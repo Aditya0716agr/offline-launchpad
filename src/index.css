@@ -2,41 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Product Hunt-inspired Design System */
 
 @layer base {
   :root {
+    /* Beautiful warm color palette */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 240 10% 3.9%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 240 10% 3.9%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 240 10% 3.9%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Warm orange primary like Product Hunt */
+    --primary: 20 100% 56%;
+    --primary-foreground: 0 0% 98%;
+    --primary-hover: 20 100% 52%;
+    --primary-light: 20 100% 96%;
 
+    /* Soft secondary colors */
     --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary-foreground: 240 5.9% 10%;
 
-    --muted: 210 40% 96.1%;
+    /* Muted backgrounds */
+    --muted: 210 40% 98%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
+    /* Accent for highlights */
     --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent-foreground: 240 5.9% 10%;
 
+    /* Destructive for errors */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
+    /* Borders and inputs */
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 20 100% 56%;
 
-    --radius: 0.5rem;
+    /* Success colors */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 98%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(20 100% 56%), hsl(25 100% 60%));
+    --gradient-secondary: linear-gradient(135deg, hsl(210 40% 98%), hsl(220 40% 96%));
+    --gradient-hero: linear-gradient(135deg, hsl(20 100% 97%), hsl(25 100% 98%));
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-primary: 0 10px 30px -10px hsl(20 100% 56% / 0.3);
+
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -92,6 +114,51 @@ All colors MUST be HSL.
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  .dark {
+    /* Dark theme for Product Hunt platform */
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 20 100% 56%;
+    --primary-foreground: 0 0% 98%;
+    --primary-hover: 20 100% 52%;
+    --primary-light: 20 100% 8%;
+
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 20 100% 56%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 98%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(20 100% 56%), hsl(25 100% 60%));
+    --gradient-secondary: linear-gradient(135deg, hsl(240 3.7% 15.9%), hsl(240 3.7% 20%));
+    --gradient-hero: linear-gradient(135deg, hsl(240 10% 3.9%), hsl(240 3.7% 15.9%));
+
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+    --shadow-primary: 0 10px 30px -10px hsl(20 100% 56% / 0.5);
+  }
 }
 
 @layer base {
@@ -100,6 +167,119 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl lg:text-4xl;
+  }
+}
+
+@layer components {
+  /* Button variants */
+  .btn-hero {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg;
+    background: var(--gradient-primary);
+    box-shadow: var(--shadow-primary);
+    transition: all 0.3s ease;
+  }
+
+  .btn-hero:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-primary), 0 4px 12px -2px hsl(20 100% 56% / 0.4);
+  }
+
+  .btn-outline-primary {
+    @apply border-2 border-primary text-primary bg-transparent hover:bg-primary hover:text-primary-foreground;
+    transition: all 0.2s ease;
+  }
+
+  .btn-ghost {
+    @apply text-muted-foreground hover:text-foreground hover:bg-accent;
+    transition: all 0.2s ease;
+  }
+
+  /* Card variants */
+  .card-startup {
+    @apply bg-card border border-border rounded-xl p-6 shadow-md hover:shadow-lg;
+    transition: all 0.3s ease;
+  }
+
+  .card-startup:hover {
+    transform: translateY(-2px);
+    border-color: hsl(var(--primary) / 0.3);
+  }
+
+  .card-feature {
+    @apply bg-card border border-border rounded-xl p-8 shadow-lg;
+    background: var(--gradient-secondary);
+  }
+
+  /* Vote button */
+  .vote-button {
+    @apply flex flex-col items-center justify-center w-12 h-16 rounded-lg border-2 border-border hover:border-primary/50 transition-all duration-200;
+  }
+
+  .vote-button.voted {
+    @apply border-primary bg-primary-light text-primary;
+  }
+
+  /* Animations */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.4s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 }
