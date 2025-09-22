@@ -14,13 +14,229 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          slug?: string
+        }
+        Relationships: []
+      }
+      comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          startup_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          startup_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          startup_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_startup_id_fkey"
+            columns: ["startup_id"]
+            isOneToOne: false
+            referencedRelation: "startups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          location: string | null
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          location?: string | null
+          role?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          location?: string | null
+          role?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      startups: {
+        Row: {
+          category_id: string | null
+          created_at: string
+          description: string
+          founder_id: string
+          id: string
+          is_featured: boolean
+          launch_date: string | null
+          location: string | null
+          logo_url: string | null
+          name: string
+          slug: string
+          status: string
+          updated_at: string
+          view_count: number
+          website_url: string | null
+          whatsapp_link: string | null
+        }
+        Insert: {
+          category_id?: string | null
+          created_at?: string
+          description: string
+          founder_id: string
+          id?: string
+          is_featured?: boolean
+          launch_date?: string | null
+          location?: string | null
+          logo_url?: string | null
+          name: string
+          slug: string
+          status?: string
+          updated_at?: string
+          view_count?: number
+          website_url?: string | null
+          whatsapp_link?: string | null
+        }
+        Update: {
+          category_id?: string | null
+          created_at?: string
+          description?: string
+          founder_id?: string
+          id?: string
+          is_featured?: boolean
+          launch_date?: string | null
+          location?: string | null
+          logo_url?: string | null
+          name?: string
+          slug?: string
+          status?: string
+          updated_at?: string
+          view_count?: number
+          website_url?: string | null
+          whatsapp_link?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "startups_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "startups_founder_id_fkey"
+            columns: ["founder_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      votes: {
+        Row: {
+          created_at: string
+          id: string
+          startup_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          startup_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          startup_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "votes_startup_id_fkey"
+            columns: ["startup_id"]
+            isOneToOne: false
+            referencedRelation: "startups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "votes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_slug: {
+        Args: { input_text: string }
+        Returns: string
+      }
+      increment_view_count: {
+        Args: { startup_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
