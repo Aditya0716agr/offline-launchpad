@@ -5,7 +5,7 @@ import { AuthModal } from "@/components/auth/AuthModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { getCurrentUser, signOut, getUserProfile } from "@/lib/auth";
-import { User, LogOut, Plus, Settings, Rocket } from "lucide-react";
+import { User, LogOut, Settings } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import type { UserProfile } from "@/lib/auth";
 
@@ -46,11 +46,11 @@ export function Navbar() {
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-12">
-            <Link to="/explore" className="link-minimal">
+            <Link to="/explore" className="text-muted-foreground hover:text-foreground transition-colors">
               Explore
             </Link>
-            <Link to="/launch" className="link-minimal">
-              Launch
+            <Link to="/dashboard" className="text-muted-foreground hover:text-foreground transition-colors">
+              Dashboard
             </Link>
           </div>
 
@@ -92,11 +92,18 @@ export function Navbar() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <AuthModal defaultTab="signup">
-                <Button className="btn-minimal px-6">
-                  Get Started
-                </Button>
-              </AuthModal>
+              <div className="flex items-center gap-3">
+                <AuthModal defaultTab="signin">
+                  <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
+                    Sign In
+                  </Button>
+                </AuthModal>
+                <AuthModal defaultTab="signup">
+                  <Button className="px-6">
+                    Get Started
+                  </Button>
+                </AuthModal>
+              </div>
             )}
           </div>
         </div>

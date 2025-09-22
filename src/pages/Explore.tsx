@@ -1,279 +1,360 @@
-import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Navbar } from "@/components/layout/Navbar";
 import { StartupCard } from "@/components/startup/StartupCard";
-import { Search, Filter, SlidersHorizontal } from "lucide-react";
-import type { Startup } from "@/components/startup/StartupCard";
+import { Search, Filter, Grid, List, SlidersHorizontal } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
-// Mock data - will be replaced with real data from Supabase
-const mockStartups: Startup[] = [
-  {
-    id: "1",
-    name: "Fresh Bowls Co.",
-    slug: "fresh-bowls-co",
-    description: "Healthy, customizable grain bowls made with locally sourced ingredients. Perfect for busy professionals who want nutritious meals.",
-    logo_url: null,
-    category: "food",
-    location: "Austin, TX",
-    website_url: "https://freshbowlsco.com",
-    whatsapp_link: null,
-    upvote_count: 47,
-    view_count: 234,
-    launch_date: "2024-01-15",
-    created_at: "2024-01-10T00:00:00Z",
-  },
-  {
-    id: "2",
-    name: "Urban Yoga Studio",
-    slug: "urban-yoga-studio",
-    description: "Modern yoga studio offering classes for all levels. Specializing in hot yoga, meditation, and wellness workshops.",
-    logo_url: null,
-    category: "wellness",
-    location: "Portland, OR",
-    website_url: "https://urbanyoga.com",
-    whatsapp_link: null,
-    upvote_count: 32,
-    view_count: 187,
-    launch_date: "2024-02-01",
-    created_at: "2024-01-25T00:00:00Z",
-  },
-  {
-    id: "3",
-    name: "Handmade Ceramics",
-    slug: "handmade-ceramics",
-    description: "Beautiful, handcrafted ceramic pieces for your home. Each piece is unique and made with sustainable materials.",
-    logo_url: null,
-    category: "retail",
-    location: "Nashville, TN",
-    website_url: "https://handmadeceramics.shop",
-    whatsapp_link: null,
-    upvote_count: 28,
-    view_count: 156,
-    launch_date: "2024-01-20",
-    created_at: "2024-01-15T00:00:00Z",
-  },
-];
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+}
 
-export default function Explore() {
-  const [startups, setStartups] = useState<Startup[]>(mockStartups);
-  const [filteredStartups, setFilteredStartups] = useState<Startup[]>(mockStartups);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedLocation, setSelectedLocation] = useState("all");
-  const [sortBy, setSortBy] = useState("newest");
+interface Startup {
+  id: string;
+  name: string;
+  description: string;
+  logo_url: string | null;
+  location: string | null;
+  website_url: string | null;
+  view_count: number;
+  created_at: string;
+  categories: {
+    name: string;
+    slug: string;
+  } | null;
+  votes: { id: string }[];
+}
+
+const Explore = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [startups, setStartups] = useState<Startup[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedLocation, setSelectedLocation] = useState<string>("all");
+  const [sortBy, setSortBy] = useState<string>("newest");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   useEffect(() => {
-    let filtered = [...startups];
+    fetchCategories();
+    fetchStartups();
+  }, []);
 
-    // Search filter
-    if (searchQuery) {
-      filtered = filtered.filter(startup =>
-        startup.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        startup.description.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+  useEffect(() => {
+    fetchStartups();
+  }, [searchTerm, selectedCategory, selectedLocation, sortBy, selectedCategories]);
+
+  const fetchCategories = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('categories')
+        .select('*')
+        .order('name');
+
+      if (error) throw error;
+      setCategories(data || []);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
     }
+  };
 
-    // Category filter
-    if (selectedCategory !== "all") {
-      filtered = filtered.filter(startup => startup.category === selectedCategory);
+  const fetchStartups = async () => {
+    setLoading(true);
+    try {
+      let query = supabase
+        .from('startups')
+        .select(`
+          *,
+          categories (name, slug),
+          votes (id)
+        `)
+        .eq('status', 'approved');
+
+      // Apply search filter
+      if (searchTerm) {
+        query = query.or(`name.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`);
+      }
+
+      // Apply category filter
+      if (selectedCategory !== "all") {
+        query = query.eq('categories.slug', selectedCategory);
+      }
+
+      // Apply location filter
+      if (selectedLocation !== "all") {
+        query = query.ilike('location', `%${selectedLocation}%`);
+      }
+
+      // Apply category filters from sidebar
+      if (selectedCategories.length > 0) {
+        query = query.in('categories.slug', selectedCategories);
+      }
+
+      // Apply sorting
+      switch (sortBy) {
+        case 'newest':
+          query = query.order('created_at', { ascending: false });
+          break;
+        case 'oldest':
+          query = query.order('created_at', { ascending: true });
+          break;
+        case 'alphabetical':
+          query = query.order('name', { ascending: true });
+          break;
+        case 'most_voted':
+          // This would need a more complex query in production
+          query = query.order('created_at', { ascending: false });
+          break;
+        default:
+          query = query.order('created_at', { ascending: false });
+      }
+
+      const { data, error } = await query;
+
+      if (error) throw error;
+      setStartups(data || []);
+    } catch (error) {
+      console.error('Error fetching startups:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load startups",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
     }
+  };
 
-    // Location filter
-    if (selectedLocation !== "all") {
-      filtered = filtered.filter(startup =>
-        startup.location?.toLowerCase().includes(selectedLocation.toLowerCase())
-      );
-    }
+  const handleCategoryToggle = (categorySlug: string) => {
+    setSelectedCategories(prev => 
+      prev.includes(categorySlug)
+        ? prev.filter(c => c !== categorySlug)
+        : [...prev, categorySlug]
+    );
+  };
 
-    // Sort
-    switch (sortBy) {
-      case "newest":
-        filtered.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-        break;
-      case "popular":
-        filtered.sort((a, b) => b.upvote_count - a.upvote_count);
-        break;
-      case "views":
-        filtered.sort((a, b) => b.view_count - a.view_count);
-        break;
-    }
+  const clearFilters = () => {
+    setSearchTerm("");
+    setSelectedCategory("all");
+    setSelectedLocation("all");
+    setSelectedCategories([]);
+    setSortBy("newest");
+  };
 
-    setFilteredStartups(filtered);
-  }, [startups, searchQuery, selectedCategory, selectedLocation, sortBy]);
-
-  const categories = [
-    { value: "all", label: "All Categories" },
-    { value: "food", label: "Food & Beverage" },
-    { value: "wellness", label: "Wellness" },
-    { value: "retail", label: "Retail" },
-    { value: "services", label: "Services" },
-    { value: "beauty", label: "Beauty" },
-    { value: "fitness", label: "Fitness" },
-    { value: "education", label: "Education" },
-    { value: "consulting", label: "Consulting" },
-    { value: "other", label: "Other" },
-  ];
-
-  const locations = [
-    { value: "all", label: "All Locations" },
-    { value: "austin", label: "Austin, TX" },
-    { value: "portland", label: "Portland, OR" },
-    { value: "nashville", label: "Nashville, TN" },
-    { value: "denver", label: "Denver, CO" },
-    { value: "seattle", label: "Seattle, WA" },
-  ];
+  const uniqueLocations = Array.from(
+    new Set(startups.map(s => s.location).filter(Boolean))
+  ).sort();
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <Navbar />
+      
+      <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-4">Explore Startups</h1>
-          <p className="text-xl text-muted-foreground">
-            Discover amazing local businesses and innovative startups in your area
-          </p>
-        </div>
-
-        {/* Filters */}
-        <div className="bg-card border border-border rounded-xl p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-              <Input
-                placeholder="Search startups..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-
-            {/* Category Filter */}
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger>
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map(category => (
-                  <SelectItem key={category.value} value={category.value}>
-                    {category.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            {/* Location Filter */}
-            <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-              <SelectTrigger>
-                <SelectValue placeholder="Location" />
-              </SelectTrigger>
-              <SelectContent>
-                {locations.map(location => (
-                  <SelectItem key={location.value} value={location.value}>
-                    {location.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            {/* Sort By */}
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger>
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="newest">Newest</SelectItem>
-                <SelectItem value="popular">Most Popular</SelectItem>
-                <SelectItem value="views">Most Viewed</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Active Filters */}
-          <div className="flex items-center gap-2 flex-wrap">
-            <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">Active filters:</span>
-            
-            {selectedCategory !== "all" && (
-              <Badge variant="outline" className="flex items-center gap-1">
-                {categories.find(c => c.value === selectedCategory)?.label}
-                <button
-                  onClick={() => setSelectedCategory("all")}
-                  className="ml-1 hover:text-destructive"
-                >
-                  ×
-                </button>
-              </Badge>
-            )}
-            
-            {selectedLocation !== "all" && (
-              <Badge variant="outline" className="flex items-center gap-1">
-                {locations.find(l => l.value === selectedLocation)?.label}
-                <button
-                  onClick={() => setSelectedLocation("all")}
-                  className="ml-1 hover:text-destructive"
-                >
-                  ×
-                </button>
-              </Badge>
-            )}
-
-            {searchQuery && (
-              <Badge variant="outline" className="flex items-center gap-1">
-                "{searchQuery}"
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="ml-1 hover:text-destructive"
-                >
-                  ×
-                </button>
-              </Badge>
-            )}
-          </div>
-        </div>
-
-        {/* Results */}
-        <div className="mb-6">
+          <h1 className="text-3xl font-medium text-foreground mb-2">
+            Discover Startups
+          </h1>
           <p className="text-muted-foreground">
-            Showing {filteredStartups.length} of {startups.length} startups
+            Explore innovative local businesses and support entrepreneurs
           </p>
         </div>
 
-        {/* Startups Grid */}
-        <div className="space-y-6">
-          {filteredStartups.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-                <Search className="h-8 w-8 text-muted-foreground" />
+        {/* Search and Filters */}
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Filter Sidebar */}
+          <div className={`lg:w-64 space-y-6 ${showFilters ? 'block' : 'hidden lg:block'}`}>
+            <Card className="border-0 shadow-none bg-accent/5">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-medium text-foreground">Filters</h3>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={clearFilters}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Clear
+                  </Button>
+                </div>
+
+                {/* Categories */}
+                <div className="space-y-3">
+                  <Label className="text-sm font-medium">Categories</Label>
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {categories.map((category) => (
+                      <div key={category.id} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={category.slug}
+                          checked={selectedCategories.includes(category.slug)}
+                          onCheckedChange={() => handleCategoryToggle(category.slug)}
+                        />
+                        <Label
+                          htmlFor={category.slug}
+                          className="text-sm font-normal cursor-pointer"
+                        >
+                          {category.name}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <Separator className="my-6" />
+
+                {/* Location Filter */}
+                <div className="space-y-3">
+                  <Label className="text-sm font-medium">Location</Label>
+                  <Select value={selectedLocation} onValueChange={setSelectedLocation}>
+                    <SelectTrigger className="border-0 bg-background">
+                      <SelectValue placeholder="All locations" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All locations</SelectItem>
+                      {uniqueLocations.map((location) => (
+                        <SelectItem key={location} value={location!}>
+                          {location}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Main Content */}
+          <div className="flex-1 space-y-6">
+            {/* Search and Controls */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              {/* Search */}
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                <Input
+                  placeholder="Search startups..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 border-0 bg-accent/5"
+                />
               </div>
-              <h3 className="text-lg font-semibold mb-2">No startups found</h3>
-              <p className="text-muted-foreground mb-4">
-                Try adjusting your search criteria or browse all categories
-              </p>
-              <Button
-                onClick={() => {
-                  setSearchQuery("");
-                  setSelectedCategory("all");
-                  setSelectedLocation("all");
-                }}
-                variant="outline"
-              >
-                Clear Filters
-              </Button>
+
+              {/* Controls */}
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="lg:hidden"
+                >
+                  <SlidersHorizontal className="w-4 h-4 mr-2" />
+                  Filters
+                </Button>
+
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-48 border-0 bg-accent/5">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="newest">Newest first</SelectItem>
+                    <SelectItem value="oldest">Oldest first</SelectItem>
+                    <SelectItem value="alphabetical">A-Z</SelectItem>
+                    <SelectItem value="most_voted">Most voted</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <div className="flex border rounded-lg bg-accent/5">
+                  <Button
+                    variant={viewMode === "grid" ? "default" : "ghost"}
+                    size="sm"
+                    onClick={() => setViewMode("grid")}
+                    className="rounded-r-none"
+                  >
+                    <Grid className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant={viewMode === "list" ? "default" : "ghost"}
+                    size="sm"
+                    onClick={() => setViewMode("list")}
+                    className="rounded-l-none border-l"
+                  >
+                    <List className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
             </div>
-          ) : (
-            filteredStartups.map((startup) => (
-              <StartupCard
-                key={startup.id}
-                startup={startup}
-                showLaunchBadge={true}
-              />
-            ))
-          )}
+
+            {/* Results Header */}
+            <div className="flex items-center justify-between">
+              <p className="text-muted-foreground">
+                {loading ? "Loading..." : `${startups.length} startups found`}
+              </p>
+            </div>
+
+            {/* Startups Grid/List */}
+            {loading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <div key={i} className="animate-pulse">
+                    <div className="h-48 bg-muted rounded-lg mb-4"></div>
+                    <div className="h-4 bg-muted rounded w-3/4 mb-2"></div>
+                    <div className="h-4 bg-muted rounded w-1/2"></div>
+                  </div>
+                ))}
+              </div>
+            ) : startups.length === 0 ? (
+              <Card className="border-0 shadow-none bg-accent/5">
+                <CardContent className="p-12 text-center">
+                  <h3 className="text-lg font-medium text-foreground mb-2">
+                    No startups found
+                  </h3>
+                  <p className="text-muted-foreground mb-4">
+                    Try adjusting your search terms or filters
+                  </p>
+                  <Button onClick={clearFilters} variant="outline">
+                    Clear filters
+                  </Button>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className={
+                viewMode === "grid" 
+                  ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                  : "space-y-4"
+              }>
+                {startups.map((startup) => (
+                  <div 
+                    key={startup.id}
+                    onClick={() => navigate(`/startup/${startup.id}`)}
+                    className="cursor-pointer"
+                  >
+                    <StartupCard 
+                      startup={startup} 
+                      viewMode={viewMode}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default Explore;
