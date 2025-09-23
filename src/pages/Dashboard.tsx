@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Eye, Heart, MessageSquare, Settings, BarChart3 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { AddStartupModal } from "@/components/startup/AddStartupModal";
 
 interface UserProfile {
   id: string;
@@ -34,6 +35,7 @@ const Dashboard = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [startups, setStartups] = useState<Startup[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showAddStartupModal, setShowAddStartupModal] = useState(false);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -186,7 +188,10 @@ const Dashboard = () => {
           </div>
           
           {profile.role === 'founder' && (
-            <Button className="flex items-center gap-2">
+            <Button 
+              className="flex items-center gap-2"
+              onClick={() => setShowAddStartupModal(true)}
+            >
               <Plus className="w-4 h-4" />
               Add Startup
             </Button>
@@ -280,7 +285,7 @@ const Dashboard = () => {
                       <p className="text-muted-foreground mb-4">
                         Ready to showcase your startup to the world?
                       </p>
-                      <Button>
+                      <Button onClick={() => setShowAddStartupModal(true)}>
                         <Plus className="w-4 h-4 mr-2" />
                         Add Your First Startup
                       </Button>
@@ -390,6 +395,12 @@ const Dashboard = () => {
           </div>
         )}
       </div>
+
+      <AddStartupModal 
+        open={showAddStartupModal}
+        onOpenChange={setShowAddStartupModal}
+        onSuccess={() => checkUser()}
+      />
     </div>
   );
 };

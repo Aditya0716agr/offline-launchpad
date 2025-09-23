@@ -2,17 +2,19 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { AuthModal } from "@/components/auth/AuthModal";
+import { AddStartupModal } from "@/components/startup/AddStartupModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { getCurrentUser, signOut, getUserProfile } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
-import { User, LogOut, Settings } from "lucide-react";
+import { User, LogOut, Settings, Plus } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import type { UserProfile } from "@/lib/auth";
 
 export function Navbar() {
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [showAddStartupModal, setShowAddStartupModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -74,7 +76,18 @@ export function Navbar() {
           {/* Auth Section */}
           <div className="flex items-center gap-4">
             {user ? (
-              <DropdownMenu>
+              <>
+                {profile?.role === 'founder' && (
+                  <Button 
+                    onClick={() => setShowAddStartupModal(true)}
+                    className="flex items-center gap-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Startup
+                  </Button>
+                )}
+                
+                <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                     <Avatar className="h-8 w-8">
@@ -108,6 +121,7 @@ export function Navbar() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+              </>
             ) : (
               <div className="flex items-center gap-3">
                 <AuthModal defaultTab="signin">
@@ -125,6 +139,14 @@ export function Navbar() {
           </div>
         </div>
       </div>
+      
+      <AddStartupModal 
+        open={showAddStartupModal}
+        onOpenChange={setShowAddStartupModal}
+        onSuccess={() => {
+          // Optionally refresh user data or navigate somewhere
+        }}
+      />
     </nav>
   );
 }

@@ -119,17 +119,32 @@ export type Database = {
       startups: {
         Row: {
           category_id: string | null
+          city: string | null
+          cover_image_url: string | null
           created_at: string
           description: string
+          email_contact: string | null
           founder_id: string
+          full_address: string | null
+          gallery_images: string[] | null
           id: string
           is_featured: boolean
           launch_date: string | null
           location: string | null
           logo_url: string | null
+          looking_for: string[] | null
           name: string
+          phone_number: string | null
           slug: string
+          social_facebook: string | null
+          social_instagram: string | null
+          social_linkedin: string | null
+          social_twitter: string | null
+          stage: string | null
+          state_region: string | null
           status: string
+          tagline: string | null
+          team_size: string | null
           updated_at: string
           view_count: number
           website_url: string | null
@@ -137,17 +152,32 @@ export type Database = {
         }
         Insert: {
           category_id?: string | null
+          city?: string | null
+          cover_image_url?: string | null
           created_at?: string
           description: string
+          email_contact?: string | null
           founder_id: string
+          full_address?: string | null
+          gallery_images?: string[] | null
           id?: string
           is_featured?: boolean
           launch_date?: string | null
           location?: string | null
           logo_url?: string | null
+          looking_for?: string[] | null
           name: string
+          phone_number?: string | null
           slug: string
+          social_facebook?: string | null
+          social_instagram?: string | null
+          social_linkedin?: string | null
+          social_twitter?: string | null
+          stage?: string | null
+          state_region?: string | null
           status?: string
+          tagline?: string | null
+          team_size?: string | null
           updated_at?: string
           view_count?: number
           website_url?: string | null
@@ -155,17 +185,32 @@ export type Database = {
         }
         Update: {
           category_id?: string | null
+          city?: string | null
+          cover_image_url?: string | null
           created_at?: string
           description?: string
+          email_contact?: string | null
           founder_id?: string
+          full_address?: string | null
+          gallery_images?: string[] | null
           id?: string
           is_featured?: boolean
           launch_date?: string | null
           location?: string | null
           logo_url?: string | null
+          looking_for?: string[] | null
           name?: string
+          phone_number?: string | null
           slug?: string
+          social_facebook?: string | null
+          social_instagram?: string | null
+          social_linkedin?: string | null
+          social_twitter?: string | null
+          stage?: string | null
+          state_region?: string | null
           status?: string
+          tagline?: string | null
+          team_size?: string | null
           updated_at?: string
           view_count?: number
           website_url?: string | null
