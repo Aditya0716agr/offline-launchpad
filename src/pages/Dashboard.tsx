@@ -65,7 +65,7 @@ const Dashboard = () => {
         .from('profiles')
         .select('*')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
       if (profileError) {
         console.error('Profile error:', profileError);
@@ -73,10 +73,26 @@ const Dashboard = () => {
       }
       
       if (!profileData) {
-        throw new Error('No profile found for user');
+        // Create profile if it doesn't exist
+        const { data: newProfile, error: createError } = await supabase
+          .from('profiles')
+          .insert({
+            user_id: user.id,
+            full_name: user.email,
+            role: 'user'
+          })
+          .select()
+          .single();
+          
+        if (createError) {
+          console.error('Error creating profile:', createError);
+          throw createError;
+        }
+        
+        setProfile(newProfile);
+      } else {
+        setProfile(profileData);
       }
-      
-      setProfile(profileData);
 
       // If user is a founder, fetch their startups
       if (profileData.role === 'founder') {
