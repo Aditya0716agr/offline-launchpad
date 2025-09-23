@@ -19,8 +19,7 @@ function App() {
       <Toaster />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/startup/:id" element={<StartupDetail />} />
           <Route path="/login" element={<Login />} />
