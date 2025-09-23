@@ -5,6 +5,7 @@ import { AuthModal } from "@/components/auth/AuthModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { getCurrentUser, signOut, getUserProfile } from "@/lib/auth";
+import { supabase } from "@/integrations/supabase/client";
 import { User, LogOut, Settings } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import type { UserProfile } from "@/lib/auth";
@@ -15,18 +16,34 @@ export function Navbar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    checkUser();
-  }, []);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+        
+        if (session?.user) {
+          // Defer profile fetch with setTimeout to avoid deadlock
+          setTimeout(() => {
+            getUserProfile(session.user.id).then(setProfile);
+          }, 0);
+        } else {
+          setProfile(null);
+        }
+      }
+    );
 
-  const checkUser = async () => {
-    const currentUser = await getCurrentUser();
-    setUser(currentUser);
-    
-    if (currentUser) {
-      const userProfile = await getUserProfile(currentUser.id);
-      setProfile(userProfile);
-    }
-  };
+    // Check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        setTimeout(() => {
+          getUserProfile(session.user.id).then(setProfile);
+        }, 0);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleSignOut = async () => {
     await signOut();

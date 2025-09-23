@@ -36,7 +36,17 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (event === 'SIGNED_OUT' || !session) {
+          navigate('/');
+        }
+      }
+    );
+
     checkUser();
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const checkUser = async () => {
@@ -57,7 +67,14 @@ const Dashboard = () => {
         .eq('user_id', user.id)
         .single();
 
-      if (profileError) throw profileError;
+      if (profileError) {
+        console.error('Profile error:', profileError);
+        throw profileError;
+      }
+      
+      if (!profileData) {
+        throw new Error('No profile found for user');
+      }
       
       setProfile(profileData);
 
@@ -72,10 +89,14 @@ const Dashboard = () => {
           .eq('founder_id', profileData.id)
           .order('created_at', { ascending: false });
 
-        if (startupsError) throw startupsError;
+        if (startupsError) {
+          console.error('Startups error:', startupsError);
+          throw startupsError;
+        }
         setStartups(startupsData || []);
       }
     } catch (error: any) {
+      console.error('Dashboard error:', error);
       toast({
         title: "Error",
         description: error.message || "Failed to load dashboard",
