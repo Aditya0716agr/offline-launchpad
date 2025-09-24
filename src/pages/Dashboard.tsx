@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Eye, Heart, MessageSquare, Settings, BarChart3 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { AddStartupModal } from "@/components/startup/AddStartupModal";
+import { EditProfileModal } from "@/components/profile/EditProfileModal";
 
 interface UserProfile {
   id: string;
@@ -36,6 +37,8 @@ const Dashboard = () => {
   const [startups, setStartups] = useState<Startup[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddStartupModal, setShowAddStartupModal] = useState(false);
+  const [showEditProfile, setShowEditProfile] = useState(false);
+  const [roleUpdateLoading, setRoleUpdateLoading] = useState(false);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -122,6 +125,37 @@ const Dashboard = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const updateUserRole = async (newRole: string) => {
+    setRoleUpdateLoading(true);
+    try {
+      if (!profile) return;
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({ role: newRole })
+        .eq('user_id', (profile as any).user_id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: `Role updated to ${newRole} successfully!`,
+      });
+
+      // Refresh the profile data
+      await checkUser();
+    } catch (error: any) {
+      console.error('Error updating role:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update role",
+        variant: "destructive",
+      });
+    } finally {
+      setRoleUpdateLoading(false);
     }
   };
 
@@ -379,19 +413,170 @@ const Dashboard = () => {
         ) : (
           // Regular user dashboard
           <div className="space-y-6">
-            <Card className="border-0 shadow-none bg-accent/5">
-              <CardContent className="p-8 text-center">
-                <h2 className="text-xl font-medium text-foreground mb-2">
-                  Discover Amazing Startups
-                </h2>
-                <p className="text-muted-foreground mb-4">
-                  Explore innovative local businesses and support entrepreneurs in your area
-                </p>
-                <Button onClick={() => navigate('/explore')}>
-                  Start Exploring
-                </Button>
-              </CardContent>
-            </Card>
+            <Tabs defaultValue="profile" className="space-y-6">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="profile">My Profile</TabsTrigger>
+                <TabsTrigger value="discover">Discover</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="profile" className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-medium text-foreground">Profile Information</h2>
+                  <Button 
+                    variant="outline"
+                    onClick={() => setShowEditProfile(true)}
+                  >
+                    Edit Profile
+                  </Button>
+                </div>
+
+                <Card className="border-0 shadow-none">
+                  <CardContent className="p-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {/* Basic Info */}
+                      <div className="space-y-4">
+                        <div>
+                          <h3 className="text-sm font-medium text-muted-foreground mb-1">Full Name</h3>
+                          <p className="text-foreground">{profile.full_name || 'Not provided'}</p>
+                        </div>
+                        
+                        <div>
+                          <h3 className="text-sm font-medium text-muted-foreground mb-1">Email</h3>
+                          <p className="text-foreground">{user?.email}</p>
+                        </div>
+
+                        <div>
+                          <h3 className="text-sm font-medium text-muted-foreground mb-1">Location</h3>
+                          <p className="text-foreground">{(profile as any).location || 'Not provided'}</p>
+                        </div>
+
+                        <div>
+                          <h3 className="text-sm font-medium text-muted-foreground mb-1">Designation</h3>
+                          <p className="text-foreground">{(profile as any).designation || 'Not provided'}</p>
+                        </div>
+
+                        <div>
+                          <h3 className="text-sm font-medium text-muted-foreground mb-1">Company</h3>
+                          <p className="text-foreground">{(profile as any).company || 'Not provided'}</p>
+                        </div>
+                      </div>
+
+                      {/* Links & Social */}
+                      <div className="space-y-4">
+                        <div>
+                          <h3 className="text-sm font-medium text-muted-foreground mb-1">Bio</h3>
+                          <p className="text-foreground">{(profile as any).bio || 'No bio provided'}</p>
+                        </div>
+
+                        <div>
+                          <h3 className="text-sm font-medium text-muted-foreground mb-2">Links</h3>
+                          <div className="space-y-2">
+                            {(profile as any).website_url && (
+                              <div>
+                                <span className="text-sm text-muted-foreground">Website: </span>
+                                <a 
+                                  href={(profile as any).website_url} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="text-primary hover:underline"
+                                >
+                                  {(profile as any).website_url}
+                                </a>
+                              </div>
+                            )}
+                            
+                            {(profile as any).linkedin_url && (
+                              <div>
+                                <span className="text-sm text-muted-foreground">LinkedIn: </span>
+                                <a 
+                                  href={(profile as any).linkedin_url} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="text-primary hover:underline"
+                                >
+                                  View Profile
+                                </a>
+                              </div>
+                            )}
+                            
+                            {(profile as any).github_url && (
+                              <div>
+                                <span className="text-sm text-muted-foreground">GitHub: </span>
+                                <a 
+                                  href={(profile as any).github_url} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="text-primary hover:underline"
+                                >
+                                  View Profile
+                                </a>
+                              </div>
+                            )}
+                            
+                            {(profile as any).twitter_url && (
+                              <div>
+                                <span className="text-sm text-muted-foreground">Twitter: </span>
+                                <a 
+                                  href={(profile as any).twitter_url} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="text-primary hover:underline"
+                                >
+                                  View Profile
+                                </a>
+                              </div>
+                            )}
+                            
+                            {!(profile as any).website_url && !(profile as any).linkedin_url && !(profile as any).github_url && !(profile as any).twitter_url && (
+                              <p className="text-muted-foreground text-sm">No links added yet</p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="discover">
+                <div className="space-y-6">
+                  <Card className="border-0 shadow-none bg-accent/5">
+                    <CardContent className="p-8 text-center">
+                      <h2 className="text-xl font-medium text-foreground mb-2">
+                        Discover Amazing Startups
+                      </h2>
+                      <p className="text-muted-foreground mb-4">
+                        Explore innovative local businesses and support entrepreneurs in your area
+                      </p>
+                      <Button onClick={() => navigate('/explore')}>
+                        Start Exploring
+                      </Button>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-0 shadow-none">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="text-lg font-medium text-foreground mb-2">
+                            Are you a startup founder?
+                          </h3>
+                          <p className="text-muted-foreground">
+                            Switch to founder mode to list your startup and connect with the community.
+                          </p>
+                        </div>
+                        <Button
+                          onClick={() => updateUserRole('founder')}
+                          disabled={roleUpdateLoading}
+                        >
+                          {roleUpdateLoading ? 'Switching...' : 'Become a Founder'}
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </TabsContent>
+            </Tabs>
           </div>
         )}
       </div>
@@ -401,6 +586,15 @@ const Dashboard = () => {
         onOpenChange={setShowAddStartupModal}
         onSuccess={() => checkUser()}
       />
+
+      {profile && showEditProfile && (
+        <EditProfileModal 
+          open={showEditProfile}
+          onOpenChange={setShowEditProfile}
+          profile={profile}
+          onSuccess={() => checkUser()}
+        />
+      )}
     </div>
   );
 };

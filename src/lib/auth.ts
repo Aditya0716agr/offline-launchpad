@@ -9,6 +9,12 @@ export interface UserProfile {
   role: string;
   location: string | null;
   bio: string | null;
+  designation?: string | null;
+  company?: string | null;
+  website_url?: string | null;
+  linkedin_url?: string | null;
+  github_url?: string | null;
+  twitter_url?: string | null;
   created_at: string;
   updated_at: string;
 }
