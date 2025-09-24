@@ -6,37 +6,51 @@
 
 @layer base {
   :root {
-    /* Minimalist Color Palette */
+    /* Enhanced Color Palette */
     --background: 0 0% 100%; /* Pure white #ffffff */
-    --foreground: 214 20% 27%; /* Charcoal gray #374151 */
+    --foreground: 224 14% 17%; /* Charcoal #1F2937 */
     --card: 0 0% 100%;
-    --card-foreground: 214 20% 27%;
+    --card-foreground: 224 14% 17%;
     --popover: 0 0% 100%;
-    --popover-foreground: 214 20% 27%;
-    --primary: 168 76% 36%; /* Deep teal #0f766e */
+    --popover-foreground: 224 14% 17%;
+    --primary: 167 85% 36%; /* Emerald green #10B981 */
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 168 76% 32%;
-    --secondary: 210 20% 98%; /* Light gray #f9fafb */
-    --secondary-foreground: 214 20% 27%;
-    --muted: 210 20% 98%;
-    --muted-foreground: 214 13% 47%; /* Light gray #6b7280 */
-    --accent: 168 76% 36%;
+    --primary-hover: 167 85% 32%; /* Darker emerald #059669 */
+    --primary-light: 167 85% 45%;
+    --secondary: 210 20% 98%; /* Light gray #F9FAFB */
+    --secondary-foreground: 224 14% 17%;
+    --muted: 210 20% 96%; /* Slightly darker #F3F4F6 */
+    --muted-foreground: 215 10% 49%; /* Medium gray #6B7280 */
+    --accent: 167 85% 36%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 168 76% 36%;
-    --radius: 0.5rem; /* Reduced for minimal aesthetic */
+    --border: 215 14% 89%; /* Light border #E5E7EB */
+    --input: 215 14% 89%;
+    --ring: 167 85% 36%;
+    --radius: 8px; /* Modern rounded corners */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-primary: 0 4px 14px 0 rgb(16 185 129 / 0.2);
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-light)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--background)), hsl(var(--secondary)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary) / 0.1), hsl(var(--secondary)));
 
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 214 20% 27%;
-    --sidebar-primary: 214 20% 27%;
+    --sidebar-foreground: 224 14% 17%;
+    --sidebar-primary: 224 14% 17%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 210 20% 98%;
-    --sidebar-accent-foreground: 214 20% 27%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 168 76% 36%;
+    --sidebar-accent-foreground: 224 14% 17%;
+    --sidebar-border: 215 14% 89%;
+    --sidebar-ring: 167 85% 36%;
   }
 
   .dark {
@@ -88,9 +102,9 @@
 }
 
 @layer components {
-  /* Minimalist Component Styles */
+  /* Enhanced Component Styles */
   .btn-minimal {
-    @apply bg-primary text-primary-foreground hover:bg-primary-hover transition-colors duration-200 font-medium;
+    @apply bg-primary text-primary-foreground hover:bg-primary-hover transition-all duration-200 font-medium shadow-sm hover:shadow-primary;
   }
 
   .btn-ghost-minimal {
@@ -102,19 +116,39 @@
   }
 
   .link-minimal::after {
-    @apply content-[''] absolute left-0 bottom-0 w-full h-px bg-foreground scale-x-0 origin-right transition-transform duration-200;
+    @apply content-[''] absolute left-0 bottom-0 w-full h-px bg-primary scale-x-0 origin-right transition-transform duration-200;
   }
 
   .link-minimal:hover::after {
     @apply scale-x-100 origin-left;
   }
 
-  /* Minimalist startup card */
-  .startup-card-minimal {
-    @apply border-b border-secondary py-6 transition-colors duration-200;
+  /* Enhanced startup card */
+  .startup-card {
+    @apply bg-card border border-border rounded-lg hover:shadow-md transition-all duration-200;
   }
 
-  .startup-card-minimal:hover {
-    @apply bg-secondary/30;
+  .startup-card:hover {
+    @apply transform scale-[1.02] shadow-lg;
+  }
+
+  /* Filter sidebar */
+  .filter-sidebar {
+    @apply bg-secondary/30 border border-border rounded-lg p-6;
+  }
+
+  /* Search bar */
+  .search-enhanced {
+    @apply border border-border bg-background rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200;
+  }
+
+  /* Category badge */
+  .category-badge {
+    @apply bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium;
+  }
+
+  /* Header shadow */
+  .header-shadow {
+    @apply border-b border-border/50 backdrop-blur-sm bg-background/95;
   }
 }

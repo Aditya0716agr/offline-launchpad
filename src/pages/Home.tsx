@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { Link } from "react-router-dom";
+import { Footer } from "@/components/layout/Footer";
+import heroImage from "@/assets/hero-image.jpg";
 
 export default function Home() {
   const stats = [
@@ -51,21 +53,39 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="pt-32 pb-20">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h1 className="text-6xl font-medium text-foreground mb-8 leading-tight">
+      <section className="relative pt-32 pb-20 overflow-hidden">
+        {/* Hero Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src={heroImage} 
+            alt="Local entrepreneurs and startups" 
+            className="w-full h-full object-cover opacity-10"
+          />
+          <div className="absolute inset-0 bg-gradient-hero"></div>
+        </div>
+        
+        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+          <h1 className="text-5xl md:text-6xl font-semibold text-foreground mb-8 leading-tight">
             Discover Local Innovation
           </h1>
           
-          <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
-            Find and support amazing non-tech startups in your area. From D2C brands to local services.
+          <p className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
+            Find and support amazing non-tech startups in your area. From D2C brands to local services, 
+            connect with entrepreneurs building the future of local business.
           </p>
           
-          <Link to="/explore">
-            <Button className="btn-minimal text-lg px-8 py-3">
-              Explore Startups
-            </Button>
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to="/explore">
+              <Button className="btn-minimal text-lg px-8 py-4 min-w-[180px]">
+                Explore Startups
+              </Button>
+            </Link>
+            <AuthModal defaultTab="signup">
+              <Button variant="outline" className="text-lg px-8 py-4 min-w-[180px] border-primary/20 hover:bg-primary/5">
+                List Your Startup
+              </Button>
+            </AuthModal>
+          </div>
         </div>
       </section>
 
@@ -146,22 +166,24 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 border-t border-secondary">
-        <div className="max-w-2xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-medium text-foreground mb-8">
-            Launch Your Startup
+      <section className="py-20 border-t border-border bg-gradient-hero">
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-6">
+            Ready to Launch Your Startup?
           </h2>
-          <p className="text-xl text-muted-foreground mb-12">
-            Join hundreds of founders building amazing businesses
+          <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
+            Join hundreds of founders building amazing businesses and connect with your local community
           </p>
           
           <AuthModal defaultTab="signup">
-            <Button className="btn-minimal text-lg px-8 py-3">
-              Get Started
+            <Button className="btn-minimal text-lg px-10 py-4">
+              Get Started Today
             </Button>
           </AuthModal>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }

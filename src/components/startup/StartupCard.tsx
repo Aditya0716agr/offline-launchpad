@@ -1,7 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MapPin, Heart, Eye } from "lucide-react";
+import { MapPin, Heart, Eye, ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface StartupCardProps {
   startup: {
@@ -23,48 +24,65 @@ interface StartupCardProps {
 export function StartupCard({ startup, viewMode = "grid" }: StartupCardProps) {
   if (viewMode === "list") {
     return (
-      <Card className="border-0 shadow-none hover:bg-accent/5 transition-colors">
+      <Card className="startup-card group">
         <CardContent className="p-6">
-          <div className="flex items-center gap-4">
-            <Avatar className="w-16 h-16">
-              <AvatarImage src={startup.logo_url || ''} alt={startup.name} />
-              <AvatarFallback className="text-lg font-medium">
-                {startup.name.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
+          <div className="flex items-center gap-6">
+            {/* Logo */}
+            <div className="shrink-0">
+              <Avatar className="w-20 h-20">
+                <AvatarImage src={startup.logo_url || ''} alt={startup.name} />
+                <AvatarFallback className="text-xl font-semibold bg-primary/10 text-primary">
+                  {startup.name.charAt(0)}
+                </AvatarFallback>
+              </Avatar>
+            </div>
             
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-medium text-foreground mb-1 truncate">
+                  {/* Business Name */}
+                  <h3 className="text-lg font-semibold text-foreground mb-2 truncate group-hover:text-primary transition-colors">
                     {startup.name}
                   </h3>
-                  <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
+                  
+                  {/* Description */}
+                  <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 mb-3">
                     {startup.description}
                   </p>
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                  
+                  {/* Meta Info */}
+                  <div className="flex items-center gap-6 text-muted-foreground">
                     {startup.location && (
                       <div className="flex items-center gap-1">
-                        <MapPin className="w-3 h-3" />
-                        <span>{startup.location}</span>
+                        <MapPin className="w-4 h-4" />
+                        <span className="text-sm">{startup.location}</span>
                       </div>
                     )}
                     <div className="flex items-center gap-1">
-                      <Eye className="w-3 h-3" />
-                      <span>{startup.view_count}</span>
+                      <Eye className="w-4 h-4" />
+                      <span className="text-sm">{startup.view_count}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <Heart className="w-3 h-3" />
-                      <span>{startup.votes?.length || 0}</span>
+                      <Heart className="w-4 h-4" />
+                      <span className="text-sm">{startup.votes?.length || 0}</span>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                
+                <div className="flex items-center gap-3">
                   {startup.categories && (
-                    <Badge variant="secondary" className="text-xs">
+                    <Badge className="category-badge">
                       {startup.categories.name}
                     </Badge>
                   )}
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <ExternalLink className="w-3 h-3 mr-2" />
+                    View
+                  </Button>
                 </div>
               </div>
             </div>
@@ -75,53 +93,76 @@ export function StartupCard({ startup, viewMode = "grid" }: StartupCardProps) {
   }
 
   return (
-    <Card className="border-0 shadow-none hover:bg-accent/5 transition-colors overflow-hidden">
+    <Card className="startup-card group">
       <CardContent className="p-0">
-        <div className="aspect-video bg-accent/10 flex items-center justify-center">
-          <Avatar className="w-16 h-16">
-            <AvatarImage src={startup.logo_url || ''} alt={startup.name} />
-            <AvatarFallback className="text-2xl font-medium">
-              {startup.name.charAt(0)}
-            </AvatarFallback>
-          </Avatar>
+        {/* Hero Image Area */}
+        <div className="aspect-[16/9] relative overflow-hidden bg-gradient-to-br from-primary/5 to-secondary">
+          {startup.logo_url ? (
+            <img 
+              src={startup.logo_url} 
+              alt={startup.name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <Avatar className="w-20 h-20">
+                <AvatarFallback className="text-3xl font-semibold bg-primary/10 text-primary">
+                  {startup.name.charAt(0)}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+          )}
+          
+          {/* Category Badge Overlay */}
+          {startup.categories && (
+            <div className="absolute top-3 right-3">
+              <Badge className="category-badge shadow-sm">
+                {startup.categories.name}
+              </Badge>
+            </div>
+          )}
         </div>
         
         <div className="p-6">
-          <div className="flex items-start justify-between gap-2 mb-2">
-            <h3 className="font-medium text-foreground line-clamp-1">
-              {startup.name}
-            </h3>
-            {startup.categories && (
-              <Badge variant="secondary" className="text-xs shrink-0">
-                {startup.categories.name}
-              </Badge>
-            )}
-          </div>
+          {/* Business Name */}
+          <h3 className="text-lg font-semibold text-foreground mb-2 line-clamp-1 group-hover:text-primary transition-colors">
+            {startup.name}
+          </h3>
           
-          <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
+          {/* Description */}
+          <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 mb-4">
             {startup.description}
           </p>
           
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <div className="flex items-center gap-1">
-              {startup.location && (
-                <>
-                  <MapPin className="w-3 h-3" />
-                  <span className="truncate">{startup.location}</span>
-                </>
-              )}
+          {/* Location */}
+          {startup.location && (
+            <div className="flex items-center gap-2 text-muted-foreground mb-4">
+              <MapPin className="w-4 h-4" />
+              <span className="text-sm">{startup.location}</span>
+            </div>
+          )}
+          
+          {/* Stats and Action */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4 text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <Eye className="w-4 h-4" />
+                <span className="text-sm">{startup.view_count}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Heart className="w-4 h-4" />
+                <span className="text-sm">{startup.votes?.length || 0}</span>
+              </div>
             </div>
             
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1">
-                <Eye className="w-3 h-3" />
-                <span>{startup.view_count}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Heart className="w-3 h-3" />
-                <span>{startup.votes?.length || 0}</span>
-              </div>
-            </div>
+            <Button 
+              size="sm" 
+              variant="outline" 
+              className="opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <ExternalLink className="w-3 h-3 mr-2" />
+              View
+            </Button>
           </div>
         </div>
       </CardContent>

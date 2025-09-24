@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/layout/Navbar";
 import { StartupCard } from "@/components/startup/StartupCard";
-import { Search, Filter, Grid, List, SlidersHorizontal } from "lucide-react";
+import { Search, Filter, Grid, List, SlidersHorizontal, Coffee, Heart, ShoppingBag, Wrench, Sparkles, Dumbbell, Home, GraduationCap, Music, Plane, Briefcase, Leaf } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface Category {
@@ -160,6 +160,25 @@ const Explore = () => {
     new Set(startups.map(s => s.location).filter(Boolean))
   ).sort();
 
+  // Category icons mapping
+  const getCategoryIcon = (categoryName: string) => {
+    const iconMap: Record<string, React.ComponentType<any>> = {
+      'Food & Beverage': Coffee,
+      'Wellness & Health': Heart,
+      'Retail & Fashion': ShoppingBag,
+      'Services': Wrench,
+      'Beauty & Personal Care': Sparkles,
+      'Fitness & Sports': Dumbbell,
+      'Home & Living': Home,
+      'Education & Training': GraduationCap,
+      'Entertainment': Music,
+      'Travel & Hospitality': Plane,
+      'Professional Services': Briefcase,
+      'Sustainability': Leaf,
+    };
+    return iconMap[categoryName] || Wrench;
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -176,11 +195,11 @@ const Explore = () => {
         </div>
 
         {/* Search and Filters */}
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Filter Sidebar */}
-          <div className={`lg:w-64 space-y-6 ${showFilters ? 'block' : 'hidden lg:block'}`}>
-            <Card className="border-0 shadow-none bg-accent/5">
-              <CardContent className="p-6">
+          <div className={`lg:w-72 space-y-6 ${showFilters ? 'block' : 'hidden lg:block'}`}>
+            <div className="filter-sidebar">
+              <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-medium text-foreground">Filters</h3>
                   <Button 
@@ -196,22 +215,26 @@ const Explore = () => {
                 {/* Categories */}
                 <div className="space-y-3">
                   <Label className="text-sm font-medium">Categories</Label>
-                  <div className="space-y-2 max-h-48 overflow-y-auto">
-                    {categories.map((category) => (
-                      <div key={category.id} className="flex items-center space-x-2">
-                        <Checkbox
-                          id={category.slug}
-                          checked={selectedCategories.includes(category.slug)}
-                          onCheckedChange={() => handleCategoryToggle(category.slug)}
-                        />
-                        <Label
-                          htmlFor={category.slug}
-                          className="text-sm font-normal cursor-pointer"
-                        >
-                          {category.name}
-                        </Label>
-                      </div>
-                    ))}
+                  <div className="space-y-3 max-h-64 overflow-y-auto">
+                    {categories.map((category) => {
+                      const IconComponent = getCategoryIcon(category.name);
+                      return (
+                        <div key={category.id} className="flex items-center space-x-3">
+                          <Checkbox
+                            id={category.slug}
+                            checked={selectedCategories.includes(category.slug)}
+                            onCheckedChange={() => handleCategoryToggle(category.slug)}
+                          />
+                          <Label
+                            htmlFor={category.slug}
+                            className="text-sm font-normal cursor-pointer flex items-center gap-2 flex-1"
+                          >
+                            <IconComponent className="w-4 h-4 text-muted-foreground" />
+                            {category.name}
+                          </Label>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -234,22 +257,22 @@ const Explore = () => {
                     </SelectContent>
                   </Select>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
 
           {/* Main Content */}
           <div className="flex-1 space-y-6">
             {/* Search and Controls */}
             <div className="flex flex-col sm:flex-row gap-4">
-              {/* Search */}
+              {/* Enhanced Search */}
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                 <Input
-                  placeholder="Search startups..."
+                  placeholder="Search startups by name, description, or location..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 border-0 bg-accent/5"
+                  className="search-enhanced pl-12 py-4 text-base"
                 />
               </div>
 
@@ -266,7 +289,7 @@ const Explore = () => {
                 </Button>
 
                 <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-48 border-0 bg-accent/5">
+                  <SelectTrigger className="w-48 search-enhanced">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -277,12 +300,12 @@ const Explore = () => {
                   </SelectContent>
                 </Select>
 
-                <div className="flex border rounded-lg bg-accent/5">
+                <div className="flex border border-border rounded-lg overflow-hidden">
                   <Button
                     variant={viewMode === "grid" ? "default" : "ghost"}
                     size="sm"
                     onClick={() => setViewMode("grid")}
-                    className="rounded-r-none"
+                    className="rounded-none"
                   >
                     <Grid className="w-4 h-4" />
                   </Button>
@@ -290,7 +313,7 @@ const Explore = () => {
                     variant={viewMode === "list" ? "default" : "ghost"}
                     size="sm"
                     onClick={() => setViewMode("list")}
-                    className="rounded-l-none border-l"
+                    className="rounded-none border-l border-border"
                   >
                     <List className="w-4 h-4" />
                   </Button>
@@ -333,8 +356,8 @@ const Explore = () => {
             ) : (
               <div className={
                 viewMode === "grid" 
-                  ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                  : "space-y-4"
+                  ? "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"
+                  : "space-y-6"
               }>
                 {startups.map((startup) => (
                   <div 
