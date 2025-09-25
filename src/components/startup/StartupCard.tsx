@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MapPin, Heart, Eye, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BookmarkButton } from "./BookmarkButton";
 
 interface StartupCardProps {
   startup: {
@@ -75,14 +76,21 @@ export function StartupCard({ startup, viewMode = "grid" }: StartupCardProps) {
                       {startup.categories.name}
                     </Badge>
                   )}
-                  <Button 
-                    size="sm" 
-                    variant="outline"
-                    className="opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <ExternalLink className="w-3 h-3 mr-2" />
-                    View
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <BookmarkButton 
+                      startupId={startup.id} 
+                      size="sm" 
+                      variant="outline"
+                    />
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <ExternalLink className="w-3 h-3 mr-2" />
+                      View
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -113,14 +121,19 @@ export function StartupCard({ startup, viewMode = "grid" }: StartupCardProps) {
             </div>
           )}
           
-          {/* Category Badge Overlay */}
-          {startup.categories && (
-            <div className="absolute top-3 right-3">
+          {/* Category Badge and Bookmark Overlay */}
+          <div className="absolute top-3 right-3 flex items-center gap-2">
+            <BookmarkButton 
+              startupId={startup.id} 
+              size="sm" 
+              variant="outline"
+            />
+            {startup.categories && (
               <Badge className="category-badge shadow-sm">
                 {startup.categories.name}
               </Badge>
-            </div>
-          )}
+            )}
+          </div>
         </div>
         
         <div className="p-6">
@@ -142,7 +155,7 @@ export function StartupCard({ startup, viewMode = "grid" }: StartupCardProps) {
             </div>
           )}
           
-          {/* Stats and Action */}
+          {/* Stats and Actions */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4 text-muted-foreground">
               <div className="flex items-center gap-1">
@@ -155,14 +168,21 @@ export function StartupCard({ startup, viewMode = "grid" }: StartupCardProps) {
               </div>
             </div>
             
-            <Button 
-              size="sm" 
-              variant="outline" 
-              className="opacity-0 group-hover:opacity-100 transition-opacity"
-            >
-              <ExternalLink className="w-3 h-3 mr-2" />
-              View
-            </Button>
+            <div className="flex items-center gap-2">
+              <BookmarkButton 
+                startupId={startup.id} 
+                size="sm" 
+                variant="ghost"
+              />
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <ExternalLink className="w-3 h-3 mr-2" />
+                View
+              </Button>
+            </div>
           </div>
         </div>
       </CardContent>

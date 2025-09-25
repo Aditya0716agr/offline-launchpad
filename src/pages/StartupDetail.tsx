@@ -7,8 +7,10 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { Heart, MapPin, Globe, MessageSquare, ArrowLeft, Eye } from "lucide-react";
+import { Heart, MapPin, Globe, MessageSquare, ArrowLeft, Eye, Bookmark } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { CommentsSection } from "@/components/startup/CommentsSection";
+import { BookmarkButton } from "@/components/startup/BookmarkButton";
 
 interface Startup {
   id: string;
@@ -245,14 +247,17 @@ const StartupDetail = () => {
                         )}
                       </div>
                       
-                      <Button
-                        onClick={handleVote}
-                        variant={hasVoted ? "default" : "outline"}
-                        className="flex items-center gap-2"
-                      >
-                        <Heart className={`w-4 h-4 ${hasVoted ? 'fill-current' : ''}`} />
-                        {votes.length}
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={handleVote}
+                          variant={hasVoted ? "default" : "outline"}
+                          className="flex items-center gap-2"
+                        >
+                          <Heart className={`w-4 h-4 ${hasVoted ? 'fill-current' : ''}`} />
+                          {votes.length}
+                        </Button>
+                        <BookmarkButton startupId={id!} />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -286,6 +291,9 @@ const StartupDetail = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Comments Section */}
+            <CommentsSection startupId={id!} />
           </div>
 
           {/* Sidebar */}

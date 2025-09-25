@@ -13,6 +13,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { StartupCard } from "@/components/startup/StartupCard";
 import { Search, Filter, Grid, List, SlidersHorizontal, Coffee, Heart, ShoppingBag, Wrench, Sparkles, Dumbbell, Home, GraduationCap, Music, Plane, Briefcase, Leaf } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { GeolocationButton } from "@/components/ui/geolocation-button";
 
 interface Category {
   id: string;
@@ -278,6 +279,10 @@ const Explore = () => {
 
               {/* Controls */}
               <div className="flex gap-2">
+                <GeolocationButton 
+                  onLocationFound={(location) => setSelectedLocation(location)} 
+                />
+                
                 <Button
                   variant="outline"
                   size="sm"

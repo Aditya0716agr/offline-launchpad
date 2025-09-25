@@ -10,6 +10,8 @@ import { Plus, Eye, Heart, MessageSquare, Settings, BarChart3 } from "lucide-rea
 import { useToast } from "@/hooks/use-toast";
 import { AddStartupModal } from "@/components/startup/AddStartupModal";
 import { EditProfileModal } from "@/components/profile/EditProfileModal";
+import { UserBookmarksTab } from "@/components/startup/UserBookmarksTab";
+import { UserVotesTab } from "@/components/startup/UserVotesTab";
 
 interface UserProfile {
   id: string;
@@ -414,8 +416,10 @@ const Dashboard = () => {
           // Regular user dashboard
           <div className="space-y-6">
             <Tabs defaultValue="profile" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="profile">My Profile</TabsTrigger>
+                <TabsTrigger value="saved">Saved</TabsTrigger>
+                <TabsTrigger value="voted">Upvoted</TabsTrigger>
                 <TabsTrigger value="discover">Discover</TabsTrigger>
               </TabsList>
 
@@ -536,6 +540,14 @@ const Dashboard = () => {
                     </div>
                   </CardContent>
                 </Card>
+              </TabsContent>
+
+              <TabsContent value="saved">
+                <UserBookmarksTab userProfile={profile} />
+              </TabsContent>
+
+              <TabsContent value="voted">
+                <UserVotesTab userProfile={profile} />
               </TabsContent>
 
               <TabsContent value="discover">
