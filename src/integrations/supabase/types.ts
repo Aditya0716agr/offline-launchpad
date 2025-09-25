@@ -296,6 +296,42 @@ export type Database = {
         Args: { input_text: string }
         Returns: string
       }
+      get_startup_public_view: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          category_id: string
+          city: string
+          cover_image_url: string
+          created_at: string
+          description: string
+          email_contact: string
+          founder_id: string
+          full_address: string
+          gallery_images: string[]
+          id: string
+          is_featured: boolean
+          launch_date: string
+          location: string
+          logo_url: string
+          looking_for: string[]
+          name: string
+          phone_number: string
+          slug: string
+          social_facebook: string
+          social_instagram: string
+          social_linkedin: string
+          social_twitter: string
+          stage: string
+          state_region: string
+          status: string
+          tagline: string
+          team_size: string
+          updated_at: string
+          view_count: number
+          website_url: string
+          whatsapp_link: string
+        }[]
+      }
       increment_view_count: {
         Args: { startup_id: string }
         Returns: undefined
