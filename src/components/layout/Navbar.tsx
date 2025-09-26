@@ -59,8 +59,8 @@ export function Navbar() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link to="/" className="font-medium text-xl text-foreground">
-            LaunchLocal
+          <Link to="/" className="flex items-center gap-2 text-xl font-bold text-foreground hover:text-primary transition-colors">
+            <span className="text-primary">Know</span>Founders
           </Link>
 
           {/* Navigation Links */}
