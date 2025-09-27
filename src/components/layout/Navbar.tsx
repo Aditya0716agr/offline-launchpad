@@ -59,8 +59,9 @@ export function Navbar() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 text-xl font-bold text-foreground hover:text-primary transition-colors">
+          <Link to="/" className="flex items-center gap-3 text-xl font-bold text-foreground hover:text-primary transition-colors">
             <span className="text-primary">Know</span>Founders
+            <span className="text-xs bg-primary/15 text-primary px-2 py-1 rounded-full font-medium">Early Access</span>
           </Link>
 
           {/* Navigation Links */}
@@ -130,8 +131,8 @@ export function Navbar() {
                   </Button>
                 </AuthModal>
                 <AuthModal defaultTab="signup">
-                  <Button className="px-6">
-                    Get Started
+                  <Button className="px-6 bg-gradient-primary hover:opacity-90">
+                    Get Early Access
                   </Button>
                 </AuthModal>
               </div>
