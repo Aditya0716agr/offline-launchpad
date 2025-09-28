@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Heart, MapPin, Mail, Github, Twitter } from "lucide-react";
+import { Heart, MapPin, Mail, Linkedin } from "lucide-react";
 
 export function Footer() {
   return (
@@ -12,7 +12,7 @@ export function Footer() {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Heart className="w-4 h-4 text-primary-foreground" />
               </div>
-              <span className="text-xl font-medium text-foreground">LaunchLocal</span>
+              <span className="text-xl font-medium text-foreground">KnowFounders</span>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed">
               Connecting local communities with innovative startups. Discover, support, and grow together.
@@ -66,9 +66,9 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/blog" className="text-muted-foreground hover:text-foreground transition-colors">
                   Resources
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -78,21 +78,15 @@ export function Footer() {
             <h3 className="font-medium text-foreground">Connect</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="mailto:hello@launchlocal.com" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
+                <a href="mailto:hertofhelp@gmail.com" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
                   <Mail className="w-3 h-3" />
                   Contact Us
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
-                  <Twitter className="w-3 h-3" />
-                  Twitter
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
-                  <Github className="w-3 h-3" />
-                  GitHub
+                <a href="https://www.linkedin.com/company/know-founder" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
+                  <Linkedin className="w-3 h-3" />
+                  LinkedIn
                 </a>
               </li>
             </ul>
@@ -102,13 +96,13 @@ export function Footer() {
         <div className="border-t border-border mt-12 pt-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-muted-foreground text-sm">
-              © 2024 LaunchLocal. Made with ❤️ for local entrepreneurs.
+              © 2024 KnowFounders. Made with ❤️ for local entrepreneurs.
             </p>
             <div className="flex items-center gap-6 text-sm">
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+              <a href="/privacy-policy" className="text-muted-foreground hover:text-foreground transition-colors">
                 Privacy Policy
               </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+              <a href="/terms-of-service" className="text-muted-foreground hover:text-foreground transition-colors">
                 Terms of Service
               </a>
             </div>

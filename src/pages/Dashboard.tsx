@@ -219,7 +219,7 @@ const Dashboard = () => {
               Welcome back, {profile.full_name || 'there'}
             </h1>
             <p className="text-muted-foreground mt-1">
-              {profile.role === 'founder' ? 'Manage your startup listings' : 'Your LaunchLocal dashboard'}
+              {profile.role === 'founder' ? 'Manage your startup listings' : 'Your KnowFounders dashboard'}
             </p>
           </div>
           

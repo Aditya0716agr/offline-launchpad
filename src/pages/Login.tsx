@@ -52,7 +52,7 @@ const Login = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link to="/" className="text-2xl font-medium text-primary">
-            LaunchLocal
+            KnowFounders
           </Link>
         </div>
 

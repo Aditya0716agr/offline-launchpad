@@ -29,7 +29,7 @@ const Signup = () => {
       await signUp(formData.email, formData.password, formData.fullName, formData.role);
       toast({
         title: "Account created!",
-        description: "Welcome to LaunchLocal. You can now start exploring startups.",
+        description: "Welcome to KnowFounders. You can now start exploring startups.",
       });
       navigate("/");
     } catch (error: any) {
@@ -62,13 +62,13 @@ const Signup = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link to="/" className="text-2xl font-medium text-primary">
-            LaunchLocal
+            KnowFounders
           </Link>
         </div>
 
         <Card className="border-0 shadow-none bg-accent/5">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-medium">Join LaunchLocal</CardTitle>
+            <CardTitle className="text-2xl font-medium">Join KnowFounders</CardTitle>
             <CardDescription>
               Create your account to discover and support local startups
             </CardDescription>
