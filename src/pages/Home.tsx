@@ -13,58 +13,58 @@ export default function Home() {
   const featuredStartups = [
     {
       id: "1",
-      name: "EcoClean Solutions",
-      description: "Sustainable cleaning products for modern homes",
+      name: "Desi Delights",
+      description: "Authentic regional Indian snacks delivered pan-India",
       logo_url: null,
-      location: "San Francisco, CA",
+      location: "Pune, Maharashtra",
       view_count: 1247,
       upvote_count: 89,
-      category: "Wellness",
-      founder_name: "Sarah Chen"
+      category: "Food & Beverage",
+      founder_name: "Priya Sharma"
     },
     {
       id: "2", 
-      name: "Artisan Bread Co.",
-      description: "Handcrafted sourdough bread delivered fresh daily",
+      name: "KhadiCraft",
+      description: "Handwoven khadi products supporting rural artisans",
       logo_url: null,
-      location: "Portland, OR",
+      location: "Jaipur, Rajasthan",
       view_count: 892,
       upvote_count: 67,
-      category: "Food",
-      founder_name: "Marcus Rodriguez"
+      category: "Fashion & Textiles",
+      founder_name: "Rajesh Agarwal"
     },
     {
       id: "3",
-      name: "FitLife Studio",
-      description: "Personalized fitness coaching for busy professionals",
+      name: "Ayur Wellness Hub",
+      description: "Traditional Ayurvedic treatments with modern convenience",
       logo_url: null,
-      location: "Austin, TX",
+      location: "Kochi, Kerala",
       view_count: 1156,
       upvote_count: 94,
-      category: "Fitness",
-      founder_name: "Jessica Park"
+      category: "Health & Wellness",
+      founder_name: "Dr. Meena Nair"
     },
     {
       id: "4",
-      name: "GreenThumb Gardens",
-      description: "Urban gardening solutions for apartment dwellers",
+      name: "Urban Tiffin",
+      description: "Homestyle meals for working professionals in metros",
       logo_url: null,
-      location: "Seattle, WA",
+      location: "Bengaluru, Karnataka",
       view_count: 743,
       upvote_count: 52,
-      category: "Wellness",
-      founder_name: "David Kim"
+      category: "Food & Beverage",
+      founder_name: "Suresh Kumar"
     },
     {
       id: "5",
-      name: "Craft & Co.",
-      description: "Handmade jewelry and accessories from local artisans",
+      name: "Village Connect",
+      description: "Bridging rural farmers with urban organic food buyers",
       logo_url: null,
-      location: "Nashville, TN",
+      location: "Nashik, Maharashtra",
       view_count: 634,
       upvote_count: 41,
-      category: "Retail",
-      founder_name: "Amanda Foster"
+      category: "Agriculture",
+      founder_name: "Anita Patil"
     }
   ];
 
