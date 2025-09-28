@@ -348,13 +348,13 @@ const Explore = () => {
               <Card className="border-0 shadow-none bg-accent/5">
                 <CardContent className="p-12 text-center">
                   <h3 className="text-lg font-medium text-foreground mb-2">
-                    No startups found
+                    Startup Previews Begin Next Week
                   </h3>
                   <p className="text-muted-foreground mb-4">
-                    Try adjusting your search terms or filters
+                    Connect with like-minded founders from day one
                   </p>
                   <Button onClick={clearFilters} variant="outline">
-                    Clear filters
+                    Join Community
                   </Button>
                 </CardContent>
               </Card>
