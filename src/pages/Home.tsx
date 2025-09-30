@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowRight, CheckCircle, Users, TrendingUp, Heart, Eye, MapPin } from "lucide-react";
+import { trackUrgencyBannerClick } from "@/lib/analytics";
 
 export default function Home() {
   // Mock featured startups data - in real app, this would come from API
@@ -30,7 +31,7 @@ export default function Home() {
       location: "Jaipur, Rajasthan",
       view_count: 892,
       upvote_count: 67,
-      category: "Fashion & Textiles",
+      category: "Retail & Fashion",
       founder_name: "Rajesh Agarwal"
     },
     {
@@ -63,8 +64,118 @@ export default function Home() {
       location: "Nashik, Maharashtra",
       view_count: 634,
       upvote_count: 41,
-      category: "Agriculture",
+      category: "Food & Beverage",
       founder_name: "Anita Patil"
+    },
+    {
+      id: "6",
+      name: "FitAtHome",
+      description: "Personalized home fitness training for busy professionals",
+      logo_url: null,
+      location: "Delhi, NCR",
+      view_count: 892,
+      upvote_count: 73,
+      category: "Health & Wellness",
+      founder_name: "Vikram Singh"
+    },
+    {
+      id: "7",
+      name: "EcoThread",
+      description: "Sustainable fashion for conscious consumers",
+      logo_url: null,
+      location: "Hyderabad, Telangana",
+      view_count: 567,
+      upvote_count: 45,
+      category: "Retail & Fashion",
+      founder_name: "Kavita Reddy"
+    },
+    {
+      id: "8",
+      name: "SkillBridge Academy",
+      description: "Professional skill development for career advancement",
+      logo_url: null,
+      location: "Mumbai, Maharashtra",
+      view_count: 934,
+      upvote_count: 68,
+      category: "Education & Training",
+      founder_name: "Arjun Mehta"
+    },
+    {
+      id: "9",
+      name: "Herbal Glow",
+      description: "Natural skincare solutions using traditional Indian herbs",
+      logo_url: null,
+      location: "Ahmedabad, Gujarat",
+      view_count: 678,
+      upvote_count: 56,
+      category: "Beauty & Personal Care",
+      founder_name: "Sunita Joshi"
+    },
+    {
+      id: "10",
+      name: "Smart Home Solutions",
+      description: "Affordable home automation for Indian households",
+      logo_url: null,
+      location: "Chandigarh, Punjab",
+      view_count: 789,
+      upvote_count: 62,
+      category: "Home & Lifestyle",
+      founder_name: "Rohit Gupta"
+    },
+    {
+      id: "11",
+      name: "EventCraft",
+      description: "Memorable events and celebrations for every occasion",
+      logo_url: null,
+      location: "Chennai, Tamil Nadu",
+      view_count: 445,
+      upvote_count: 38,
+      category: "Entertainment",
+      founder_name: "Deepika Iyer"
+    },
+    {
+      id: "12",
+      name: "Local Explorer",
+      description: "Authentic local experiences and hidden gems",
+      logo_url: null,
+      location: "Lucknow, Uttar Pradesh",
+      view_count: 356,
+      upvote_count: 29,
+      category: "Travel & Hospitality",
+      founder_name: "Manoj Tiwari"
+    },
+    {
+      id: "13",
+      name: "BusinessBoost",
+      description: "Strategic consulting for small business growth",
+      logo_url: null,
+      location: "Indore, Madhya Pradesh",
+      view_count: 523,
+      upvote_count: 41,
+      category: "Services",
+      founder_name: "Pooja Shah"
+    },
+    {
+      id: "14",
+      name: "Mindful Living",
+      description: "Holistic wellness coaching for mental and physical health",
+      logo_url: null,
+      location: "Kolkata, West Bengal",
+      view_count: 456,
+      upvote_count: 34,
+      category: "Health & Wellness",
+      founder_name: "Amit Kumar"
+    },
+    {
+      id: "15",
+      name: "Green Wardrobe",
+      description: "Pre-loved designer fashion for sustainable style",
+      logo_url: null,
+      location: "Bhubaneswar, Odisha",
+      view_count: 234,
+      upvote_count: 18,
+      category: "Retail & Fashion",
+      founder_name: "Neha Agarwal"
     }
   ];
 
@@ -108,8 +219,30 @@ export default function Home() {
     <div className="min-h-screen bg-background">
       <Navbar />
       
+      {/* Urgency Banner */}
+      <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 border-b border-primary/20">
+        <div className="max-w-6xl mx-auto px-8 py-4">
+          <div className="flex items-center justify-center gap-3 text-center">
+            <span className="text-2xl">🎖</span>
+            <div className="flex flex-col sm:flex-row items-center gap-2">
+              <span className="font-semibold text-primary">First 100 founders get a Founding Member badge</span>
+              <span className="text-muted-foreground">+ free featured spot!</span>
+            </div>
+            <AuthModal defaultTab="signup">
+              <Button 
+                size="sm" 
+                className="bg-primary text-primary-foreground hover:bg-primary/90 ml-4"
+                onClick={() => trackUrgencyBannerClick('claim_badge')}
+              >
+                Claim Yours
+              </Button>
+            </AuthModal>
+          </div>
+        </div>
+      </div>
+      
       {/* Hero Section */}
-      <section className="relative pt-32 pb-24 overflow-hidden">
+      <section className="relative pt-24 pb-24 overflow-hidden">
         <div className="relative z-10 max-w-6xl mx-auto px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-light text-foreground mb-8 leading-tight tracking-tight">
             The Future of Non-Tech
@@ -122,7 +255,11 @@ export default function Home() {
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
             <AuthModal defaultTab="signup">
-              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-12 py-4 h-12 min-w-[240px] rounded-full font-medium transition-all duration-200 hover:scale-105">
+              <Button 
+                size="lg" 
+                className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-12 py-4 h-12 min-w-[240px] rounded-full font-medium transition-all duration-200 hover:scale-105"
+                onClick={() => trackUrgencyBannerClick('signup')}
+              >
                 Join the Movement
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
@@ -153,7 +290,7 @@ export default function Home() {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {featuredStartups.slice(0, 3).map((startup) => (
+            {featuredStartups.slice(0, 6).map((startup) => (
               <Card key={startup.id} className="startup-card group">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4 mb-4">

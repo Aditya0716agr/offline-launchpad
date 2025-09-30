@@ -7,7 +7,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { signUp, signIn } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, User, UserPlus } from "lucide-react";
+import { Loader2, User, UserPlus, Rocket } from "lucide-react";
+import { QuickStartupModal } from "@/components/startup/QuickStartupModal";
+import { trackSignup, trackLogin } from "@/lib/analytics";
 
 interface AuthModalProps {
   children: React.ReactNode;
@@ -18,6 +20,7 @@ export function AuthModal({ children, defaultTab = "signin" }: AuthModalProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(defaultTab);
+  const [showQuickStartup, setShowQuickStartup] = useState(false);
   const { toast } = useToast();
 
   const [signInData, setSignInData] = useState({
@@ -38,6 +41,7 @@ export function AuthModal({ children, defaultTab = "signin" }: AuthModalProps) {
 
     try {
       await signIn(signInData.email, signInData.password);
+      trackLogin('email');
       toast({
         title: "Welcome back!",
         description: "You've successfully signed in.",
@@ -61,12 +65,20 @@ export function AuthModal({ children, defaultTab = "signin" }: AuthModalProps) {
 
     try {
       await signUp(signUpData.email, signUpData.password, signUpData.fullName, signUpData.role);
+      trackSignup('email');
       toast({
         title: "Account created!",
         description: "Welcome to the platform. You can now start exploring startups.",
       });
-      setOpen(false);
-      window.location.reload();
+      
+      // If user signed up as founder, show quick startup modal
+      if (signUpData.role === "founder") {
+        setOpen(false);
+        setShowQuickStartup(true);
+      } else {
+        setOpen(false);
+        window.location.reload();
+      }
     } catch (error: any) {
       toast({
         title: "Sign up failed",
@@ -186,6 +198,15 @@ export function AuthModal({ children, defaultTab = "signin" }: AuthModalProps) {
           </TabsContent>
         </Tabs>
       </DialogContent>
+      
+      <QuickStartupModal 
+        open={showQuickStartup} 
+        onOpenChange={setShowQuickStartup}
+        onSuccess={() => {
+          setShowQuickStartup(false);
+          window.location.reload();
+        }}
+      />
     </Dialog>
   );
 }

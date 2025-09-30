@@ -2,19 +2,19 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { AuthModal } from "@/components/auth/AuthModal";
-import { AddStartupModal } from "@/components/startup/AddStartupModal";
+import { QuickStartupModal } from "@/components/startup/QuickStartupModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { getCurrentUser, signOut, getUserProfile } from "@/lib/auth";
+import { signOut, getUserProfile } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
-import { User, LogOut, Settings, Plus } from "lucide-react";
+import { User, LogOut, Plus } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import type { UserProfile } from "@/lib/auth";
 
 export function Navbar() {
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [showAddStartupModal, setShowAddStartupModal] = useState(false);
+  const [showQuickStartupModal, setShowQuickStartupModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -101,7 +101,7 @@ export function Navbar() {
               <>
                 {profile?.role === 'founder' && (
                   <Button 
-                    onClick={() => setShowAddStartupModal(true)}
+                    onClick={() => setShowQuickStartupModal(true)}
                     className="flex items-center gap-2 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground border border-primary/20 hover:border-primary transition-all duration-300 rounded-full px-4 py-2 h-9 text-sm font-medium"
                   >
                     <Plus className="w-4 h-4" />
@@ -120,7 +120,7 @@ export function Navbar() {
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end" className="bg-background/95 backdrop-blur-md border border-border/50">
+                <DropdownMenuContent className="w-56 bg-background/95 backdrop-blur-md border border-border/50" align="end">
                   <div className="flex items-center justify-start gap-3 p-3">
                     <Avatar className="h-10 w-10">
                       <AvatarImage src={profile?.avatar_url || ""} />
@@ -174,9 +174,9 @@ export function Navbar() {
         </div>
       </div>
       
-      <AddStartupModal 
-        open={showAddStartupModal}
-        onOpenChange={setShowAddStartupModal}
+      <QuickStartupModal 
+        open={showQuickStartupModal}
+        onOpenChange={setShowQuickStartupModal}
         onSuccess={() => {
           // Optionally refresh user data or navigate somewhere
         }}
