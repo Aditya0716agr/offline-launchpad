@@ -29,6 +29,7 @@ interface Startup {
   profiles: {
     full_name: string | null;
     avatar_url: string | null;
+    is_founding_member: boolean;
   };
 }
 
@@ -66,7 +67,7 @@ const StartupDetail = () => {
         .select(`
           *,
           categories (name, slug),
-          profiles (full_name, avatar_url)
+          profiles (full_name, avatar_url, is_founding_member)
         `)
         .eq('id', id)
         .eq('status', 'approved')
@@ -240,11 +241,18 @@ const StartupDetail = () => {
                             <span>{startup.view_count} views</span>
                           </div>
                         </div>
-                        {startup.categories && (
-                          <Badge variant="secondary" className="mt-2">
-                            {startup.categories.name}
-                          </Badge>
-                        )}
+                        <div className="flex items-center gap-2 mt-2">
+                          {startup.categories && (
+                            <Badge variant="secondary">
+                              {startup.categories.name}
+                            </Badge>
+                          )}
+                          {startup.profiles.is_founding_member && (
+                            <Badge className="bg-amber-500 text-white border-amber-600">
+                              🎖 Founding Member
+                            </Badge>
+                          )}
+                        </div>
                       </div>
                       
                       <div className="flex gap-2">

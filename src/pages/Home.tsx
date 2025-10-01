@@ -1,15 +1,81 @@
 import { Button } from "@/components/ui/button";
 import { AuthModal } from "@/components/auth/AuthModal";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowRight, CheckCircle, Users, TrendingUp, Heart, Eye, MapPin } from "lucide-react";
-import { trackUrgencyBannerClick } from "@/lib/analytics";
+import { trackUrgencyBannerClick, trackFoundingMemberClaim } from "@/lib/analytics";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
+  const [isFoundingMember, setIsFoundingMember] = useState(false);
+
+  useEffect(() => {
+    checkUser();
+  }, []);
+
+  const checkUser = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      setUser(user);
+      // Check if already a founding member
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('is_founding_member')
+        .eq('user_id', user.id)
+        .single();
+      
+      if (profile?.is_founding_member) {
+        setIsFoundingMember(true);
+      }
+    }
+  };
+
+  const claimFoundingMember = async () => {
+    if (!user) {
+      toast({
+        title: "Sign up required",
+        description: "Please sign up to claim your Founding Member badge",
+      });
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ is_founding_member: true })
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      setIsFoundingMember(true);
+      trackFoundingMemberClaim();
+      
+      toast({
+        title: "🎖 Founding Member Badge Claimed!",
+        description: "You're now part of the first 100 founders. Your badge will be displayed on your profile and startups.",
+      });
+
+      // Redirect to dashboard
+      setTimeout(() => navigate('/dashboard'), 2000);
+    } catch (error: any) {
+      console.error('Error claiming badge:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to claim badge",
+        variant: "destructive",
+      });
+    }
+  };
+
   // Mock featured startups data - in real app, this would come from API
   const featuredStartups = [
     {
@@ -228,15 +294,32 @@ export default function Home() {
               <span className="font-semibold text-primary">First 100 founders get a Founding Member badge</span>
               <span className="text-muted-foreground">+ free featured spot!</span>
             </div>
-            <AuthModal defaultTab="signup">
+            {user && !isFoundingMember ? (
               <Button 
                 size="sm" 
                 className="bg-primary text-primary-foreground hover:bg-primary/90 ml-4"
-                onClick={() => trackUrgencyBannerClick('claim_badge')}
+                onClick={() => {
+                  trackUrgencyBannerClick('claim_badge');
+                  claimFoundingMember();
+                }}
               >
                 Claim Yours
               </Button>
-            </AuthModal>
+            ) : user && isFoundingMember ? (
+              <Badge className="ml-4 bg-amber-500 text-white border-amber-600">
+                ✓ Claimed
+              </Badge>
+            ) : (
+              <AuthModal defaultTab="signup">
+                <Button 
+                  size="sm" 
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 ml-4"
+                  onClick={() => trackUrgencyBannerClick('claim_badge')}
+                >
+                  Claim Yours
+                </Button>
+              </AuthModal>
+            )}
           </div>
         </div>
       </div>

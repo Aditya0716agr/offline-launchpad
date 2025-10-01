@@ -18,6 +18,9 @@ interface StartupCardProps {
       slug: string;
     } | null;
     votes: { id: string }[];
+    profiles?: {
+      is_founding_member?: boolean;
+    };
   };
   viewMode?: "grid" | "list";
 }
@@ -76,6 +79,11 @@ export function StartupCard({ startup, viewMode = "grid" }: StartupCardProps) {
                       {startup.categories.name}
                     </Badge>
                   )}
+                  {startup.profiles?.is_founding_member && (
+                    <Badge className="bg-amber-500 text-white border-amber-600 text-xs">
+                      🎖
+                    </Badge>
+                  )}
                   <div className="flex items-center gap-2">
                     <BookmarkButton 
                       startupId={startup.id} 
@@ -131,6 +139,11 @@ export function StartupCard({ startup, viewMode = "grid" }: StartupCardProps) {
             {startup.categories && (
               <Badge className="category-badge shadow-sm">
                 {startup.categories.name}
+              </Badge>
+            )}
+            {startup.profiles?.is_founding_member && (
+              <Badge className="bg-amber-500 text-white border-amber-600 shadow-sm">
+                🎖
               </Badge>
             )}
           </div>

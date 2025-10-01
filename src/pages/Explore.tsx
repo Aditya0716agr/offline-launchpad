@@ -35,6 +35,9 @@ interface Startup {
     slug: string;
   } | null;
   votes: { id: string }[];
+  profiles?: {
+    is_founding_member?: boolean;
+  };
 }
 
 const Explore = () => {
@@ -82,7 +85,8 @@ const Explore = () => {
         .select(`
           *,
           categories (name, slug),
-          votes (id)
+          votes (id),
+          profiles (is_founding_member)
         `)
         .eq('status', 'approved');
 

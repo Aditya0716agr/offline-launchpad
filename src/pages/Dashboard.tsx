@@ -215,9 +215,16 @@ const Dashboard = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-medium text-foreground">
-              Welcome back, {profile.full_name || 'there'}
-            </h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-3xl font-medium text-foreground">
+                Welcome back, {profile.full_name || 'there'}
+              </h1>
+              {(profile as any).is_founding_member && (
+                <Badge className="bg-amber-500 text-white border-amber-600 flex items-center gap-1">
+                  🎖 Founding Member
+                </Badge>
+              )}
+            </div>
             <p className="text-muted-foreground mt-1">
               {profile.role === 'founder' ? 'Manage your startup listings' : 'Your KnowFounders dashboard'}
             </p>
