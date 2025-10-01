@@ -116,6 +116,7 @@ export function Footer() {
               <a href="https://similarlabs.com/?ref=embed" target="_blank" style={{cursor: 'pointer'}}>
                 <img src="https://similarlabs.com/similarlabs-embed-badge-light.svg" alt="SimilarLabs Embed Badge" />
               </a>
+              <a href="https://startupfa.me/s/knowfounders?utm_source=knowfounder.online" target="_blank"><img src="https://startupfa.me/badges/featured/light.webp" alt="Featured on Startup Fame" width="171" height="54" /></a>
             </div>
           </div>
         </div>
