@@ -93,7 +93,22 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Launch Badges */}
         <div className="border-t border-border mt-12 pt-8">
+          <div className="text-center mb-8">
+            <h3 className="text-sm font-medium text-muted-foreground mb-4">Featured On</h3>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a href="https://launchigniter.com/product/knowfounders?ref=badge-knowfounders" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
+                <img src="https://launchigniter.com/api/badge/knowfounders?theme=neutral" alt="Featured on LaunchIgniter" width="212" height="55" />
+              </a>
+              <a href="https://www.producthunt.com/products/knowfounders?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-knowfounders" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
+                <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1020985&theme=neutral&t=1759343386759" alt="KnowFounders - Where non-tech founders get discovered. | Product Hunt" style={{width: '250px', height: '54px'}} width="250" height="54" />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t border-border pt-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-muted-foreground text-sm">
               © 2024 KnowFounders. Made with ❤️ for local entrepreneurs.
