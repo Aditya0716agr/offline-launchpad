@@ -99,12 +99,12 @@ export function Footer() {
               © 2024 KnowFounders. Made with ❤️ for local entrepreneurs.
             </p>
             <div className="flex items-center gap-6 text-sm">
-              <a href="/privacy-policy" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Link to="/privacy-policy" className="text-muted-foreground hover:text-foreground transition-colors">
                 Privacy Policy
-              </a>
-              <a href="/terms-of-service" className="text-muted-foreground hover:text-foreground transition-colors">
+              </Link>
+              <Link to="/terms-of-service" className="text-muted-foreground hover:text-foreground transition-colors">
                 Terms of Service
-              </a>
+              </Link>
             </div>
           </div>
         </div>
