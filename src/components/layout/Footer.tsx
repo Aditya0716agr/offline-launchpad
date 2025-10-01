@@ -110,6 +110,10 @@ export function Footer() {
               <a href="https://fazier.com" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
                 <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=featured&theme=neutral" width="250" alt="Fazier badge" />
               </a>
+              <a href="https://starterbest.com" target="_blank" rel="noopener noreferrer"> 
+                <img src="https://starterbest.com/badages-awards.svg" alt="Featured on Starter Best" style={{height: '54px', width: 'auto'}} />
+              </a>
+              
             </div>
           </div>
         </div>
