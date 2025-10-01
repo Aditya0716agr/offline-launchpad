@@ -113,7 +113,9 @@ export function Footer() {
               <a href="https://starterbest.com" target="_blank" rel="noopener noreferrer"> 
                 <img src="https://starterbest.com/badages-awards.svg" alt="Featured on Starter Best" style={{height: '54px', width: 'auto'}} />
               </a>
-              
+              <a href="https://similarlabs.com/?ref=embed" target="_blank" style={{cursor: 'pointer'}}>
+                <img src="https://similarlabs.com/similarlabs-embed-badge-light.svg" alt="SimilarLabs Embed Badge" />
+              </a>
             </div>
           </div>
         </div>
