@@ -315,35 +315,6 @@ const Explore = () => {
           </div>
         </div>
 
-        {/* Results Header */}
-        <div className="flex items-center justify-between py-4">
-          <div className="flex items-center gap-4">
-            <h2 className="text-2xl font-bold text-gray-900">
-              {loading ? "Loading..." : `${startups.length} startups found`}
-            </h2>
-            {selectedCategories.length > 0 && (
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-500">in</span>
-                <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
-                  {categories.find(c => c.slug === selectedCategories[0])?.name}
-                </span>
-              </div>
-            )}
-            {selectedLocation !== "all" && (
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-500">near</span>
-                <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
-                  {selectedLocation}
-                </span>
-              </div>
-            )}
-          </div>
-          {startups.length > 0 && (
-            <div className="text-sm text-gray-500">
-              Showing {startups.length} result{startups.length !== 1 ? 's' : ''}
-            </div>
-          )}
-        </div>
 
         {/* Startups Grid/List */}
         {loading ? (
