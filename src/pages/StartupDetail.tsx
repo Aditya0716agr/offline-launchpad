@@ -351,8 +351,8 @@ const StartupDetail = () => {
         {/* Demo Disclaimer */}
         {startup.is_featured && (
           <div className="mt-8 text-center">
-            <p className="text-xs text-muted-foreground/60">
-              * This is a featured listing for demonstration purposes
+            <p className="text-xs text-muted-foreground/60 italic">
+              * This is only for show purpose
             </p>
           </div>
         )}
