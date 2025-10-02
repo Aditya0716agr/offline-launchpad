@@ -22,6 +22,7 @@ interface Startup {
   whatsapp_link: string | null;
   view_count: number;
   created_at: string;
+  is_featured: boolean;
   categories: {
     name: string;
     slug: string;
@@ -346,6 +347,15 @@ const StartupDetail = () => {
             </Card>
           </div>
         </div>
+
+        {/* Demo Disclaimer */}
+        {startup.is_featured && (
+          <div className="mt-8 text-center">
+            <p className="text-xs text-muted-foreground/60 italic">
+              * This is only for show purpose
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
