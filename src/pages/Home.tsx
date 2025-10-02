@@ -11,6 +11,7 @@ import { trackUrgencyBannerClick, trackFoundingMemberClaim } from "@/lib/analyti
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
+import { SEOHead } from "@/components/seo/SEOHead";
 
 export default function Home() {
   const { toast } = useToast();
@@ -283,6 +284,12 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="Know Founders - Discover Non-Tech Startups & Entrepreneurs | Startup Directory"
+        description="Discover innovative non-tech startups and connect with entrepreneurs. Browse startup directory, find cofounders, get funding, and join the largest community of non-tech founders in India."
+        keywords="non-tech startups, startup directory, find startups, startup discovery, non-tech founders, entrepreneur directory, startup community, business directory, startup listing, find cofounder, startup funding, business networking, startup ecosystem, entrepreneur platform, startup search, business discovery, startup database, founder network, startup marketplace, business opportunities, startup investment"
+        url="https://knowfounders.com"
+      />
       <Navbar />
       
       {/* Urgency Banner */}

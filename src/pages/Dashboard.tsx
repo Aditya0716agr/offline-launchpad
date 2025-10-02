@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Eye, Heart, MessageSquare, Settings, BarChart3 } from "lucide-react";
+import { Plus, Eye, Heart, MessageSquare, Settings, BarChart3, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { AddStartupModal } from "@/components/startup/AddStartupModal";
 import { EditProfileModal } from "@/components/profile/EditProfileModal";
@@ -23,12 +23,11 @@ interface Startup {
   id: string;
   name: string;
   description: string;
+  logo_url: string | null;
   status: string;
   view_count: number;
-  created_at: string;
-  categories: {
-    name: string;
-  } | null;
+  votes?: { id: string }[];
+  comments?: { id: string }[];
 }
 
 const Dashboard = () => {
@@ -40,89 +39,166 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [showAddStartupModal, setShowAddStartupModal] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
-  const [roleUpdateLoading, setRoleUpdateLoading] = useState(false);
 
   useEffect(() => {
+    const initUser = async () => {
+      console.log('Initializing user...');
+      
+      // First, try to get the current session
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      console.log('Session check:', { session: !!session, error: sessionError });
+      
+      if (session?.user) {
+        console.log('User found in session:', session.user.email);
+        setUser(session.user);
+        await checkUser(session.user);
+        return;
+      }
+      
+      // If no session, try to get user directly
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      console.log('Direct user check:', { user: !!user, error: userError });
+      
+      if (user) {
+        console.log('User found directly:', user.email);
+        setUser(user);
+        await checkUser(user);
+      } else {
+        console.log('No user found, redirecting to home');
+        setLoading(false);
+        // Redirect to home if no user
+        navigate('/');
+      }
+    };
+    
+    initUser();
+
+    // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (event === 'SIGNED_OUT' || !session) {
-          navigate('/');
+      async (event, session) => {
+        console.log('Auth state changed:', event, session?.user?.email);
+        if (session?.user) {
+          setUser(session.user);
+          await checkUser(session.user);
+        } else {
+          setUser(null);
+          setProfile(null);
+          setStartups([]);
+          setLoading(false);
         }
       }
     );
 
-    checkUser();
-
     return () => subscription.unsubscribe();
-  }, []);
+  }, [navigate]);
 
-  const checkUser = async () => {
+  const checkUser = async (userToCheck = user) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        navigate('/login');
+      if (!userToCheck) {
+        console.log('No user found, setting loading to false');
+        setLoading(false);
         return;
       }
 
-      setUser(user);
+      console.log('Checking profile for user:', userToCheck.email);
 
-      // Get user profile
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('user_id', user.id)
-        .maybeSingle();
+      // Get user profile with retry logic
+      let profileData = null;
+      let profileError = null;
+      
+      // Try multiple times to get the profile
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        console.log(`Profile check attempt ${attempt}/3`);
+        
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', userToCheck.id)
+          .single();
 
-      if (profileError) {
-        console.error('Profile error:', profileError);
+        if (error && error.code !== 'PGRST116') {
+          console.error(`Profile check attempt ${attempt} failed:`, error);
+          profileError = error;
+          if (attempt < 3) {
+            // Wait a bit before retrying
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            continue;
+          }
+        } else if (error && error.code === 'PGRST116') {
+          console.log(`Profile not found on attempt ${attempt}`);
+          profileError = error;
+          break;
+        } else {
+          console.log(`Profile found on attempt ${attempt}:`, data);
+          profileData = data;
+          profileError = null;
+          break;
+        }
+      }
+
+      if (profileError && profileError.code !== 'PGRST116') {
         throw profileError;
       }
       
+      // If no profile exists, create one automatically
       if (!profileData) {
-        // Create profile if it doesn't exist
-        const { data: newProfile, error: createError } = await supabase
-          .from('profiles')
-          .insert({
-            user_id: user.id,
-            full_name: user.email,
-            role: 'user'
-          })
-          .select()
-          .single();
+        console.log('No profile found, creating one automatically...');
+        
+        try {
+          const { data: newProfile, error: createError } = await supabase
+            .from('profiles')
+            .insert({
+              user_id: userToCheck.id,
+              full_name: userToCheck.user_metadata?.full_name || userToCheck.email,
+              role: 'user'
+            })
+            .select()
+            .single();
           
         if (createError) {
-          console.error('Error creating profile:', createError);
-          throw createError;
+            console.error('Failed to create profile:', createError);
+            // Don't throw error, just set loading to false so user can see the message
+            setLoading(false);
+            return;
+          } else {
+            setProfile(newProfile);
+            console.log('Profile created successfully:', newProfile);
+            profileData = newProfile;
+          }
+        } catch (error) {
+          console.error('Profile creation failed:', error);
+          setLoading(false);
+          return;
         }
-        
-        setProfile(newProfile);
       } else {
         setProfile(profileData);
+        console.log('Profile loaded successfully:', profileData);
       }
 
-      // If user is a founder, fetch their startups
-      if (profileData.role === 'founder') {
+      // Get user's startups
+      if (profileData) {
         const { data: startupsData, error: startupsError } = await supabase
           .from('startups')
           .select(`
             *,
-            categories (name)
+            votes (id),
+            comments (id)
           `)
           .eq('founder_id', profileData.id)
           .order('created_at', { ascending: false });
 
         if (startupsError) {
-          console.error('Startups error:', startupsError);
-          throw startupsError;
+          console.error('Error fetching startups:', startupsError);
+        } else {
+          setStartups(startupsData || []);
+          console.log('Startups loaded:', startupsData?.length || 0);
         }
-        setStartups(startupsData || []);
       }
-    } catch (error: any) {
-      console.error('Dashboard error:', error);
+    } catch (error) {
+      console.error('Error checking user:', error);
       toast({
         title: "Error",
-        description: error.message || "Failed to load dashboard",
+        description: "Failed to load user data",
         variant: "destructive",
       });
     } finally {
@@ -130,63 +206,30 @@ const Dashboard = () => {
     }
   };
 
-  const updateUserRole = async (newRole: string) => {
-    setRoleUpdateLoading(true);
-    try {
-      if (!profile) return;
-
-      const { error } = await supabase
-        .from('profiles')
-        .update({ role: newRole })
-        .eq('user_id', (profile as any).user_id);
-
-      if (error) throw error;
-
-      toast({
-        title: "Success",
-        description: `Role updated to ${newRole} successfully!`,
-      });
-
-      // Refresh the profile data
-      await checkUser();
-    } catch (error: any) {
-      console.error('Error updating role:', error);
-      toast({
-        title: "Error",
-        description: error.message || "Failed to update role",
-        variant: "destructive",
-      });
-    } finally {
-      setRoleUpdateLoading(false);
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'approved':
-        return 'default';
-      case 'pending':
-        return 'secondary';
-      case 'rejected':
-        return 'destructive';
-      default:
-        return 'secondary';
-    }
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
-        <div className="container mx-auto px-4 py-8">
-          <div className="animate-pulse">
-            <div className="h-8 bg-muted rounded w-1/4 mb-6"></div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="h-32 bg-muted rounded"></div>
-              ))}
+        <div className="container mx-auto px-4 py-8 text-center">
+          <h1 className="text-2xl font-medium text-foreground mb-4">
+            Loading dashboard...
+          </h1>
             </div>
           </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="container mx-auto px-4 py-8 text-center">
+          <h1 className="text-2xl font-medium text-foreground mb-4">
+            Please sign in to access your dashboard
+          </h1>
+          <Button onClick={() => navigate('/')}>
+            Go Home
+          </Button>
         </div>
       </div>
     );
@@ -198,11 +241,98 @@ const Dashboard = () => {
         <Navbar />
         <div className="container mx-auto px-4 py-8 text-center">
           <h1 className="text-2xl font-medium text-foreground mb-4">
-            Unable to load dashboard
+            Profile Setup Required
           </h1>
-          <Button onClick={() => navigate('/')}>
+          <p className="text-muted-foreground mb-6">
+            We need to create your profile to access the dashboard.
+          </p>
+          <div className="flex flex-col gap-4 items-center max-w-md mx-auto">
+            <Button 
+              onClick={async () => {
+                try {
+                  if (!user) return;
+                  
+                  console.log('Creating profile manually...');
+                  const { data: newProfile, error: createError } = await supabase
+                    .from('profiles')
+                    .insert({
+                      user_id: user.id,
+                      full_name: user.email,
+                      role: 'user'
+                    })
+                    .select()
+                    .single();
+
+                  if (createError) {
+                    console.error('Profile creation failed:', createError);
+                    toast({
+                      title: "Error",
+                      description: "Failed to create profile. Please try the SQL fix.",
+                      variant: "destructive",
+                    });
+                  } else {
+                    console.log('Profile created:', newProfile);
+                    setProfile(newProfile);
+                    toast({
+                      title: "Success",
+                      description: "Profile created successfully!",
+                    });
+                  }
+                } catch (error) {
+                  console.error('Error:', error);
+                  toast({
+                    title: "Error",
+                    description: "An error occurred. Please try the SQL fix.",
+                    variant: "destructive",
+                  });
+                }
+              }}
+              className="w-full"
+            >
+              Create My Profile
+            </Button>
+            <Button 
+              variant="outline" 
+              onClick={() => window.location.reload()}
+              className="w-full"
+            >
+              Refresh Page
+            </Button>
+            <Button 
+              variant="outline" 
+              onClick={() => navigate('/')}
+              className="w-full"
+            >
             Go Home
           </Button>
+            <Button 
+              variant="secondary" 
+              onClick={() => {
+                // Create a temporary profile object to bypass the check
+                const tempProfile = {
+                  id: user.id,
+                  role: 'user',
+                  full_name: user.email
+                };
+                setProfile(tempProfile);
+                toast({
+                  title: "Temporary Access",
+                  description: "Using temporary profile. Some features may be limited.",
+                });
+              }}
+              className="w-full"
+            >
+              Continue Without Profile (Temporary)
+            </Button>
+            <div className="mt-6 p-4 bg-muted/50 rounded-lg text-left">
+              <h3 className="font-medium mb-2">If nothing works:</h3>
+              <ol className="text-sm text-muted-foreground space-y-1">
+                <li>1. Go to Supabase Dashboard → SQL Editor</li>
+                <li>2. Run the complete-dashboard-fix.sql script</li>
+                <li>3. Refresh this page</li>
+              </ol>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -227,11 +357,20 @@ const Dashboard = () => {
               )}
             </div>
             <p className="text-base text-muted-foreground">
-              {profile.role === 'founder' ? 'Manage your startup listings and track your performance' : 'Your KnowFounders dashboard'}
+              Your KnowFounders dashboard - manage your startups and connect with the community
             </p>
           </div>
           
-          {profile.role === 'founder' && (
+          <div className="flex items-center gap-3">
+            <Button 
+              variant="outline"
+              size="lg"
+              className="flex items-center gap-2"
+              onClick={() => setShowEditProfile(true)}
+            >
+              <User className="w-5 h-5" />
+              Update My Details
+            </Button>
             <Button 
               size="lg"
               className="flex items-center gap-2 shadow-lg"
@@ -240,15 +379,14 @@ const Dashboard = () => {
               <Plus className="w-5 h-5" />
               Add Startup
             </Button>
-          )}
+          </div>
         </div>
 
-        {profile.role === 'founder' ? (
           <Tabs defaultValue="startups" className="space-y-6">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="startups">My Startups</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
-              <TabsTrigger value="settings">Settings</TabsTrigger>
+            <TabsTrigger value="bookmarks">Bookmarks</TabsTrigger>
+            <TabsTrigger value="votes">Votes</TabsTrigger>
             </TabsList>
 
             <TabsContent value="startups" className="space-y-6">
@@ -342,38 +480,51 @@ const Dashboard = () => {
                       <Card key={startup.id} className="border-0 shadow-none">
                         <CardContent className="p-6">
                           <div className="flex items-start justify-between">
+                          <div className="flex items-start gap-4">
+                            <div className="w-16 h-16 rounded-lg bg-muted flex items-center justify-center overflow-hidden">
+                              {startup.logo_url ? (
+                                <img 
+                                  src={startup.logo_url} 
+                                  alt={startup.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                                  <span className="text-primary font-semibold text-sm">
+                                    {startup.name.charAt(0)}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
                             <div className="flex-1">
                               <div className="flex items-center gap-3 mb-2">
                                 <h3 className="text-lg font-medium text-foreground">
                                   {startup.name}
                                 </h3>
-                                <Badge variant={getStatusColor(startup.status)}>
+                                <Badge variant={startup.status === 'approved' ? 'default' : 'secondary'}>
                                   {startup.status}
                                 </Badge>
-                                {startup.categories && (
-                                  <Badge variant="outline">
-                                    {startup.categories.name}
-                                  </Badge>
-                                )}
                               </div>
-                              
-                              <p className="text-muted-foreground mb-4 line-clamp-2">
+                              <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
                                 {startup.description}
                               </p>
-                              
-                              <div className="flex items-center gap-6 text-sm text-muted-foreground">
+                              <div className="flex items-center gap-4 text-sm text-muted-foreground">
                                 <div className="flex items-center gap-1">
                                   <Eye className="w-4 h-4" />
                                   {startup.view_count} views
                                 </div>
-                                <div>
-                                  Listed {new Date(startup.created_at).toLocaleDateString()}
+                                <div className="flex items-center gap-1">
+                                  <Heart className="w-4 h-4" />
+                                  {startup.votes?.length || 0} votes
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <MessageSquare className="w-4 h-4" />
+                                  {startup.comments?.length || 0} comments
                                 </div>
                               </div>
                             </div>
-                            
-                            <div className="flex gap-2">
-                              {startup.status === 'approved' && (
+                          </div>
+                          <div className="flex items-center gap-2">
                                 <Button
                                   variant="outline"
                                   size="sm"
@@ -381,11 +532,7 @@ const Dashboard = () => {
                                 >
                                   View
                                 </Button>
-                              )}
-                              <Button variant="outline" size="sm">
-                                <Settings className="w-4 h-4" />
-                              </Button>
-                            </div>
+                          </div>
                           </div>
                         </CardContent>
                       </Card>
@@ -395,211 +542,14 @@ const Dashboard = () => {
               </div>
             </TabsContent>
 
-            <TabsContent value="analytics">
-              <Card className="border-0 shadow-none">
-                <CardHeader>
-                  <CardTitle>Analytics Overview</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    Detailed analytics and insights coming soon...
-                  </p>
-                </CardContent>
-              </Card>
+          <TabsContent value="bookmarks">
+            <UserBookmarksTab userProfile={profile} />
             </TabsContent>
 
-            <TabsContent value="settings">
-              <Card className="border-0 shadow-none">
-                <CardHeader>
-                  <CardTitle>Account Settings</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    Profile and account management coming soon...
-                  </p>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        ) : (
-          // Regular user dashboard
-          <div className="space-y-6">
-            <Tabs defaultValue="profile" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="profile">My Profile</TabsTrigger>
-                <TabsTrigger value="saved">Saved</TabsTrigger>
-                <TabsTrigger value="voted">Upvoted</TabsTrigger>
-                <TabsTrigger value="discover">Discover</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="profile" className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-medium text-foreground">Profile Information</h2>
-                  <Button 
-                    variant="outline"
-                    onClick={() => setShowEditProfile(true)}
-                  >
-                    Edit Profile
-                  </Button>
-                </div>
-
-                <Card className="border-0 shadow-none">
-                  <CardContent className="p-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {/* Basic Info */}
-                      <div className="space-y-4">
-                        <div>
-                          <h3 className="text-sm font-medium text-muted-foreground mb-1">Full Name</h3>
-                          <p className="text-foreground">{profile.full_name || 'Not provided'}</p>
-                        </div>
-                        
-                        <div>
-                          <h3 className="text-sm font-medium text-muted-foreground mb-1">Email</h3>
-                          <p className="text-foreground">{user?.email}</p>
-                        </div>
-
-                        <div>
-                          <h3 className="text-sm font-medium text-muted-foreground mb-1">Location</h3>
-                          <p className="text-foreground">{(profile as any).location || 'Not provided'}</p>
-                        </div>
-
-                        <div>
-                          <h3 className="text-sm font-medium text-muted-foreground mb-1">Designation</h3>
-                          <p className="text-foreground">{(profile as any).designation || 'Not provided'}</p>
-                        </div>
-
-                        <div>
-                          <h3 className="text-sm font-medium text-muted-foreground mb-1">Company</h3>
-                          <p className="text-foreground">{(profile as any).company || 'Not provided'}</p>
-                        </div>
-                      </div>
-
-                      {/* Links & Social */}
-                      <div className="space-y-4">
-                        <div>
-                          <h3 className="text-sm font-medium text-muted-foreground mb-1">Bio</h3>
-                          <p className="text-foreground">{(profile as any).bio || 'No bio provided'}</p>
-                        </div>
-
-                        <div>
-                          <h3 className="text-sm font-medium text-muted-foreground mb-2">Links</h3>
-                          <div className="space-y-2">
-                            {(profile as any).website_url && (
-                              <div>
-                                <span className="text-sm text-muted-foreground">Website: </span>
-                                <a 
-                                  href={(profile as any).website_url} 
-                                  target="_blank" 
-                                  rel="noopener noreferrer"
-                                  className="text-primary hover:underline"
-                                >
-                                  {(profile as any).website_url}
-                                </a>
-                              </div>
-                            )}
-                            
-                            {(profile as any).linkedin_url && (
-                              <div>
-                                <span className="text-sm text-muted-foreground">LinkedIn: </span>
-                                <a 
-                                  href={(profile as any).linkedin_url} 
-                                  target="_blank" 
-                                  rel="noopener noreferrer"
-                                  className="text-primary hover:underline"
-                                >
-                                  View Profile
-                                </a>
-                              </div>
-                            )}
-                            
-                            {(profile as any).github_url && (
-                              <div>
-                                <span className="text-sm text-muted-foreground">GitHub: </span>
-                                <a 
-                                  href={(profile as any).github_url} 
-                                  target="_blank" 
-                                  rel="noopener noreferrer"
-                                  className="text-primary hover:underline"
-                                >
-                                  View Profile
-                                </a>
-                              </div>
-                            )}
-                            
-                            {(profile as any).twitter_url && (
-                              <div>
-                                <span className="text-sm text-muted-foreground">Twitter: </span>
-                                <a 
-                                  href={(profile as any).twitter_url} 
-                                  target="_blank" 
-                                  rel="noopener noreferrer"
-                                  className="text-primary hover:underline"
-                                >
-                                  View Profile
-                                </a>
-                              </div>
-                            )}
-                            
-                            {!(profile as any).website_url && !(profile as any).linkedin_url && !(profile as any).github_url && !(profile as any).twitter_url && (
-                              <p className="text-muted-foreground text-sm">No links added yet</p>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="saved">
-                <UserBookmarksTab userProfile={profile} />
-              </TabsContent>
-
-              <TabsContent value="voted">
-                <UserVotesTab userProfile={profile} />
-              </TabsContent>
-
-              <TabsContent value="discover">
-                <div className="space-y-6">
-                  <Card className="border-0 shadow-none bg-accent/5">
-                    <CardContent className="p-8 text-center">
-                      <h2 className="text-xl font-medium text-foreground mb-2">
-                        Discover Amazing Startups
-                      </h2>
-                      <p className="text-muted-foreground mb-4">
-                        Explore innovative local businesses and support entrepreneurs in your area
-                      </p>
-                      <Button onClick={() => navigate('/explore')}>
-                        Start Exploring
-                      </Button>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="border-0 shadow-none">
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h3 className="text-lg font-medium text-foreground mb-2">
-                            Are you a startup founder?
-                          </h3>
-                          <p className="text-muted-foreground">
-                            Switch to founder mode to list your startup and connect with the community.
-                          </p>
-                        </div>
-                        <Button
-                          onClick={() => updateUserRole('founder')}
-                          disabled={roleUpdateLoading}
-                        >
-                          {roleUpdateLoading ? 'Switching...' : 'Become a Founder'}
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
+          <TabsContent value="votes">
+            <UserVotesTab userProfile={profile} />
               </TabsContent>
             </Tabs>
-          </div>
-        )}
       </div>
 
       <AddStartupModal 

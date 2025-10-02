@@ -11,9 +11,10 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/layout/Navbar";
 import { StartupCard } from "@/components/startup/StartupCard";
-import { Search, Filter, Grid, List, SlidersHorizontal, Coffee, Heart, ShoppingBag, Wrench, Sparkles, Dumbbell, Home, GraduationCap, Music, Plane, Briefcase, Leaf } from "lucide-react";
+import { Search, Filter, Grid, List, Coffee, Heart, ShoppingBag, Wrench, Sparkles, Dumbbell, Home, GraduationCap, Music, Plane, Briefcase, Leaf } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { GeolocationButton } from "@/components/ui/geolocation-button";
+import { SEOHead } from "@/components/seo/SEOHead";
 
 interface Category {
   id: string;
@@ -47,21 +48,26 @@ const Explore = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedLocation, setSelectedLocation] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("newest");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [showFilters, setShowFilters] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     fetchCategories();
     fetchStartups();
+    checkUser();
   }, []);
+
+  const checkUser = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    setUser(user);
+  };
 
   useEffect(() => {
     fetchStartups();
-  }, [searchTerm, selectedCategory, selectedLocation, sortBy, selectedCategories]);
+  }, [searchTerm, selectedLocation, sortBy, selectedCategories]);
 
   const fetchCategories = async () => {
     try {
@@ -95,19 +101,14 @@ const Explore = () => {
         query = query.or(`name.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`);
       }
 
-      // Apply category filter
-      if (selectedCategory !== "all") {
-        query = query.eq('categories.slug', selectedCategory);
+      // Apply category filters
+      if (selectedCategories.length > 0) {
+        query = query.in('categories.slug', selectedCategories);
       }
 
       // Apply location filter
       if (selectedLocation !== "all") {
         query = query.ilike('location', `%${selectedLocation}%`);
-      }
-
-      // Apply category filters from sidebar
-      if (selectedCategories.length > 0) {
-        query = query.in('categories.slug', selectedCategories);
       }
 
       // Apply sorting
@@ -146,16 +147,18 @@ const Explore = () => {
   };
 
   const handleCategoryToggle = (categorySlug: string) => {
-    setSelectedCategories(prev => 
-      prev.includes(categorySlug)
-        ? prev.filter(c => c !== categorySlug)
-        : [...prev, categorySlug]
-    );
+    setSelectedCategories(prev => {
+      // If clicking the same category, deselect it
+      if (prev.includes(categorySlug)) {
+        return [];
+      }
+      // Otherwise, select only this category (single selection)
+      return [categorySlug];
+    });
   };
 
   const clearFilters = () => {
     setSearchTerm("");
-    setSelectedCategory("all");
     setSelectedLocation("all");
     setSelectedCategories([]);
     setSortBy("newest");
@@ -185,205 +188,225 @@ const Explore = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gray-50">
+      <SEOHead
+        title="Discover Non-Tech Startups | Startup Directory | Know Founders"
+        description="Browse and discover innovative non-tech startups across India. Find startups by category, location, and stage. Connect with founders, get funding, and join the startup ecosystem."
+        keywords="startup directory, discover startups, non-tech startups, startup search, find startups, startup discovery, business directory, entrepreneur directory, startup listing, startup database, startup marketplace, business opportunities, startup investment, founder network, startup community"
+        url="https://knowfounders.com/explore"
+      />
       <Navbar />
       
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
+      <div className="container mx-auto px-6 py-12">
+
+        {/* Filters Section */}
         <div className="mb-8">
-          <h1 className="text-3xl font-medium text-foreground mb-2">
-            Discover Startups
-          </h1>
-          <p className="text-muted-foreground">
-            Explore innovative local businesses and support entrepreneurs
-          </p>
-        </div>
-
-        {/* Search and Filters */}
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filter Sidebar */}
-          <div className={`lg:w-72 space-y-6 ${showFilters ? 'block' : 'hidden lg:block'}`}>
-            <div className="filter-sidebar">
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-medium text-foreground">Filters</h3>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={clearFilters}
-                    className="text-muted-foreground hover:text-foreground"
+          {/* Categories Filter */}
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Categories</h3>
+              {selectedCategories.length > 0 && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={clearFilters}
+                  className="text-gray-500 hover:text-gray-700 text-sm"
+                >
+                  Clear all
+                </Button>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {categories.map((category) => {
+                const IconComponent = getCategoryIcon(category.name);
+                const isSelected = selectedCategories.includes(category.slug);
+                return (
+                  <Button
+                    key={category.id}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleCategoryToggle(category.slug)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                      isSelected 
+                        ? 'bg-green-600 text-white border-green-600 hover:bg-green-700' 
+                        : 'border-gray-200 text-gray-700 hover:border-green-300 hover:text-green-600 hover:bg-green-50'
+                    }`}
                   >
-                    Clear
+                    <IconComponent className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-gray-500'}`} />
+                    {category.name}
                   </Button>
-                </div>
-
-                {/* Categories */}
-                <div className="space-y-3">
-                  <Label className="text-sm font-medium">Categories</Label>
-                  <div className="space-y-3 max-h-64 overflow-y-auto">
-                    {categories.map((category) => {
-                      const IconComponent = getCategoryIcon(category.name);
-                      return (
-                        <div key={category.id} className="flex items-center space-x-3">
-                          <Checkbox
-                            id={category.slug}
-                            checked={selectedCategories.includes(category.slug)}
-                            onCheckedChange={() => handleCategoryToggle(category.slug)}
-                          />
-                          <Label
-                            htmlFor={category.slug}
-                            className="text-sm font-normal cursor-pointer flex items-center gap-2 flex-1"
-                          >
-                            <IconComponent className="w-4 h-4 text-muted-foreground" />
-                            {category.name}
-                          </Label>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <Separator className="my-6" />
-
-                {/* Location Filter */}
-                <div className="space-y-3">
-                  <Label className="text-sm font-medium">Location</Label>
-                  <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-                    <SelectTrigger className="border-0 bg-background">
-                      <SelectValue placeholder="All locations" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All locations</SelectItem>
-                      {uniqueLocations.map((location) => (
-                        <SelectItem key={location} value={location!}>
-                          {location}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+                );
+              })}
             </div>
           </div>
 
-          {/* Main Content */}
-          <div className="flex-1 space-y-6">
-            {/* Search and Controls */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              {/* Enhanced Search */}
-              <div className="relative flex-1">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
-                <Input
-                  placeholder="Search startups by name, description, or location..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="search-enhanced pl-12 py-4 text-base"
-                />
-              </div>
+          {/* Location Filter */}
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Location</h3>
+            <div className="flex items-center gap-4">
+              <Select value={selectedLocation} onValueChange={setSelectedLocation}>
+                <SelectTrigger className="w-64 border-gray-200 focus:border-green-500 focus:ring-green-500 bg-white">
+                  <SelectValue placeholder="All locations" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All locations</SelectItem>
+                  {uniqueLocations.map((location) => (
+                    <SelectItem key={location} value={location!}>
+                      {location}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              
+              <GeolocationButton 
+                onLocationFound={(location) => setSelectedLocation(location)} 
+              />
+            </div>
+          </div>
+        </div>
 
-              {/* Controls */}
-              <div className="flex gap-2">
-                <GeolocationButton 
-                  onLocationFound={(location) => setSelectedLocation(location)} 
-                />
-                
+        {/* Search and Controls */}
+        <div className="mb-8">
+          <div className="flex flex-col lg:flex-row gap-4">
+            {/* Search */}
+            <div className="relative flex-1">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Input
+                placeholder="Search startups by name, description, or location..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-12 py-3 text-base border-gray-200 focus:border-green-500 focus:ring-green-500 rounded-lg"
+              />
+            </div>
+
+            {/* Controls */}
+            <div className="flex gap-3">
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-48 border-gray-200 focus:border-green-500 rounded-lg">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="newest">Newest first</SelectItem>
+                  <SelectItem value="oldest">Oldest first</SelectItem>
+                  <SelectItem value="alphabetical">A-Z</SelectItem>
+                  <SelectItem value="most_voted">Most voted</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <div className="flex border border-gray-200 rounded-lg overflow-hidden">
                 <Button
-                  variant="outline"
+                  variant={viewMode === "grid" ? "default" : "ghost"}
                   size="sm"
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="lg:hidden"
+                  onClick={() => setViewMode("grid")}
+                  className={`rounded-none ${viewMode === "grid" ? "bg-green-600 text-white" : "text-gray-600 hover:bg-gray-50"}`}
                 >
-                  <SlidersHorizontal className="w-4 h-4 mr-2" />
-                  Filters
+                  <Grid className="w-4 h-4" />
                 </Button>
-
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-48 search-enhanced">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="newest">Newest first</SelectItem>
-                    <SelectItem value="oldest">Oldest first</SelectItem>
-                    <SelectItem value="alphabetical">A-Z</SelectItem>
-                    <SelectItem value="most_voted">Most voted</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <div className="flex border border-border rounded-lg overflow-hidden">
-                  <Button
-                    variant={viewMode === "grid" ? "default" : "ghost"}
-                    size="sm"
-                    onClick={() => setViewMode("grid")}
-                    className="rounded-none"
-                  >
-                    <Grid className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant={viewMode === "list" ? "default" : "ghost"}
-                    size="sm"
-                    onClick={() => setViewMode("list")}
-                    className="rounded-none border-l border-border"
-                  >
-                    <List className="w-4 h-4" />
-                  </Button>
-                </div>
+                <Button
+                  variant={viewMode === "list" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("list")}
+                  className={`rounded-none border-l border-gray-200 ${viewMode === "list" ? "bg-green-600 text-white" : "text-gray-600 hover:bg-gray-50"}`}
+                >
+                  <List className="w-4 h-4" />
+                </Button>
               </div>
             </div>
+          </div>
+        </div>
 
-            {/* Results Header */}
-            <div className="flex items-center justify-between">
-              <p className="text-muted-foreground">
-                {loading ? "Loading..." : `${startups.length} startups found`}
-              </p>
-            </div>
-
-            {/* Startups Grid/List */}
-            {loading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div key={i} className="animate-pulse">
-                    <div className="h-48 bg-muted rounded-lg mb-4"></div>
-                    <div className="h-4 bg-muted rounded w-3/4 mb-2"></div>
-                    <div className="h-4 bg-muted rounded w-1/2"></div>
-                  </div>
-                ))}
+        {/* Results Header */}
+        <div className="flex items-center justify-between py-4">
+          <div className="flex items-center gap-4">
+            <h2 className="text-2xl font-bold text-gray-900">
+              {loading ? "Loading..." : `${startups.length} startups found`}
+            </h2>
+            {selectedCategories.length > 0 && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-500">in</span>
+                <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+                  {categories.find(c => c.slug === selectedCategories[0])?.name}
+                </span>
               </div>
-            ) : startups.length === 0 ? (
-              <Card className="border-0 shadow-none bg-accent/5">
-                <CardContent className="p-12 text-center">
-                  <h3 className="text-lg font-medium text-foreground mb-2">
-                    Startup Previews Begin Next Week
-                  </h3>
-                  <p className="text-muted-foreground mb-4">
-                    Connect with like-minded founders from day one
-                  </p>
-                  <Button onClick={clearFilters} variant="outline">
-                    Join Community
-                  </Button>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className={
-                viewMode === "grid" 
-                  ? "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"
-                  : "space-y-6"
-              }>
-                {startups.map((startup) => (
-                  <div 
-                    key={startup.id}
-                    onClick={() => navigate(`/startup/${startup.id}`)}
-                    className="cursor-pointer"
-                  >
-                    <StartupCard 
-                      startup={startup} 
-                      viewMode={viewMode}
-                    />
-                  </div>
-                ))}
+            )}
+            {selectedLocation !== "all" && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-500">near</span>
+                <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+                  {selectedLocation}
+                </span>
               </div>
             )}
           </div>
+          {startups.length > 0 && (
+            <div className="text-sm text-gray-500">
+              Showing {startups.length} result{startups.length !== 1 ? 's' : ''}
+            </div>
+          )}
         </div>
+
+        {/* Startups Grid/List */}
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="animate-pulse">
+                <div className="h-48 bg-gray-200 rounded-xl mb-4"></div>
+                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+              </div>
+            ))}
+          </div>
+        ) : startups.length === 0 ? (
+          <div className="bg-white rounded-2xl border border-gray-200 p-16 text-center shadow-lg">
+            <div className="max-w-md mx-auto">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Search className="w-8 h-8 text-gray-400" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                No startups found
+              </h3>
+              <p className="text-gray-600 mb-8 leading-relaxed">
+                We couldn't find any startups matching your criteria. Try adjusting your search terms or explore different categories.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button 
+                  onClick={clearFilters} 
+                  variant="outline" 
+                  className="border-gray-200 text-gray-600 hover:bg-gray-50"
+                >
+                  Clear All Filters
+                </Button>
+                <Button 
+                  onClick={() => setSearchTerm("")} 
+                  variant="default"
+                  className="bg-green-600 hover:bg-green-700 text-white"
+                >
+                  Browse All Startups
+                </Button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className={
+            viewMode === "grid" 
+              ? "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"
+              : "space-y-6"
+          }>
+            {startups.map((startup) => (
+              <div 
+                key={startup.id}
+                onClick={() => navigate(`/startup/${startup.id}`)}
+                className="cursor-pointer"
+              >
+                <StartupCard 
+                  startup={startup} 
+                  viewMode={viewMode}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+
       </div>
     </div>
   );

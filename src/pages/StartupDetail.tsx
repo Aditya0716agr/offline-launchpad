@@ -11,6 +11,7 @@ import { Heart, MapPin, Globe, MessageSquare, ArrowLeft, Eye, Bookmark } from "l
 import { useToast } from "@/hooks/use-toast";
 import { CommentsSection } from "@/components/startup/CommentsSection";
 import { BookmarkButton } from "@/components/startup/BookmarkButton";
+import { StartupSEO } from "@/components/seo/StartupSEO";
 
 interface Startup {
   id: string;
@@ -198,6 +199,7 @@ const StartupDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {startup && <StartupSEO startup={startup} />}
       <Navbar />
       
       <div className="container mx-auto px-4 py-8">

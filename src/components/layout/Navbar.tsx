@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { AuthModal } from "@/components/auth/AuthModal";
-import { QuickStartupModal } from "@/components/startup/QuickStartupModal";
+import { StartupSubmissionModal } from "@/components/startup/StartupSubmissionModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { signOut, getUserProfile } from "@/lib/auth";
@@ -14,7 +14,7 @@ import type { UserProfile } from "@/lib/auth";
 export function Navbar() {
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [showQuickStartupModal, setShowQuickStartupModal] = useState(false);
+  const [showStartupModal, setShowStartupModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -99,15 +99,13 @@ export function Navbar() {
           <div className="flex items-center gap-4">
             {user ? (
               <>
-                {profile?.role === 'founder' && (
-                  <Button 
-                    onClick={() => setShowQuickStartupModal(true)}
-                    className="flex items-center gap-2 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground border border-primary/20 hover:border-primary transition-all duration-300 rounded-full px-4 py-2 h-9 text-sm font-medium"
-                  >
-                    <Plus className="w-4 h-4" />
-                    Add Startup
-                  </Button>
-                )}
+                <Button 
+                  onClick={() => setShowStartupModal(true)}
+                  className="flex items-center gap-2 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground border border-primary/20 hover:border-primary transition-all duration-300 rounded-full px-4 py-2 h-9 text-sm font-medium"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Startup
+                </Button>
                 
                 <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -174,9 +172,9 @@ export function Navbar() {
         </div>
       </div>
       
-      <QuickStartupModal 
-        open={showQuickStartupModal}
-        onOpenChange={setShowQuickStartupModal}
+      <StartupSubmissionModal 
+        open={showStartupModal}
+        onOpenChange={setShowStartupModal}
         onSuccess={() => {
           // Optionally refresh user data or navigate somewhere
         }}
