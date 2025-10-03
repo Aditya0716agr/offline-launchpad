@@ -340,7 +340,7 @@ export default function Home() {
           </h1>
           
           <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed font-light">
-            Join the platform built specifically for non-tech entrepreneurs. Validate ideas, find cofounders, and connect with investors who understand your business.
+          Launchpad for non-tech entrepreneurs to showcase, validate, and grow. Takes less than 2 minutes.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
@@ -350,7 +350,7 @@ export default function Home() {
                 className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-12 py-4 h-12 min-w-[240px] rounded-full font-medium transition-all duration-200 hover:scale-105"
                 onClick={() => trackUrgencyBannerClick('signup')}
               >
-                Join the Movement
+                List Your Startup Free
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </AuthModal>
@@ -362,6 +362,7 @@ export default function Home() {
           </div>
 
           <p className="text-lg text-muted-foreground">
+            
             Trusted by <span className="font-medium text-foreground">industry leaders</span> and <span className="font-medium text-foreground">successful founders</span>
           </p>
         </div>
@@ -629,7 +630,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <AuthModal defaultTab="signup">
               <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-12 py-4 h-12 min-w-[240px] rounded-full font-medium transition-all duration-200 hover:scale-105">
-                Join the Movement
+                Add Your Startup
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </AuthModal>

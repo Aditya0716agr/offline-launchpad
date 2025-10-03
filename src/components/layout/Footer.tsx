@@ -124,7 +124,7 @@ export function Footer() {
         <div className="border-t border-border pt-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-muted-foreground text-sm">
-              © 2024 KnowFounders. Made with ❤️ for local entrepreneurs.
+              © 2025 Know Founder. Made with ❤️ for non-techentrepreneurs.
             </p>
             <div className="flex items-center gap-6 text-sm">
               <Link to="/privacy-policy" className="text-muted-foreground hover:text-foreground transition-colors">
