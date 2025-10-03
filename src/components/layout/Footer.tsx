@@ -93,6 +93,33 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Launch Badges */}
+        <div className="border-t border-border mt-12 pt-8">
+          <div className="text-center mb-8">
+            <h3 className="text-sm font-medium text-muted-foreground mb-4">Featured On</h3>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a href="https://launchigniter.com/product/knowfounders?ref=badge-knowfounders" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
+                <img src="https://launchigniter.com/api/badge/knowfounders?theme=neutral" alt="Featured on LaunchIgniter" width="212" height="55" />
+              </a>
+              <a href="https://www.producthunt.com/products/knowfounders?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-knowfounders" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
+                <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1020985&theme=neutral&t=1759343386759" alt="KnowFounders - Where non-tech founders get discovered. | Product Hunt" style={{width: '250px', height: '54px'}} width="250" height="54" />
+              </a>
+              <a href="https://launchboard.dev" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
+                <img src="https://launchboard.dev/launchboard-badge.png" alt="Launched on LaunchBoard - Product Launch Platform" width="240" height="60" />
+              </a>
+              <a href="https://fazier.com" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
+                <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=featured&theme=neutral" width="250" alt="Fazier badge" />
+              </a>
+              <a href="https://starterbest.com" target="_blank" rel="noopener noreferrer"> 
+                <img src="https://starterbest.com/badages-awards.svg" alt="Featured on Starter Best" style={{height: '54px', width: 'auto'}} />
+              </a>
+              <a href="https://similarlabs.com/?ref=embed" target="_blank" style={{cursor: 'pointer'}}>
+                <img src="https://similarlabs.com/similarlabs-embed-badge-light.svg" alt="SimilarLabs Embed Badge" />
+              </a>
+              <a href="https://startupfa.me/s/knowfounders?utm_source=knowfounder.online" target="_blank"><img src="https://startupfa.me/badges/featured/light.webp" alt="Featured on Startup Fame" width="171" height="54" /></a>
+            </div>
+          </div>
+        </div>
 
         <div className="border-t border-border pt-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">

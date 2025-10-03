@@ -8,14 +8,12 @@ interface BookmarkButtonProps {
   startupId: string;
   size?: "sm" | "default" | "lg";
   variant?: "default" | "outline" | "ghost";
-  className?: string;
 }
 
 export const BookmarkButton = ({ 
   startupId, 
   size = "default",
-  variant = "outline",
-  className = ""
+  variant = "outline" 
 }: BookmarkButtonProps) => {
   const { toast } = useToast();
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -129,7 +127,7 @@ export const BookmarkButton = ({
       size={size}
       onClick={handleBookmark}
       disabled={loading}
-      className={`flex items-center gap-2 ${isBookmarked ? 'text-primary' : ''} ${className}`}
+      className={`flex items-center gap-2 ${isBookmarked ? 'text-primary' : ''}`}
     >
       <Bookmark 
         className={`w-4 h-4 ${isBookmarked ? 'fill-current' : ''}`} 

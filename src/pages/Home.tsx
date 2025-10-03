@@ -332,58 +332,38 @@ export default function Home() {
       </div>
       
       {/* Hero Section */}
-      <section className="relative pt-24 pb-16 overflow-hidden">
+      <section className="relative pt-24 pb-24 overflow-hidden">
         <div className="relative z-10 max-w-6xl mx-auto px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-light text-foreground mb-8 leading-tight tracking-tight">
-            Launch your startup without code.
+            The Future of Non-Tech
+            <span className="block text-primary font-normal">Entrepreneurship</span>
           </h1>
           
           <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed font-light">
-            KnowFounders is the launchpad for non-tech entrepreneurs to showcase, validate, and grow.
+            Join the platform built specifically for non-tech entrepreneurs. Validate ideas, find cofounders, and connect with investors who understand your business.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-4">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
             <AuthModal defaultTab="signup">
               <Button 
                 size="lg" 
                 className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-12 py-4 h-12 min-w-[240px] rounded-full font-medium transition-all duration-200 hover:scale-105"
                 onClick={() => trackUrgencyBannerClick('signup')}
               >
-                🚀 List Your Startup Free
+                Join the Movement
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </AuthModal>
-            <AuthModal defaultTab="signup">
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="text-lg px-12 py-4 h-12 min-w-[240px] border-border hover:bg-muted/50 rounded-full font-medium transition-all duration-200"
-                onClick={() => trackUrgencyBannerClick('signup')}
-              >
-                👥 Join as Founder
+            <Link to="/explore">
+              <Button variant="outline" size="lg" className="text-lg px-12 py-4 h-12 min-w-[240px] border-border hover:bg-muted/50 rounded-full font-medium transition-all duration-200">
+                Start Your Journey
               </Button>
-            </AuthModal>
+            </Link>
           </div>
 
-          <p className="text-sm text-muted-foreground mb-12">
-            Takes less than a minute.
+          <p className="text-lg text-muted-foreground">
+            Trusted by <span className="font-medium text-foreground">industry leaders</span> and <span className="font-medium text-foreground">successful founders</span>
           </p>
-
-          {/* Featured Badges */}
-          <div className="border-t border-border pt-12">
-            <p className="text-sm font-medium text-muted-foreground mb-6">Featured on Product Hunt, Starter Best, LaunchBoard, Startup Fame</p>
-            <div className="flex flex-wrap items-center justify-center gap-6">
-              <a href="https://www.producthunt.com/products/knowfounders?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-knowfounders" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
-                <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1020985&theme=neutral&t=1759343386759" alt="KnowFounders - Where non-tech founders get discovered. | Product Hunt" style={{width: '250px', height: '54px'}} width="250" height="54" />
-              </a>
-              <a href="https://starterbest.com" target="_blank" rel="noopener noreferrer"> 
-                <img src="https://starterbest.com/badages-awards.svg" alt="Featured on Starter Best" style={{height: '54px', width: 'auto'}} />
-              </a>
-              <a href="https://launchboard.dev" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
-                <img src="https://launchboard.dev/launchboard-badge.png" alt="Launched on LaunchBoard - Product Launch Platform" width="240" height="60" />
-              </a>
-              <a href="https://startupfa.me/s/knowfounders?utm_source=knowfounder.online" target="_blank"><img src="https://startupfa.me/badges/featured/light.webp" alt="Featured on Startup Fame" width="171" height="54" /></a>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -649,7 +629,8 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <AuthModal defaultTab="signup">
               <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-12 py-4 h-12 min-w-[240px] rounded-full font-medium transition-all duration-200 hover:scale-105">
-                🚀 List Your Startup Free
+                Join the Movement
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </AuthModal>
             <Link to="/explore">
