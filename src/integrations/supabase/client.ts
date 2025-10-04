@@ -8,11 +8,22 @@ const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
+// Get the correct origin based on environment
+const getRedirectUrl = () => {
+  if (typeof window !== 'undefined') {
+    return `${window.location.origin}/email-confirmation`;
+  }
+  // Fallback for SSR - you need to replace this with your actual production domain
+  return import.meta.env.VITE_SITE_URL 
+    ? `${import.meta.env.VITE_SITE_URL}/email-confirmation`
+    : 'http://localhost:8080/email-confirmation';
+};
+
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: {
     storage: localStorage,
     persistSession: true,
     autoRefreshToken: true,
-    redirectTo: `${window.location.origin}/email-confirmation`,
+    redirectTo: getRedirectUrl(),
   }
 });

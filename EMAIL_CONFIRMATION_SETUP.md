@@ -59,10 +59,52 @@ Make sure email confirmation is enabled:
 - ✅ Loading states and animations
 - ✅ Responsive design matching the app's theme
 
+## Vercel Configuration
+
+For the email confirmation to work on Vercel, you need to configure client-side routing. The `vercel.json` file has been created with the proper configuration:
+
+```json
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+```
+
+This ensures that all routes (including `/email-confirmation`) are handled by the React app instead of returning 404 errors.
+
 ## Environment Variables
 
 Make sure your `.env` file has the correct Supabase configuration:
 ```
 VITE_SUPABASE_URL=your-supabase-url
 VITE_SUPABASE_PUBLISHABLE_KEY=your-anon-key
+VITE_SITE_URL=https://www.knowfounder.online
 ```
+
+## Supabase Dashboard Configuration
+
+You also need to configure your Supabase project to use the correct redirect URLs:
+
+1. **Go to your Supabase dashboard** → Authentication → URL Configuration
+2. **Set Site URL** to: `https://www.knowfounder.online`
+3. **Add Redirect URLs**:
+   - `https://www.knowfounder.online/email-confirmation`
+   - `http://localhost:8080/email-confirmation` (for development)
+
+## Deployment Steps
+
+1. **Add environment variable** `VITE_SITE_URL` to your Vercel project with value: `https://www.knowfounder.online`
+2. **Commit and push** all changes to your repository
+3. **Redeploy** your Vercel application
+4. **Test** the signup flow on the production site
+
+## Troubleshooting
+
+If email confirmation still redirects to localhost:
+1. Check that `VITE_SITE_URL` is set correctly in Vercel environment variables
+2. Verify Supabase URL Configuration has your production domain
+3. Clear browser cache and try again

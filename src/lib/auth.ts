@@ -20,6 +20,17 @@ export interface UserProfile {
 }
 
 export async function signUp(email: string, password: string, fullName: string, role: 'founder' | 'user' = 'user') {
+  // Get the correct redirect URL based on environment
+  const getEmailRedirectUrl = () => {
+    if (typeof window !== 'undefined') {
+      return `${window.location.origin}/email-confirmation`;
+    }
+    // Fallback for SSR - you need to replace this with your actual production domain
+    return import.meta.env.VITE_SITE_URL 
+      ? `${import.meta.env.VITE_SITE_URL}/email-confirmation`
+      : 'http://localhost:8080/email-confirmation';
+  };
+
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -28,7 +39,7 @@ export async function signUp(email: string, password: string, fullName: string, 
         full_name: fullName,
         role,
       },
-      emailRedirectTo: `${window.location.origin}/email-confirmation`,
+      emailRedirectTo: getEmailRedirectUrl(),
     }
   });
 
