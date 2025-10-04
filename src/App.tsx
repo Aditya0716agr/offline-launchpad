@@ -10,6 +10,7 @@ import StartupDetail from "./pages/StartupDetail";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
+import EmailConfirmation from "./pages/EmailConfirmation";
 import Dashboard from "./pages/Dashboard";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
@@ -34,6 +35,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/email-confirmation" element={<EmailConfirmation />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />

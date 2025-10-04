@@ -27,7 +27,8 @@ export async function signUp(email: string, password: string, fullName: string, 
       data: {
         full_name: fullName,
         role,
-      }
+      },
+      emailRedirectTo: `${window.location.origin}/email-confirmation`,
     }
   });
 

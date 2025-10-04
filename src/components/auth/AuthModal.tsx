@@ -67,18 +67,13 @@ export function AuthModal({ children, defaultTab = "signin" }: AuthModalProps) {
       await signUp(signUpData.email, signUpData.password, signUpData.fullName, signUpData.role);
       trackSignup('email');
       toast({
-        title: "Account created!",
-        description: "Welcome to the platform. You can now start exploring startups.",
+        title: "Check your email!",
+        description: "We've sent you a confirmation link. Please check your email to verify your account.",
       });
       
-      // If user signed up as founder, show quick startup modal
-      if (signUpData.role === "founder") {
-        setOpen(false);
-        setShowQuickStartup(true);
-      } else {
-        setOpen(false);
-        window.location.reload();
-      }
+      setOpen(false);
+      // Redirect to email confirmation page
+      window.location.href = "/email-confirmation";
     } catch (error: any) {
       toast({
         title: "Sign up failed",

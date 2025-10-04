@@ -28,10 +28,10 @@ const Signup = () => {
     try {
       await signUp(formData.email, formData.password, formData.fullName, formData.role);
       toast({
-        title: "Account created!",
-        description: "Welcome to KnowFounders. You can now start exploring startups.",
+        title: "Check your email!",
+        description: "We've sent you a confirmation link. Please check your email to verify your account.",
       });
-      navigate("/");
+      navigate("/email-confirmation");
     } catch (error: any) {
       toast({
         title: "Sign up failed",
