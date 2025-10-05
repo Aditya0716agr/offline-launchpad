@@ -6,7 +6,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowRight, CheckCircle, Users, TrendingUp, Heart, Eye, MapPin } from "lucide-react";
+import { ArrowRight, CheckCircle, Users, TrendingUp, Heart, Eye, MapPin, ChefHat, Shirt, Heart as HeartIcon, Palette, Store, Package, Target, Share2, MessageCircle, Handshake, BarChart3 } from "lucide-react";
 import { trackUrgencyBannerClick, trackFoundingMemberClaim } from "@/lib/analytics";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -283,7 +283,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/10 to-primary/5">
       <SEOHead
         title="Know Founders - Discover Non-Tech Startups & Entrepreneurs | Startup Directory"
         description="Discover innovative non-tech startups and connect with entrepreneurs. Browse startup directory, find cofounders, get funding, and join the largest community of non-tech founders in India."
@@ -334,13 +334,13 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative pt-24 pb-24 overflow-hidden">
         <div className="relative z-10 max-w-6xl mx-auto px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-light text-foreground mb-8 leading-tight tracking-tight">
-            The Future of Non-Tech
-            <span className="block text-primary font-normal">Entrepreneurship</span>
+          <h1 className="text-4xl md:text-5xl font-light text-foreground mb-6 leading-tight tracking-tight" style={{letterSpacing: '-0.02em', lineHeight: '1.2'}}>
+          Launch Platform for Real-World 
+            <span className="block text-primary font-normal">Products</span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed font-light">
-          Launchpad for non-tech entrepreneurs to showcase, validate, and grow. Takes less than 2 minutes.
+          <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed font-light" style={{lineHeight: '1.6'}}>
+          The discovery platform where real-world products get the spotlight they deserve. Launch your food brand, wellness product, retail business, or service—get upvotes, feedback, and discovered by customers.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
@@ -350,7 +350,7 @@ export default function Home() {
                 className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-12 py-4 h-12 min-w-[240px] rounded-full font-medium transition-all duration-200 hover:scale-105"
                 onClick={() => trackUrgencyBannerClick('signup')}
               >
-                List Your Startup Free
+                Launch Your Product
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </AuthModal>
@@ -361,66 +361,100 @@ export default function Home() {
             </Link>
           </div>
 
-          <p className="text-lg text-muted-foreground">
-            
-            Trusted by <span className="font-medium text-foreground">industry leaders</span> and <span className="font-medium text-foreground">successful founders</span>
-          </p>
+          <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span>Trusted by <span className="font-medium text-foreground">1000+ founders</span></span>
+            </div>
+            <div className="w-px h-4 bg-border"></div>
+            <span>Featured on <span className="font-medium text-foreground">Product Hunt</span></span>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured On Section */}
+      <section className="py-12 border-t border-border bg-gray-50">
+        <div className="max-w-6xl mx-auto px-8">
+          <div className="text-center mb-8">
+            <h3 className="text-sm font-medium text-muted-foreground mb-4">Featured On</h3>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a href="https://launchigniter.com/product/knowfounders?ref=badge-knowfounders" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
+                <img src="https://launchigniter.com/api/badge/knowfounders?theme=neutral" alt="Featured on LaunchIgniter" width="212" height="55" />
+              </a>
+              <a href="https://www.producthunt.com/products/knowfounders?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-knowfounders" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
+                <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1020985&theme=neutral&t=1759343386759" alt="KnowFounders - Where non-tech founders get discovered. | Product Hunt" style={{width: '250px', height: '54px'}} width="250" height="54" />
+              </a>
+              <a href="https://launchboard.dev" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
+                <img src="https://launchboard.dev/launchboard-badge.png" alt="Launched on LaunchBoard - Product Launch Platform" width="240" height="60" />
+              </a>
+              <a href="https://fazier.com" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
+                <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=featured&theme=neutral" width="250" alt="Fazier badge" />
+              </a>
+              <a href="https://starterbest.com" target="_blank" rel="noopener noreferrer"> 
+                <img src="https://starterbest.com/badages-awards.svg" alt="Featured on Starter Best" style={{height: '54px', width: 'auto'}} />
+              </a>
+              <a href="https://similarlabs.com/?ref=embed" target="_blank" style={{cursor: 'pointer'}}>
+                <img src="https://similarlabs.com/similarlabs-embed-badge-light.svg" alt="SimilarLabs Embed Badge" />
+              </a>
+              <a href="https://startupfa.me/s/knowfounders?utm_source=knowfounder.online" target="_blank"><img src="https://startupfa.me/badges/featured/light.webp" alt="Featured on Startup Fame" width="171" height="54" /></a>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Featured Startups Section */}
-      <section className="py-24 border-t border-border">
+      <section className="py-16 border-t border-border bg-background/80 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-light text-foreground mb-6 leading-tight">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-light text-foreground mb-3 leading-tight tracking-tight" style={{letterSpacing: '-0.02em', lineHeight: '1.2'}}>
               Featured Non-Tech Startups
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-light">
+            <p className="text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed font-light" style={{lineHeight: '1.6'}}>
               Discover innovative businesses built by non-tech founders making their mark
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {featuredStartups.slice(0, 6).map((startup) => (
-              <Card key={startup.id} className="startup-card group">
+              <Card key={startup.id} className="group bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1" style={{boxShadow: '0 4px 6px rgba(0, 0, 0, 0.06)'}}>
                 <CardContent className="p-6">
-                  <div className="flex items-start gap-4 mb-4">
+                  <div className="flex items-start gap-3 mb-4">
                     <Avatar className="w-12 h-12">
                       <AvatarImage src={startup.logo_url || ''} alt={startup.name} />
-                      <AvatarFallback className="text-lg font-medium bg-primary/10 text-primary">
+                      <AvatarFallback className="text-base font-medium bg-primary/10 text-primary">
                         {startup.name.charAt(0)}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-medium text-foreground mb-1 line-clamp-1 group-hover:text-primary transition-colors">
+                      <h3 className="text-lg font-semibold text-foreground mb-1 line-clamp-1 group-hover:text-primary transition-colors">
                         {startup.name}
                       </h3>
                       <p className="text-sm text-muted-foreground mb-2">{startup.founder_name}</p>
-                      <Badge className="category-badge text-xs">
+                      <Badge className="category-badge text-xs bg-primary/10 text-primary border-primary/20">
                         {startup.category}
                       </Badge>
                     </div>
                   </div>
                   
-                  <p className="text-muted-foreground text-sm leading-relaxed mb-4 line-clamp-2">
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-4 line-clamp-2" style={{color: '#6b7280', lineHeight: '1.6'}}>
                     {startup.description}
                   </p>
                   
                   <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-6">
+                      <div className="flex items-center gap-2">
                         <Eye className="w-4 h-4" />
-                        <span>{startup.view_count}</span>
+                        <span className="font-medium">{startup.view_count}</span>
                       </div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-2">
                         <Heart className="w-4 h-4" />
-                        <span>{startup.upvote_count}</span>
+                        <span className="font-medium">{startup.upvote_count}</span>
                       </div>
                     </div>
                     {startup.location && (
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-2">
                         <MapPin className="w-4 h-4" />
-                        <span className="truncate max-w-[100px]">{startup.location}</span>
+                        <span className="truncate max-w-[100px] text-xs">{startup.location}</span>
                       </div>
                     )}
                   </div>
@@ -431,11 +465,129 @@ export default function Home() {
 
           <div className="text-center">
             <Link to="/explore">
-              <Button variant="outline" size="lg" className="px-8 py-3 h-11 border-border hover:bg-muted/50 rounded-full font-medium transition-all duration-200">
+              <Button variant="outline" size="lg" className="px-10 py-4 h-14 border-border hover:bg-muted/50 rounded-full font-medium transition-all duration-200 hover:scale-105 text-base">
                 Continue Exploring
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* CLARITY SECTION */}
+      <section className="py-16 border-t border-border bg-background/60 backdrop-blur-sm">
+        <div className="max-w-4xl mx-auto px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-light text-foreground mb-3 leading-tight tracking-tight" style={{letterSpacing: '-0.02em', lineHeight: '1.2'}}>
+              The Discovery Platform for Non-Tech Products
+            </h2>
+            <p className="text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed font-light" style={{lineHeight: '1.6'}}>
+              While most platforms focus on apps and software, we celebrate real-world products that touch people's lives.
+            </p>
+          </div>
+          
+          <div className="max-w-3xl mx-auto mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+              {[
+                { icon: ChefHat, title: "Food & Beverage" },
+                { icon: Shirt, title: "Fashion & Retail" },
+                { icon: HeartIcon, title: "Wellness & Health" },
+                { icon: Palette, title: "Artisan Goods" },
+                { icon: Store, title: "Local Services" },
+                { icon: Package, title: "Physical Products" }
+              ].map((item, index) => {
+                const Icon = item.icon;
+                return (
+                  <div key={index} className="flex items-center gap-4 py-3">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-5 h-5 text-primary" />
+                    </div>
+                    <span className="text-foreground font-medium text-base">{item.title}</span>
+                  </div>
+                );
+              })}
+            </div>
+            
+            <div className="text-center mt-8">
+              <span className="text-muted-foreground text-sm font-medium">and many more...</span>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <p className="text-lg text-primary font-medium">
+              We give non-tech products their launch moment.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Benefits Section */}
+      <section className="py-16 border-t border-border bg-background/80 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-light text-foreground mb-3 leading-tight tracking-tight" style={{letterSpacing: '-0.02em', lineHeight: '1.2'}}>
+              Why Launch on KnowFounders?
+            </h2>
+            <p className="text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed font-light" style={{lineHeight: '1.6'}}>
+              Everything you need to launch and grow your non-tech business
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                icon: Target,
+                number: "01",
+                title: "Get Discovered",
+                desc: "Featured placement, community votes, and category listings help customers find you"
+              },
+              {
+                icon: Share2,
+                number: "02",
+                title: "Social Amplification",
+                desc: "We showcase your launch across our social channels to 10K+ followers"
+              },
+              {
+                icon: MessageCircle,
+                number: "03",
+                title: "Real Feedback",
+                desc: "Get honest community feedback and validate demand before scaling"
+              },
+              {
+                icon: Handshake,
+                number: "04",
+                title: "Find Your People",
+                desc: "Connect with co-founders, investors, and partners in your space"
+              },
+              {
+                icon: BarChart3,
+                number: "05",
+                title: "Build Credibility",
+                desc: "Earn social proof with upvotes, featured badges, and traction metrics"
+              }
+            ].map((benefit, index) => {
+              const Icon = benefit.icon;
+              return (
+                <Card key={index} className="group h-full bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1" style={{boxShadow: '0 4px 6px rgba(0, 0, 0, 0.06)'}}>
+                  <CardContent className="p-6 h-full flex flex-col text-center">
+                    <div className="relative mb-4">
+                      <span className="absolute -top-1 -left-1 text-4xl font-light text-gray-100 select-none" style={{fontSize: '3rem'}}>
+                        {benefit.number}
+                      </span>
+                      <div className="w-16 h-16 mx-auto rounded-full bg-primary/8 flex items-center justify-center group-hover:bg-primary/12 transition-colors duration-300 relative z-10">
+                        <Icon className="w-8 h-8 text-primary group-hover:rotate-3 transition-transform duration-300" />
+                      </div>
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
+                      {benefit.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed flex-1" style={{color: '#6b7280', lineHeight: '1.6'}}>
+                      {benefit.desc}
+                    </p>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </section>

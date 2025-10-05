@@ -1,138 +1,149 @@
 import { Link } from "react-router-dom";
-import { Heart, MapPin, Mail, Linkedin } from "lucide-react";
+import { Heart, MapPin, Mail, Linkedin, Twitter, Github } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-background mt-20">
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="border-t border-border bg-gradient-to-br from-background via-muted/5 to-primary/5 mt-20">
+      <div className="max-w-7xl mx-auto px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <Heart className="w-4 h-4 text-primary-foreground" />
+          <div className="lg:col-span-1 space-y-6">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg">
+                <Heart className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-medium text-foreground">KnowFounders</span>
+              <span className="text-2xl font-semibold text-foreground">KnowFounders</span>
             </div>
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              Connecting local communities with innovative startups. Discover, support, and grow together.
+            <p className="text-muted-foreground text-base leading-relaxed max-w-sm">
+              The discovery platform where real-world products get the spotlight they deserve. Launch your non-tech business and connect with customers.
             </p>
+            <div className="flex items-center space-x-4">
+              <a href="https://www.linkedin.com/company/know-founder" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-muted/50 flex items-center justify-center hover:bg-primary/10 transition-colors group">
+                <Linkedin className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+              </a>
+              <a href="https://twitter.com/knowfounders" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-muted/50 flex items-center justify-center hover:bg-primary/10 transition-colors group">
+                <Twitter className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+              </a>
+              <a href="mailto:hertofhelp@gmail.com" className="w-10 h-10 rounded-full bg-muted/50 flex items-center justify-center hover:bg-primary/10 transition-colors group">
+                <Mail className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+              </a>
+            </div>
           </div>
 
           {/* Explore */}
-          <div className="space-y-4">
-            <h3 className="font-medium text-foreground">Explore</h3>
-            <ul className="space-y-2 text-sm">
+          <div className="space-y-6">
+            <h3 className="text-lg font-semibold text-foreground">Explore</h3>
+            <ul className="space-y-3">
               <li>
-                <Link to="/explore" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/explore" className="text-muted-foreground hover:text-primary transition-colors text-base">
                   All Startups
                 </Link>
               </li>
               <li>
-                <Link to="/explore?category=food-beverage" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/explore?category=food-beverage" className="text-muted-foreground hover:text-primary transition-colors text-base">
                   Food & Beverage
                 </Link>
               </li>
               <li>
-                <Link to="/explore?category=wellness-health" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/explore?category=wellness-health" className="text-muted-foreground hover:text-primary transition-colors text-base">
                   Wellness & Health
                 </Link>
               </li>
               <li>
-                <Link to="/explore?category=retail-fashion" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/explore?category=retail-fashion" className="text-muted-foreground hover:text-primary transition-colors text-base">
                   Retail & Fashion
+                </Link>
+              </li>
+              <li>
+                <Link to="/explore?category=services" className="text-muted-foreground hover:text-primary transition-colors text-base">
+                  Services
                 </Link>
               </li>
             </ul>
           </div>
 
           {/* For Founders */}
-          <div className="space-y-4">
-            <h3 className="font-medium text-foreground">For Founders</h3>
-            <ul className="space-y-2 text-sm">
+          <div className="space-y-6">
+            <h3 className="text-lg font-semibold text-foreground">For Founders</h3>
+            <ul className="space-y-3">
               <li>
-                <Link to="/signup" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/signup" className="text-muted-foreground hover:text-primary transition-colors text-base">
                   List Your Startup
                 </Link>
               </li>
               <li>
-                <Link to="/dashboard" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/dashboard" className="text-muted-foreground hover:text-primary transition-colors text-base">
                   Dashboard
                 </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/blog" className="text-muted-foreground hover:text-primary transition-colors text-base">
                   Success Stories
-                </a>
+                </Link>
               </li>
               <li>
-                <Link to="/blog" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/blog" className="text-muted-foreground hover:text-primary transition-colors text-base">
                   Resources
+                </Link>
+              </li>
+              <li>
+                <Link to="/blog" className="text-muted-foreground hover:text-primary transition-colors text-base">
+                  Founder Guide
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Connect */}
-          <div className="space-y-4">
-            <h3 className="font-medium text-foreground">Connect</h3>
-            <ul className="space-y-2 text-sm">
+          {/* Company */}
+          <div className="space-y-6">
+            <h3 className="text-lg font-semibold text-foreground">Company</h3>
+            <ul className="space-y-3">
               <li>
-                <a href="mailto:hertofhelp@gmail.com" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
-                  <Mail className="w-3 h-3" />
+                <Link to="/about" className="text-muted-foreground hover:text-primary transition-colors text-base">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link to="/blog" className="text-muted-foreground hover:text-primary transition-colors text-base">
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <a href="mailto:hertofhelp@gmail.com" className="text-muted-foreground hover:text-primary transition-colors text-base">
                   Contact Us
                 </a>
               </li>
               <li>
-                <a href="https://www.linkedin.com/company/know-founder" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
-                  <Linkedin className="w-3 h-3" />
-                  LinkedIn
-                </a>
+                <Link to="/privacy-policy" className="text-muted-foreground hover:text-primary transition-colors text-base">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms-of-service" className="text-muted-foreground hover:text-primary transition-colors text-base">
+                  Terms of Service
+                </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Launch Badges */}
-        <div className="border-t border-border mt-12 pt-8">
-          <div className="text-center mb-8">
-            <h3 className="text-sm font-medium text-muted-foreground mb-4">Featured On</h3>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a href="https://launchigniter.com/product/knowfounders?ref=badge-knowfounders" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
-                <img src="https://launchigniter.com/api/badge/knowfounders?theme=neutral" alt="Featured on LaunchIgniter" width="212" height="55" />
-              </a>
-              <a href="https://www.producthunt.com/products/knowfounders?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-knowfounders" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
-                <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1020985&theme=neutral&t=1759343386759" alt="KnowFounders - Where non-tech founders get discovered. | Product Hunt" style={{width: '250px', height: '54px'}} width="250" height="54" />
-              </a>
-              <a href="https://launchboard.dev" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
-                <img src="https://launchboard.dev/launchboard-badge.png" alt="Launched on LaunchBoard - Product Launch Platform" width="240" height="60" />
-              </a>
-              <a href="https://fazier.com" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
-                <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=featured&theme=neutral" width="250" alt="Fazier badge" />
-              </a>
-              <a href="https://starterbest.com" target="_blank" rel="noopener noreferrer"> 
-                <img src="https://starterbest.com/badages-awards.svg" alt="Featured on Starter Best" style={{height: '54px', width: 'auto'}} />
-              </a>
-              <a href="https://similarlabs.com/?ref=embed" target="_blank" style={{cursor: 'pointer'}}>
-                <img src="https://similarlabs.com/similarlabs-embed-badge-light.svg" alt="SimilarLabs Embed Badge" />
-              </a>
-              <a href="https://startupfa.me/s/knowfounders?utm_source=knowfounder.online" target="_blank"><img src="https://startupfa.me/badges/featured/light.webp" alt="Featured on Startup Fame" width="171" height="54" /></a>
-            </div>
-          </div>
-        </div>
 
-        <div className="border-t border-border pt-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-muted-foreground text-sm">
-              © 2025 Know Founder. Made with ❤️ for non-techentrepreneurs.
-            </p>
-            <div className="flex items-center gap-6 text-sm">
-              <Link to="/privacy-policy" className="text-muted-foreground hover:text-foreground transition-colors">
-                Privacy Policy
-              </Link>
-              <Link to="/terms-of-service" className="text-muted-foreground hover:text-foreground transition-colors">
-                Terms of Service
-              </Link>
+        <div className="border-t border-border/50 pt-12 mt-12">
+          <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
+            <div className="text-center lg:text-left">
+              <p className="text-muted-foreground text-base">
+                © 2025 KnowFounders. All rights reserved.
+              </p>
+              <p className="text-muted-foreground text-sm mt-1">
+                Made with ❤️ for non-tech entrepreneurs worldwide.
+              </p>
+            </div>
+            <div className="flex items-center gap-8 text-sm">
+              <span className="text-muted-foreground">Trusted by 1000+ founders</span>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-muted-foreground">All systems operational</span>
+              </div>
             </div>
           </div>
         </div>
