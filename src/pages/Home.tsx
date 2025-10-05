@@ -396,6 +396,11 @@ export default function Home() {
               <a href="https://similarlabs.com/?ref=embed" target="_blank" style={{cursor: 'pointer'}}>
                 <img src="https://similarlabs.com/similarlabs-embed-badge-light.svg" alt="SimilarLabs Embed Badge" />
               </a>
+              <a href="https://turbo0.com/item/know-founders" target="_blank" rel="noopener noreferrer">
+                <img src="https://img.turbo0.com/badge-listed-light.svg" alt="Listed on Turbo0" style={{height: '54px', width: 'auto'}} />
+              </a>
+
+
               <a href="https://startupfa.me/s/knowfounders?utm_source=knowfounder.online" target="_blank"><img src="https://startupfa.me/badges/featured/light.webp" alt="Featured on Startup Fame" width="171" height="54" /></a>
             </div>
           </div>
