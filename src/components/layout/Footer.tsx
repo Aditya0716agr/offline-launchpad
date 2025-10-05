@@ -138,11 +138,19 @@ export function Footer() {
                 Made with ❤️ for non-tech entrepreneurs worldwide.
               </p>
             </div>
-            <div className="flex items-center gap-8 text-sm">
-              <span className="text-muted-foreground">Trusted by 1000+ founders</span>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-muted-foreground">All systems operational</span>
+            <div className="flex flex-col items-center gap-4">
+              <div className="flex items-center gap-8 text-sm">
+                <span className="text-muted-foreground">Trusted by 1000+ founders</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-muted-foreground">All systems operational</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <span className="text-muted-foreground text-sm">Featured on:</span>
+                <a href="https://dofollow.tools" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
+                  <img src="https://dofollow.tools/badge/badge_transparent.svg" alt="Featured on Dofollow.Tools" width="150" height="40" />
+                </a>
               </div>
             </div>
           </div>
