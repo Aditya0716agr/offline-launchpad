@@ -66,17 +66,27 @@ export const QuickStartupModal = ({ open, onOpenChange, onSuccess }: QuickStartu
   };
 
   const uploadFile = async (file: File, bucket: string, path: string) => {
-    const { data, error } = await supabase.storage
-      .from(bucket)
-      .upload(path, file, { upsert: true });
+    try {
+      const { data, error } = await supabase.storage
+        .from(bucket)
+        .upload(path, file, { upsert: true });
 
-    if (error) throw error;
-    
-    const { data: { publicUrl } } = supabase.storage
-      .from(bucket)
-      .getPublicUrl(data.path);
+      if (error) {
+        if (error.message.includes('Bucket not found')) {
+          throw new Error(`Storage bucket '${bucket}' not found. Please contact support to set up storage buckets.`);
+        }
+        throw error;
+      }
+      
+      const { data: { publicUrl } } = supabase.storage
+        .from(bucket)
+        .getPublicUrl(data.path);
 
-    return publicUrl;
+      return publicUrl;
+    } catch (error: any) {
+      console.error(`Upload error for bucket ${bucket}:`, error);
+      throw error;
+    }
   };
 
   const onSubmit = async (data: QuickStartupData) => {
@@ -145,9 +155,22 @@ export const QuickStartupModal = ({ open, onOpenChange, onSuccess }: QuickStartu
 
     } catch (error: any) {
       console.error('Error submitting startup:', error);
+      
+      let errorMessage = "Failed to submit startup. Please try again.";
+      
+      if (error.message.includes('Bucket not found')) {
+        errorMessage = "Storage buckets not configured. Please contact support at hertofhelp@gmail.com";
+      } else if (error.message.includes('Not authenticated')) {
+        errorMessage = "Please sign in to submit a startup.";
+      } else if (error.message.includes('Profile not found')) {
+        errorMessage = "Please complete your profile first.";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       toast({
         title: "Submission Failed",
-        description: error.message || "Failed to submit startup",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
