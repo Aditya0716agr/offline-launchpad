@@ -184,6 +184,35 @@ const TermsOfService = () => {
             </section>
 
             <section>
+              <h2 className="text-2xl font-semibold text-foreground mb-4">Advertising and Monetization</h2>
+              <div className="space-y-4 text-muted-foreground leading-relaxed">
+                <p>KnowFounders may display advertisements and other promotional content on the platform. By using our service, you acknowledge that:</p>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>We may display third-party advertisements and sponsored content</li>
+                  <li>Advertisements are clearly marked and distinguished from user content</li>
+                  <li>We do not endorse or guarantee the accuracy of advertisements</li>
+                  <li>Clicking on advertisements is at your own risk</li>
+                  <li>We may use your data to personalize advertisements in accordance with our Privacy Policy</li>
+                </ul>
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-semibold text-foreground mb-4">User-Generated Content Guidelines</h2>
+              <div className="space-y-4 text-muted-foreground leading-relaxed">
+                <p>When submitting content to KnowFounders, you agree that your content:</p>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Is original and does not infringe on third-party rights</li>
+                  <li>Is accurate and not misleading</li>
+                  <li>Does not contain spam, malware, or harmful content</li>
+                  <li>Complies with all applicable laws and regulations</li>
+                  <li>Does not promote illegal activities or harmful products</li>
+                  <li>Respects the rights and dignity of others</li>
+                </ul>
+              </div>
+            </section>
+
+            <section>
               <h2 className="text-2xl font-semibold text-foreground mb-4">Contact Information</h2>
               <p className="text-muted-foreground leading-relaxed">
                 If you have any questions about these Terms of Service, please contact us at:
@@ -191,6 +220,8 @@ const TermsOfService = () => {
               <div className="mt-4 p-4 bg-accent/5 rounded-lg">
                 <p className="text-foreground font-medium">KnowFounders</p>
                 <p className="text-muted-foreground">Email: hertofhelp@gmail.com</p>
+                <p className="text-muted-foreground">Website: https://knowfounders.com</p>
+                <p className="text-muted-foreground">Address: India</p>
               </div>
             </section>
 

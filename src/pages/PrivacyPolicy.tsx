@@ -128,6 +128,29 @@ const PrivacyPolicy = () => {
             </section>
 
             <section>
+              <h2 className="text-2xl font-semibold text-foreground mb-4">Third-Party Services</h2>
+              <div className="space-y-4 text-muted-foreground leading-relaxed">
+                <p>We use third-party services to enhance our platform functionality:</p>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li><strong>Google Analytics:</strong> To analyze website traffic and user behavior</li>
+                  <li><strong>Supabase:</strong> For database and authentication services</li>
+                  <li><strong>Vercel:</strong> For hosting and analytics</li>
+                  <li><strong>Email Services:</strong> For sending notifications and updates</li>
+                </ul>
+                <p>These services may collect and process data according to their own privacy policies.</p>
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-semibold text-foreground mb-4">International Data Transfers</h2>
+              <p className="text-muted-foreground leading-relaxed">
+                Your information may be transferred to and processed in countries other than your own. 
+                We ensure that such transfers comply with applicable data protection laws and implement 
+                appropriate safeguards to protect your personal data.
+              </p>
+            </section>
+
+            <section>
               <h2 className="text-2xl font-semibold text-foreground mb-4">Contact Us</h2>
               <p className="text-muted-foreground leading-relaxed">
                 If you have any questions about this privacy policy or our data practices, please contact us at:
@@ -135,6 +158,8 @@ const PrivacyPolicy = () => {
               <div className="mt-4 p-4 bg-accent/5 rounded-lg">
                 <p className="text-foreground font-medium">KnowFounders</p>
                 <p className="text-muted-foreground">Email: hertofhelp@gmail.com</p>
+                <p className="text-muted-foreground">Website: https://knowfounders.com</p>
+                <p className="text-muted-foreground">Address: India</p>
               </div>
             </section>
           </CardContent>

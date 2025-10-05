@@ -109,9 +109,9 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="mailto:hertofhelp@gmail.com" className="text-muted-foreground hover:text-primary transition-colors text-base">
+                <Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors text-base">
                   Contact Us
-                </a>
+                </Link>
               </li>
               <li>
                 <Link to="/privacy-policy" className="text-muted-foreground hover:text-primary transition-colors text-base">
