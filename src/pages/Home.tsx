@@ -397,7 +397,7 @@ export default function Home() {
                 <img src="https://similarlabs.com/similarlabs-embed-badge-light.svg" alt="SimilarLabs Embed Badge" />
               </a>
               <a href="https://turbo0.com/item/know-founders" target="_blank" rel="noopener noreferrer">
-                <img src="https://img.turbo0.com/badge-listed-light.svg" alt="Listed on Turbo0" style={{height: '54px', width: 'auto'}} />
+              <img src="https://img.turbo0.com/badge-listed-light.svg" alt="Listed on Turbo0" style={{height: '54px', width: 'auto'}} />
               </a>
 
 
