@@ -402,6 +402,7 @@ export default function Home() {
               <a href="https://theindiewall.net" target="_blank">
                 <img src="https://theindiewall.net/indiewall.svg" alt="IndieWall" width="120" height="60" />
               </a>
+              <a href="https://dofollow.tools" target="_blank"><img src="https://dofollow.tools/badge/badge_transparent.svg" alt="Featured on Dofollow.Tools" width="200" height="54" /></a>
 
               <a href="https://startupfa.me/s/knowfounders?utm_source=knowfounder.online" target="_blank"><img src="https://startupfa.me/badges/featured/light.webp" alt="Featured on Startup Fame" width="171" height="54" /></a>
             </div>
