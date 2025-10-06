@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { signOut, getUserProfile } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
-import { User, LogOut, Plus } from "lucide-react";
+import { User, LogOut, Plus, Menu, X } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import type { UserProfile } from "@/lib/auth";
 
@@ -15,6 +15,7 @@ export function Navbar() {
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [showStartupModal, setShowStartupModal] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -95,8 +96,20 @@ export function Navbar() {
             </div>
           </div>
 
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2"
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
+          </div>
+
           {/* Right Section: Auth */}
-          <div className="flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-4">
             {user ? (
               <>
                 <Button 
@@ -155,21 +168,101 @@ export function Navbar() {
               <div className="flex items-center gap-3">
                 <AuthModal defaultTab="signin">
                   <Button 
-                    variant="ghost" 
-                    className="text-muted-foreground hover:text-foreground transition-all duration-300 text-sm font-medium px-4 py-2 h-9"
+                    className="px-6 py-2 h-9 bg-green-600 text-white hover:bg-green-700 transition-all duration-300 rounded-full text-sm font-medium shadow-sm hover:shadow-green-600/25"
                   >
                     Sign In
-                  </Button>
-                </AuthModal>
-                <AuthModal defaultTab="signup">
-                  <Button className="px-6 py-2 h-9 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 rounded-full text-sm font-medium shadow-sm hover:shadow-primary/25">
-                    Join the Movement
                   </Button>
                 </AuthModal>
               </div>
             )}
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-border/50 bg-background/95 backdrop-blur-md">
+            <div className="px-8 py-4 space-y-4">
+              {/* Mobile Navigation Links */}
+              <div className="space-y-3">
+                <Link 
+                  to="/explore" 
+                  className="block text-muted-foreground hover:text-foreground transition-colors text-sm font-medium py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Explore
+                </Link>
+                <Link 
+                  to="/blog" 
+                  className="block text-muted-foreground hover:text-foreground transition-colors text-sm font-medium py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Resources
+                </Link>
+                <Link 
+                  to="/dashboard" 
+                  className="block text-muted-foreground hover:text-foreground transition-colors text-sm font-medium py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Dashboard
+                </Link>
+              </div>
+
+              {/* Mobile Auth Section */}
+              <div className="pt-4 border-t border-border/50">
+                {user ? (
+                  <div className="space-y-3">
+                    <Button 
+                      onClick={() => {
+                        setShowStartupModal(true);
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full flex items-center justify-center gap-2 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground border border-primary/20 hover:border-primary transition-all duration-300 rounded-full px-4 py-2 h-9 text-sm font-medium"
+                    >
+                      <Plus className="w-4 h-4" />
+                      Add Startup
+                    </Button>
+                    <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage src={profile?.avatar_url || ""} />
+                        <AvatarFallback className="text-sm font-medium bg-primary/10 text-primary">
+                          {profile?.full_name?.charAt(0) || user.email?.charAt(0) || "U"}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-sm text-foreground truncate">{profile?.full_name || "User"}</p>
+                        <p className="text-xs text-muted-foreground truncate">
+                          {user.email}
+                        </p>
+                      </div>
+                    </div>
+                    <Button 
+                      onClick={() => {
+                        handleSignOut();
+                        setMobileMenuOpen(false);
+                      }}
+                      variant="ghost"
+                      className="w-full justify-start text-muted-foreground hover:text-foreground"
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Sign Out
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <AuthModal defaultTab="signin">
+                      <Button 
+                        className="w-full px-6 py-2 h-9 bg-green-600 text-white hover:bg-green-700 transition-all duration-300 rounded-full text-sm font-medium shadow-sm hover:shadow-green-600/25"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Sign In
+                      </Button>
+                    </AuthModal>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       
       <StartupSubmissionModal 
