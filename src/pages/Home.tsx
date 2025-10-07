@@ -411,6 +411,9 @@ export default function Home() {
               <a href="https://yo.directory/" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
                 <img src="https://cdn.prod.website-files.com/65c1546fa73ea974db789e3d/65e1e171f89ebfa7bd0129ac_yodirectory-featured.png" alt="yo.directory" width="150" height="54" />
               </a>
+              <a href="https://www.microsaasexamples.com/" target="_blank" > Featured On Micro SaaS Examples </a>
+
+
             </div>
           </div>
         </div>
