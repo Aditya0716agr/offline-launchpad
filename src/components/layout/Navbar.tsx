@@ -108,8 +108,23 @@ export function Navbar() {
             </Button>
           </div>
 
-          {/* Right Section: Auth */}
+          {/* Right Section: yo.directory + Auth */}
           <div className="hidden md:flex items-center gap-4">
+            {/* yo.directory Link */}
+            <a 
+              href="https://yo.directory/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="transition-opacity duration-300 hover:opacity-80"
+            >
+              <img 
+                src="https://cdn.prod.website-files.com/65c1546fa73ea974db789e3d/65e1e171f89ebfa7bd0129ac_yodirectory-featured.png" 
+                alt="yo.directory" 
+                style={{width: "150px", height: "54px"}} 
+                width="150" 
+                height="54"
+              />
+            </a>
             {user ? (
               <>
                 <Button 
@@ -205,6 +220,24 @@ export function Navbar() {
                 >
                   Dashboard
                 </Link>
+              </div>
+
+              {/* yo.directory Link for Mobile */}
+              <div className="pt-4 border-t border-border/50">
+                <a 
+                  href="https://yo.directory/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="block transition-opacity duration-300 hover:opacity-80"
+                >
+                  <img 
+                    src="https://cdn.prod.website-files.com/65c1546fa73ea974db789e3d/65e1e171f89ebfa7bd0129ac_yodirectory-featured.png" 
+                    alt="yo.directory" 
+                    style={{width: "150px", height: "54px"}} 
+                    width="150" 
+                    height="54"
+                  />
+                </a>
               </div>
 
               {/* Mobile Auth Section */}
