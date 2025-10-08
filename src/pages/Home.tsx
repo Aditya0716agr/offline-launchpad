@@ -412,7 +412,9 @@ export default function Home() {
                 <img src="https://cdn.prod.website-files.com/65c1546fa73ea974db789e3d/65e1e171f89ebfa7bd0129ac_yodirectory-featured.png" alt="yo.directory" width="150" height="54" />
               </a>
               <a href="https://www.microsaasexamples.com/" target="_blank" > Featured On Micro SaaS Examples </a>
-
+              <a href="https://similarlabs.com/?ref=embed" target="_blank" style="cursor: pointer;">
+                <img src="https://similarlabs.com/similarlabs-embed-badge-light.svg" alt="SimilarLabs Embed Badge" />
+              </a>
 
             </div>
           </div>
