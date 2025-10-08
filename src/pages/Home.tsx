@@ -28,13 +28,13 @@ export default function Home() {
     if (user) {
       setUser(user);
       // Check if already a founding member
-      const { data: profile } = await supabase
+      const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('is_founding_member')
-        .eq('user_id', user.id)
+        .eq('user_id', user.id as any)
         .single();
       
-      if (profile?.is_founding_member) {
+      if (profile && !profileError && (profile as any).is_founding_member) {
         setIsFoundingMember(true);
       }
     }
@@ -52,8 +52,8 @@ export default function Home() {
     try {
       const { error } = await supabase
         .from('profiles')
-        .update({ is_founding_member: true })
-        .eq('user_id', user.id);
+        .update({ is_founding_member: true } as any)
+        .eq('user_id', user.id as any);
 
       if (error) throw error;
 
@@ -411,8 +411,8 @@ export default function Home() {
               <a href="https://yo.directory/" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80">
                 <img src="https://cdn.prod.website-files.com/65c1546fa73ea974db789e3d/65e1e171f89ebfa7bd0129ac_yodirectory-featured.png" alt="yo.directory" width="150" height="54" />
               </a>
-              <a href="https://www.microsaasexamples.com/" target="_blank" > Featured On Micro SaaS Examples </a>
-              <a href="https://similarlabs.com/?ref=embed" target="_blank" style="cursor: pointer;">
+              
+              <a href="https://similarlabs.com/?ref=embed" target="_blank" style={{cursor: 'pointer'}}>
                 <img src="https://similarlabs.com/similarlabs-embed-badge-light.svg" alt="SimilarLabs Embed Badge" />
               </a>
 
