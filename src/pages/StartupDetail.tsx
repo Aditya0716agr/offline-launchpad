@@ -410,15 +410,10 @@ const StartupDetail = () => {
                   <div className="flex-1 min-w-0">
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="mb-2">
                       <h1 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
                           {startup.name}
                         </h1>
-                      {startup.stage && (
-                        <Badge className={`px-2 py-1 text-xs font-medium ${getStageColor(startup.stage)}`}>
-                          {startup.stage}
-                        </Badge>
-                      )}
                             </div>
                     
                     {/* Tagline */}
@@ -593,31 +588,14 @@ const StartupDetail = () => {
 
               {/* Overview Tab */}
               <TabsContent value="overview" className="space-y-3">
-                {/* Problem & Solution */}
+                {/* About */}
                 <div className="bg-white/70 backdrop-blur-xl rounded-lg border border-slate-200/50 shadow-lg shadow-slate-900/5 p-4">
                   <div className="mb-3">
-                    <h2 className="text-lg font-semibold text-slate-900">Problem & Solution</h2>
+                    <h2 className="text-lg font-semibold text-slate-900">About</h2>
                   </div>
-                  <div className="space-y-3">
-                    <div className="p-3 bg-slate-50/80 border border-slate-200/50 rounded-lg">
-                      <h4 className="font-semibold text-slate-800 mb-2 flex items-center gap-2 text-sm">
-                        <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                        The Problem
-                      </h4>
-                      <p className="text-slate-600 leading-relaxed text-sm">
-                        {startup.description.split('.')[0] || 'Addressing a critical need in the market.'}
-                      </p>
-                    </div>
-                    <div className="p-3 bg-emerald-50/80 border border-emerald-200/50 rounded-lg">
-                      <h4 className="font-semibold text-emerald-800 mb-2 flex items-center gap-2 text-sm">
-                        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                        Our Solution
-                      </h4>
-                      <p className="text-emerald-700 leading-relaxed text-sm">
-                        {startup.description || 'Innovative solution that transforms the industry.'}
-                      </p>
-                    </div>
-                  </div>
+                  <p className="text-slate-700 leading-relaxed text-sm">
+                    {startup.description || 'Innovative solution that transforms the industry.'}
+                  </p>
                 </div>
 
                 {/* Traction Indicators */}
@@ -669,11 +647,11 @@ const StartupDetail = () => {
                 {startup.looking_for && startup.looking_for.length > 0 && (
                   <div className="bg-white/70 backdrop-blur-xl rounded-lg border border-slate-200/50 shadow-lg shadow-slate-900/5 p-4">
                     <div className="mb-3">
-                      <h2 className="text-lg font-semibold text-slate-900">We're Looking For</h2>
+                      <h2 className="text-lg font-semibold text-slate-900">Opportunities</h2>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {startup.looking_for.map((item, index) => (
-                        <Badge key={index} variant="outline" className="px-2 py-1 text-slate-700 border-slate-300 bg-slate-50/80 text-xs">
+                        <Badge key={index} variant="outline" className="px-3 py-1 text-slate-700 border-slate-300 bg-white text-xs">
                           {item}
                         </Badge>
                       ))}
@@ -683,36 +661,39 @@ const StartupDetail = () => {
               </TabsContent>
 
               {/* Product Tab */}
-              <TabsContent value="product" className="space-y-6">
-                <Card className="border-0 shadow-sm">
-                  <CardHeader>
-                    <CardTitle>Product Details</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div>
-                        <h4 className="font-medium mb-2">Description</h4>
-                <p className="text-muted-foreground leading-relaxed">
-                  {startup.description}
-                </p>
+              <TabsContent value="product" className="space-y-3">
+                <div className="bg-white/70 backdrop-blur-xl rounded-lg border border-slate-200/50 shadow-lg shadow-slate-900/5 p-4">
+                  <div className="mb-3">
+                    <h2 className="text-lg font-semibold text-slate-900">Product Details</h2>
+                  </div>
+                  <div className="space-y-4">
+                    {startup.stage && (
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-sm text-slate-600 font-medium">Stage:</span>
+                        <Badge className={`px-2 py-1 text-xs font-medium ${getStageColor(startup.stage)}`}>
+                          {startup.stage}
+                        </Badge>
                       </div>
-                      
-                      {startup.website_url && (
-                        <div className="pt-4">
-                          <Button 
-                            onClick={() => window.open(startup.website_url!, '_blank')}
-                            className="w-full"
-                            size="lg"
-                          >
-                            <Globe className="w-5 h-5 mr-2" />
-                            Visit Website
-                            <ExternalLink className="w-4 h-4 ml-2" />
-                          </Button>
-                        </div>
-                      )}
+                    )}
+                    
+                    <p className="text-slate-700 leading-relaxed text-sm">
+                      {startup.description}
+                    </p>
+                    
+                    {startup.website_url && (
+                      <div className="pt-2">
+                        <Button 
+                          onClick={() => window.open(startup.website_url!, '_blank')}
+                          className="w-full h-8 bg-slate-900 hover:bg-slate-800 text-white text-sm"
+                        >
+                          <Globe className="w-3 h-3 mr-2" />
+                          Visit Website
+                          <ExternalLink className="w-3 h-3 ml-2" />
+                        </Button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
               </TabsContent>
 
               {/* Gallery Tab */}
@@ -746,8 +727,10 @@ const StartupDetail = () => {
               </TabsContent>
 
               {/* Community Tab */}
-              <TabsContent value="community" className="space-y-6">
-            <CommentsSection startupId={id!} />
+              <TabsContent value="community" className="space-y-3">
+                <div className="bg-white/70 backdrop-blur-xl rounded-lg border border-slate-200/50 shadow-lg shadow-slate-900/5 p-4">
+                  <CommentsSection startupId={id!} />
+                </div>
               </TabsContent>
             </Tabs>
           </div>
