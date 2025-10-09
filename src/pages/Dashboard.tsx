@@ -93,14 +93,44 @@ const Dashboard = () => {
   }, [navigate]);
 
   const checkUser = async (userToCheck = user) => {
+    // Set a timeout to prevent infinite loading
+    const timeoutId = setTimeout(() => {
+      console.error('Profile check timed out after 30 seconds');
+      setLoading(false);
+      toast({
+        title: "Timeout",
+        description: "Profile check timed out. Please try refreshing the page.",
+        variant: "destructive",
+      });
+    }, 30000); // 30 second timeout
+
     try {
       if (!userToCheck) {
         console.log('No user found, setting loading to false');
+        clearTimeout(timeoutId);
         setLoading(false);
         return;
       }
 
       console.log('Checking profile for user:', userToCheck.email);
+
+      // Test database connectivity first
+      try {
+        console.log('Testing database connectivity...');
+        const { data: testData, error: testError } = await supabase
+          .from('profiles')
+          .select('count')
+          .limit(1);
+        
+        if (testError) {
+          console.error('Database connectivity test failed:', testError);
+          throw new Error(`Database connection failed: ${testError.message}`);
+        }
+        console.log('Database connectivity test passed');
+      } catch (connectivityError) {
+        console.error('Database connectivity error:', connectivityError);
+        throw connectivityError;
+      }
 
       // Get user profile with retry logic
       let profileData = null;
@@ -110,34 +140,54 @@ const Dashboard = () => {
       for (let attempt = 1; attempt <= 3; attempt++) {
         console.log(`Profile check attempt ${attempt}/3`);
         
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('user_id', userToCheck.id)
-          .single();
+        try {
+          console.log(`Attempting to fetch profile for user ID: ${userToCheck.id}`);
+          const { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('user_id', userToCheck.id)
+            .single();
+          
+          console.log(`Profile query result - attempt ${attempt}:`, { data: !!data, error: error?.message || 'none' });
 
-        if (error && error.code !== 'PGRST116') {
-          console.error(`Profile check attempt ${attempt} failed:`, error);
-          profileError = error;
+          if (error && error.code !== 'PGRST116') {
+            console.error(`Profile check attempt ${attempt} failed:`, error);
+            profileError = error;
+            if (attempt < 3) {
+              // Wait a bit before retrying
+              await new Promise(resolve => setTimeout(resolve, 1000));
+              continue;
+            }
+          } else if (error && error.code === 'PGRST116') {
+            console.log(`Profile not found on attempt ${attempt}`);
+            profileError = error;
+            break;
+          } else {
+            console.log(`Profile found on attempt ${attempt}:`, data);
+            profileData = data;
+            profileError = null;
+            break;
+          }
+        } catch (attemptError) {
+          console.error(`Profile check attempt ${attempt} threw error:`, attemptError);
+          profileError = attemptError;
           if (attempt < 3) {
-            // Wait a bit before retrying
             await new Promise(resolve => setTimeout(resolve, 1000));
             continue;
           }
-        } else if (error && error.code === 'PGRST116') {
-          console.log(`Profile not found on attempt ${attempt}`);
-          profileError = error;
-          break;
-        } else {
-          console.log(`Profile found on attempt ${attempt}:`, data);
-          profileData = data;
-          profileError = null;
-          break;
         }
       }
 
+      // If we have a non-PGRST116 error after all attempts, handle it gracefully
       if (profileError && profileError.code !== 'PGRST116') {
-        throw profileError;
+        console.error('Profile check failed after all attempts:', profileError);
+        toast({
+          title: "Error",
+          description: "Failed to load profile. Please try refreshing the page.",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
       }
       
       // If no profile exists, create one automatically
@@ -155,9 +205,13 @@ const Dashboard = () => {
             .select()
             .single();
           
-        if (createError) {
+          if (createError) {
             console.error('Failed to create profile:', createError);
-            // Don't throw error, just set loading to false so user can see the message
+            toast({
+              title: "Profile Creation Failed",
+              description: "Unable to create your profile. Please try again or contact support.",
+              variant: "destructive",
+            });
             setLoading(false);
             return;
           } else {
@@ -167,6 +221,11 @@ const Dashboard = () => {
           }
         } catch (error) {
           console.error('Profile creation failed:', error);
+          toast({
+            title: "Profile Creation Failed",
+            description: "An error occurred while creating your profile. Please try again.",
+            variant: "destructive",
+          });
           setLoading(false);
           return;
         }
@@ -177,31 +236,41 @@ const Dashboard = () => {
 
       // Get user's startups
       if (profileData) {
-        const { data: startupsData, error: startupsError } = await supabase
-          .from('startups')
-          .select(`
-            *,
-            votes (id),
-            comments (id)
-          `)
-          .eq('founder_id', profileData.id)
-          .order('created_at', { ascending: false });
+        try {
+          const { data: startupsData, error: startupsError } = await supabase
+            .from('startups')
+            .select(`
+              *,
+              votes (id),
+              comments (id)
+            `)
+            .eq('founder_id', profileData.id)
+            .order('created_at', { ascending: false });
 
-        if (startupsError) {
-          console.error('Error fetching startups:', startupsError);
-        } else {
-          setStartups(startupsData || []);
-          console.log('Startups loaded:', startupsData?.length || 0);
+          if (startupsError) {
+            console.error('Error fetching startups:', startupsError);
+            // Don't fail the entire process for startup loading errors
+            setStartups([]);
+          } else {
+            setStartups(startupsData || []);
+            console.log('Startups loaded:', startupsData?.length || 0);
+          }
+        } catch (startupError) {
+          console.error('Error fetching startups:', startupError);
+          setStartups([]);
         }
       }
     } catch (error) {
       console.error('Error checking user:', error);
       toast({
         title: "Error",
-        description: "Failed to load user data",
+        description: "Failed to load user data. Please try refreshing the page.",
         variant: "destructive",
       });
     } finally {
+      // Always ensure loading is set to false and clear timeout
+      clearTimeout(timeoutId);
+      console.log('Setting loading to false');
       setLoading(false);
     }
   };
@@ -214,8 +283,37 @@ const Dashboard = () => {
           <h1 className="text-2xl font-medium text-foreground mb-4">
             Loading dashboard...
           </h1>
-            </div>
+          <p className="text-muted-foreground mb-6">
+            Setting up your profile and loading your data
+          </p>
+          <div className="flex flex-col gap-4 items-center max-w-md mx-auto">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                console.log('Manual retry triggered');
+                setLoading(false);
+                // Trigger a fresh check
+                setTimeout(() => {
+                  if (user) {
+                    checkUser(user);
+                  }
+                }, 100);
+              }}
+              className="mt-4"
+            >
+              Retry Loading
+            </Button>
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate('/')}
+              className="text-sm"
+            >
+              Go Home
+            </Button>
           </div>
+        </div>
+      </div>
     );
   }
 
