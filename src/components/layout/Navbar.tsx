@@ -73,6 +73,13 @@ export function Navbar() {
             {/* Navigation Links */}
             <div className="hidden md:flex items-center gap-8">
               <Link 
+                to="/home" 
+                className="text-muted-foreground hover:text-foreground transition-all duration-300 relative group text-sm font-medium"
+              >
+                Home
+                <span className="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all duration-300 group-hover:w-full"></span>
+              </Link>
+              <Link 
                 to="/explore" 
                 className="text-muted-foreground hover:text-foreground transition-all duration-300 relative group text-sm font-medium"
               >
@@ -184,6 +191,13 @@ export function Navbar() {
             <div className="px-8 py-4 space-y-4">
               {/* Mobile Navigation Links */}
               <div className="space-y-3">
+                <Link 
+                  to="/home" 
+                  className="block text-muted-foreground hover:text-foreground transition-colors text-sm font-medium py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Home
+                </Link>
                 <Link 
                   to="/explore" 
                   className="block text-muted-foreground hover:text-foreground transition-colors text-sm font-medium py-2"

@@ -1,91 +1,72 @@
 import { SEOHead } from './SEOHead';
-
-interface Startup {
-  id: string;
-  name: string;
-  description: string;
-  tagline?: string;
-  logo_url?: string;
-  cover_image_url?: string;
-  city?: string;
-  state_region?: string;
-  category?: {
-    name: string;
-  };
-  website_url?: string;
-  stage?: string;
-  team_size?: string;
-  founded_date?: string;
-}
+import { generateStartupSchema, generateBreadcrumbSchema, generateMetaTitle, generateMetaDescription } from '@/lib/seo';
 
 interface StartupSEOProps {
-  startup: Startup;
-  baseUrl?: string;
+  startup: {
+    id: string;
+    name: string;
+    description: string;
+    logo_url?: string;
+    website_url?: string;
+    city?: string;
+    state_region?: string;
+    category?: string;
+    founder_name?: string;
+    email_contact?: string;
+    phone_number?: string;
+    social_instagram?: string;
+    social_facebook?: string;
+    social_linkedin?: string;
+    social_twitter?: string;
+    created_at: string;
+    updated_at: string;
+  };
 }
 
-export const StartupSEO = ({ startup, baseUrl = "https://knowfounders.com" }: StartupSEOProps) => {
-  const startupUrl = `${baseUrl}/startup/${startup.id}`;
-  const imageUrl = startup.cover_image_url || startup.logo_url || `${baseUrl}/default-startup-image.jpg`;
+export const StartupSEO = ({ startup }: StartupSEOProps) => {
+  const title = generateMetaTitle(`${startup.name} - ${startup.category} Startup in ${startup.city}`);
+  const description = generateMetaDescription(
+    `Discover ${startup.name}, a ${startup.category} startup in ${startup.city}. ${startup.description}`
+  );
   
-  const title = `${startup.name} - ${startup.tagline || 'Startup'} | Know Founders`;
-  const description = startup.description.length > 160 
-    ? startup.description.substring(0, 157) + "..." 
-    : startup.description;
+  const url = `https://knowfounders.com/startup/${startup.id}`;
+  const image = startup.logo_url || 'https://knowfounders.com/default-startup-image.jpg';
+  
+  const structuredData = [
+    generateStartupSchema(startup),
+    generateBreadcrumbSchema([
+      { name: 'Home', url: 'https://knowfounders.com' },
+      { name: 'Explore', url: 'https://knowfounders.com/explore' },
+      { name: startup.category || 'Startup', url: `https://knowfounders.com/explore/${startup.category?.toLowerCase().replace(/\s+/g, '-')}` },
+      { name: startup.name, url }
+    ])
+  ];
 
   const keywords = [
     startup.name,
-    startup.category?.name || 'startup',
+    startup.category,
     startup.city,
     startup.state_region,
-    startup.stage,
-    'non-tech startup',
-    'startup directory',
+    'startup',
     'entrepreneur',
     'business',
-    'founder'
+    'non-tech startup',
+    'founder',
+    'startup directory'
   ].filter(Boolean).join(', ');
-
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": startup.name,
-    "description": startup.description,
-    "url": startup.website_url || startupUrl,
-    "logo": startup.logo_url,
-    "image": imageUrl,
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": startup.city,
-      "addressRegion": startup.state_region,
-      "addressCountry": "IN"
-    },
-    "foundingDate": startup.founded_date,
-    "numberOfEmployees": startup.team_size,
-    "knowsAbout": [
-      startup.category?.name,
-      "Non-tech startup",
-      "Business innovation"
-    ].filter(Boolean),
-    "sameAs": startup.website_url ? [startup.website_url] : [],
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": {
-        "@type": "EntryPoint",
-        "urlTemplate": `${baseUrl}/explore?search={search_term_string}`
-      },
-      "query-input": "required name=search_term_string"
-    }
-  };
 
   return (
     <SEOHead
       title={title}
       description={description}
       keywords={keywords}
-      image={imageUrl}
-      url={startupUrl}
+      image={image}
+      url={url}
       type="article"
       structuredData={structuredData}
+      publishedTime={startup.created_at}
+      modifiedTime={startup.updated_at}
+      tags={[startup.category, startup.city].filter(Boolean)}
     />
   );
 };

@@ -30,7 +30,91 @@ export function StartupCard({ startup, viewMode = "grid" }: StartupCardProps) {
   if (viewMode === "list") {
     return (
       <Card className="startup-card group bg-white border border-gray-200 hover:border-green-200 hover:shadow-lg transition-all duration-300">
-        <CardContent className="p-6">
+        <CardContent className="p-4 sm:p-6">
+          {/* Mobile Layout */}
+          <div className="block sm:hidden">
+            <div className="flex items-start gap-4 mb-4">
+              {/* Logo */}
+              <div className="shrink-0">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-50 to-white rounded-lg flex items-center justify-center border border-gray-100">
+                  {startup.logo_url ? (
+                    <img 
+                      src={startup.logo_url} 
+                      alt={startup.name}
+                      className="max-w-full max-h-full object-contain rounded-lg"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                      <span className="text-sm font-bold text-green-600">
+                        {startup.name.charAt(0)}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+              
+              <div className="flex-1 min-w-0">
+                {/* Business Name */}
+                <h3 className="text-lg font-bold text-gray-800 mb-1 truncate group-hover:text-green-600 transition-colors">
+                  {startup.name}
+                </h3>
+                
+                {/* Badges */}
+                <div className="flex items-center gap-2 mb-2">
+                  {startup.categories && (
+                    <Badge className="bg-green-600 text-white border-0 shadow-sm text-xs font-medium px-2 py-1">
+                      {startup.categories.name}
+                    </Badge>
+                  )}
+                  {startup.profiles?.is_founding_member && (
+                    <Badge className="bg-amber-500 text-white border-0 shadow-sm text-xs">
+                      🎖
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            </div>
+            
+            {/* Description */}
+            <p className="text-gray-600 text-sm leading-relaxed line-clamp-2 mb-3">
+              {startup.description}
+            </p>
+            
+            {/* Meta Info and Actions */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4 text-gray-500">
+                <div className="flex items-center gap-1">
+                  <Eye className="w-3 h-3" />
+                  <span className="text-xs font-medium">{startup.view_count}</span>
+                </div>
+                <VoteButton 
+                  startupId={startup.id}
+                  currentVotes={startup.votes?.length || 0}
+                  size="sm"
+                  variant="ghost"
+                />
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <BookmarkButton 
+                  startupId={startup.id} 
+                  size="sm" 
+                  variant="ghost"
+                />
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  className="border-green-200 text-green-600 hover:bg-green-50 hover:border-green-300 transition-all duration-200 text-xs px-3 py-1"
+                >
+                  <ExternalLink className="w-3 h-3 mr-1" />
+                  View
+                </Button>
+              </div>
+            </div>
+          </div>
+          
+          {/* Desktop Layout */}
+          <div className="hidden sm:block">
           <div className="flex items-center gap-6">
             {/* Logo */}
             <div className="shrink-0">
@@ -66,12 +150,6 @@ export function StartupCard({ startup, viewMode = "grid" }: StartupCardProps) {
                   
                   {/* Meta Info */}
                   <div className="flex items-center gap-6 text-gray-500">
-                    {startup.location && (
-                      <div className="flex items-center gap-1">
-                        <MapPin className="w-4 h-4" />
-                        <span className="text-sm">{startup.location}</span>
-                      </div>
-                    )}
                     <div className="flex items-center gap-1">
                       <Eye className="w-4 h-4" />
                       <span className="text-sm font-medium">{startup.view_count}</span>
@@ -101,7 +179,6 @@ export function StartupCard({ startup, viewMode = "grid" }: StartupCardProps) {
                       startupId={startup.id} 
                       size="sm" 
                       variant="ghost"
-                      className="text-gray-500 hover:text-green-600"
                     />
                     <Button 
                       size="sm" 
@@ -111,6 +188,7 @@ export function StartupCard({ startup, viewMode = "grid" }: StartupCardProps) {
                       <ExternalLink className="w-3 h-3 mr-1" />
                       View
                     </Button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -198,7 +276,6 @@ export function StartupCard({ startup, viewMode = "grid" }: StartupCardProps) {
                 startupId={startup.id} 
                 size="sm" 
                 variant="ghost"
-                className="text-gray-500 hover:text-green-600"
               />
               <Button 
                 size="sm" 
