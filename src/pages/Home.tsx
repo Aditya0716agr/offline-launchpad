@@ -491,15 +491,32 @@ export default function HomePage() {
                 <p className="text-lg text-slate-600 mb-6 max-w-2xl mx-auto">
                   + free featured spot! Join the exclusive community of early adopters and get your startup featured prominently.
                 </p>
-          <AuthModal defaultTab="signup">
+          {user && !isFoundingMember ? (
             <Button 
               size="lg" 
               className="bg-gradient-to-r from-primary to-emerald-600 hover:from-primary/90 hover:to-emerald-600/90 text-white text-lg px-8 py-3 h-12 rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+              onClick={claimFoundingMember}
             >
               Claim Yours
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-          </AuthModal>
+          ) : user && isFoundingMember ? (
+            <div className="flex items-center gap-3">
+              <Badge className="bg-amber-500 text-white border-amber-600 text-sm px-4 py-2">
+                ✓ Founding Member
+              </Badge>
+            </div>
+          ) : (
+            <AuthModal defaultTab="signup">
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-primary to-emerald-600 hover:from-primary/90 hover:to-emerald-600/90 text-white text-lg px-8 py-3 h-12 rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                Claim Yours
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </AuthModal>
+          )}
         </div>
       </section>
 
