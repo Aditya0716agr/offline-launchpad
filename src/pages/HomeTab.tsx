@@ -367,7 +367,7 @@ export default function HomeTab() {
               <span>Trusted by <span className="font-medium text-foreground">1000+ founders</span></span>
             </div>
             <div className="w-px h-4 bg-border"></div>
-            <span>Featured on <span className="font-medium text-foreground">Product Hunt</span></span>
+            <span> Reach <span className="font-medium text-foreground">10,000+ Entrepreneurs</span></span>
           </div>
         </div>
       </section>

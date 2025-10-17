@@ -106,6 +106,9 @@
     font-feature-settings: "rlig" 1, "calt" 1, "kern" 1;
     line-height: 1.6;
     letter-spacing: -0.01em;
+    text-rendering: optimizeSpeed;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -158,6 +161,7 @@
   /* Minimal startup card */
   .startup-card {
     @apply bg-card border border-border rounded-2xl hover:border-primary/30 transition-all duration-300;
+    will-change: transform;
   }
 
   .startup-card:hover {
@@ -210,6 +214,8 @@
   /* Auto-scrolling animation for featured badges */
   .animate-scroll {
     animation: scroll 30s linear infinite;
+    width: max-content;
+    will-change: transform;
   }
 
   @keyframes scroll {
@@ -218,6 +224,48 @@
     }
     100% {
       transform: translateX(-50%);
+    }
+  }
+
+  /* Animated headline styles */
+  .animated-headline {
+    position: relative;
+    height: 4em;
+    overflow: hidden;
+  }
+
+  .headline-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(100%);
+    animation: headlineCycle 9s infinite;
+    will-change: transform, opacity;
+    padding: 0.2em 0;
+  }
+
+  .headline-text:nth-child(1) {
+    animation-delay: 0s;
+  }
+
+  .headline-text:nth-child(2) {
+    animation-delay: 3s;
+  }
+
+  .headline-text:nth-child(3) {
+    animation-delay: 6s;
+  }
+
+  @keyframes headlineCycle {
+    0%, 26.66% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    33.33%, 100% {
+      opacity: 0;
+      transform: translateY(-100%);
     }
   }
 }

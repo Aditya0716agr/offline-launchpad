@@ -12,7 +12,7 @@ import { ArrowRight, CheckCircle, Users, TrendingUp, Heart, Eye, MapPin, ChefHat
 import { trackUrgencyBannerClick, trackFoundingMemberClaim } from "@/lib/analytics";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo, useCallback, memo } from "react";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { LazyImage } from "@/components/ui/LazyImage";
 import { generateMetaTitle, generateMetaDescription, generateOrganizationSchema, generateWebsiteSchema } from "@/lib/seo";
@@ -319,10 +319,11 @@ export default function HomePage() {
 
     // Apply search filter
     if (searchTerm) {
+      const searchLower = searchTerm.toLowerCase();
       filtered = filtered.filter(startup =>
-        startup.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        startup.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        startup.founder_name.toLowerCase().includes(searchTerm.toLowerCase())
+        startup.name.toLowerCase().includes(searchLower) ||
+        startup.description.toLowerCase().includes(searchLower) ||
+        startup.founder_name.toLowerCase().includes(searchLower)
       );
     }
 
@@ -444,9 +445,19 @@ export default function HomePage() {
         
         <div className="relative z-10 max-w-6xl mx-auto px-8 text-center">
           
-          <h1 className="text-4xl md:text-5xl font-light text-slate-900 mb-6 leading-tight tracking-tight" style={{letterSpacing: '-0.02em', lineHeight: '1.2'}}>
-          Discover India's Hidden
-            <span className="block bg-gradient-to-r from-primary via-primary to-emerald-600 bg-clip-text text-transparent font-normal">Startup Gems</span>
+          <h1 className="text-4xl md:text-5xl font-light text-slate-900 mb-6 leading-tight tracking-tight animated-headline" style={{letterSpacing: '-0.02em', lineHeight: '1.3'}}>
+            <div className="headline-text">
+              <div>Discover India's Hidden</div>
+              <div className="bg-gradient-to-r from-primary via-primary to-emerald-600 bg-clip-text text-transparent font-normal">Startup Gems</div>
+            </div>
+            <div className="headline-text">
+              <div>Get Your Startup Featured</div>
+              <div className="bg-gradient-to-r from-primary via-primary to-emerald-600 bg-clip-text text-transparent font-normal">Join 1,000+ Founders Getting Discovered</div>
+            </div>
+            <div className="headline-text">
+              <div>Share Your Story</div>
+              <div className="bg-gradient-to-r from-primary via-primary to-emerald-600 bg-clip-text text-transparent font-normal">We Highlight Real Businesses</div>
+            </div>
           </h1>
           
           <p className="text-lg md:text-xl text-slate-600 mb-12 max-w-4xl mx-auto leading-relaxed font-light" style={{lineHeight: '1.6'}}>
@@ -477,7 +488,92 @@ export default function HomePage() {
               <span>Trusted by <span className="font-medium text-slate-700">1000+ founders</span></span>
             </div>
             <div className="w-px h-4 bg-slate-200"></div>
-            <span>Featured on <span className="font-medium text-slate-700">Product Hunt</span></span>
+            <span>Reach <span className="font-medium text-slate-700">10,000+ Entrepreneurs</span></span>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured In Section */}
+      <section className="py-8 bg-gradient-to-r from-slate-50 via-white to-slate-50 border-y border-slate-200">
+        <div className="max-w-6xl mx-auto px-8">
+          <div className="text-center mb-4">
+            <h3 className="text-sm font-semibold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-2 uppercase tracking-wide">
+              Featured In
+            </h3>
+            <div className="w-8 h-0.5 bg-gradient-to-r from-primary to-primary/60 rounded-full mx-auto"></div>
+          </div>
+          <div className="relative overflow-hidden">
+            <div className="flex gap-6 items-center animate-scroll">
+              {/* First set of badges */}
+              <a href="https://launchigniter.com/product/knowfounders?ref=badge-knowfounders" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://launchigniter.com/api/badge/knowfounders?theme=neutral" alt="Featured on LaunchIgniter" width="212" height="55" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://www.producthunt.com/products/knowfounders?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-knowfounders" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1020985&theme=neutral&t=1759343386759" alt="KnowFounders - Where non-tech founders get discovered. | Product Hunt" width="250" height="54" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://launchboard.dev" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://launchboard.dev/launchboard-badge.png" alt="Launched on LaunchBoard - Product Launch Platform" width="240" height="60" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://fazier.com" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=featured&theme=neutral" width="250" alt="Fazier badge" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://starterbest.com" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80 flex-shrink-0"> 
+                <img src="https://starterbest.com/badages-awards.svg" alt="Featured on Starter Best" height="54" width="auto" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://similarlabs.com/?ref=embed" target="_blank" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://similarlabs.com/similarlabs-embed-badge-light.svg" alt="SimilarLabs Embed Badge" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://turbo0.com/item/know-founders" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://img.turbo0.com/badge-listed-light.svg" alt="Listed on Turbo0" height="54" width="auto" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://theindiewall.net" target="_blank" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://theindiewall.net/indiewall.svg" alt="IndieWall" width="120" height="60" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://startupfa.me/s/knowfounders?utm_source=knowfounder.online" target="_blank" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://startupfa.me/badges/featured/light.webp" alt="Featured on Startup Fame" width="171" height="54" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://dofollow.tools" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://dofollow.tools/badge/badge_transparent.svg" alt="Featured on Dofollow.Tools" width="200" height="54" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://yo.directory/" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://cdn.prod.website-files.com/65c1546fa73ea974db789e3d/65e1e171f89ebfa7bd0129ac_yodirectory-featured.png" alt="yo.directory" width="150" height="54" className="h-8 w-auto" loading="lazy" />
+              </a>
+              
+              {/* Duplicate set for seamless loop */}
+              <a href="https://launchigniter.com/product/knowfounders?ref=badge-knowfounders" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://launchigniter.com/api/badge/knowfounders?theme=neutral" alt="Featured on LaunchIgniter" width="212" height="55" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://www.producthunt.com/products/knowfounders?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-knowfounders" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1020985&theme=neutral&t=1759343386759" alt="KnowFounders - Where non-tech founders get discovered. | Product Hunt" width="250" height="54" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://launchboard.dev" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://launchboard.dev/launchboard-badge.png" alt="Launched on LaunchBoard - Product Launch Platform" width="240" height="60" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://fazier.com" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=featured&theme=neutral" width="250" alt="Fazier badge" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://starterbest.com" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80 flex-shrink-0"> 
+                <img src="https://starterbest.com/badages-awards.svg" alt="Featured on Starter Best" height="54" width="auto" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://similarlabs.com/?ref=embed" target="_blank" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://similarlabs.com/similarlabs-embed-badge-light.svg" alt="SimilarLabs Embed Badge" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://turbo0.com/item/know-founders" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://img.turbo0.com/badge-listed-light.svg" alt="Listed on Turbo0" height="54" width="auto" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://theindiewall.net" target="_blank" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://theindiewall.net/indiewall.svg" alt="IndieWall" width="120" height="60" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://startupfa.me/s/knowfounders?utm_source=knowfounder.online" target="_blank" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://startupfa.me/badges/featured/light.webp" alt="Featured on Startup Fame" width="171" height="54" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://dofollow.tools" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://dofollow.tools/badge/badge_transparent.svg" alt="Featured on Dofollow.Tools" width="200" height="54" className="h-8 w-auto" loading="lazy" />
+              </a>
+              <a href="https://yo.directory/" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80 flex-shrink-0">
+                <img src="https://cdn.prod.website-files.com/65c1546fa73ea974db789e3d/65e1e171f89ebfa7bd0129ac_yodirectory-featured.png" alt="yo.directory" width="150" height="54" className="h-8 w-auto" loading="lazy" />
+              </a>
+            </div>
           </div>
         </div>
       </section>
