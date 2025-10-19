@@ -538,6 +538,9 @@ export default function HomePage() {
               <a href="https://yo.directory/" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80 flex-shrink-0">
                 <img src="https://cdn.prod.website-files.com/65c1546fa73ea974db789e3d/65e1e171f89ebfa7bd0129ac_yodirectory-featured.png" alt="yo.directory" width="150" height="54" className="h-8 w-auto" loading="lazy" />
               </a>
+              <a href="https://auraplusplus.com/projects/non-tech-startup-community-india" target="_blank" rel="noopener">
+                <img src="https://auraplusplus.com/images/badges/featured-on-light.svg" alt="Featured on Aura++" width="200" height="54" className="h-8 w-auto" loading="lazy" />
+              </a>
               
               {/* Duplicate set for seamless loop */}
               <a href="https://launchigniter.com/product/knowfounders?ref=badge-knowfounders" target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-80 flex-shrink-0">

@@ -9,11 +9,11 @@ import { Footer } from "@/components/layout/Footer";
 import { getBlogPostById, getRelatedPosts } from "@/data/blogPosts";
 
 export default function BlogPost() {
-  const { id } = useParams();
+  const { slug } = useParams();
   
-  // Get the blog post by ID
-  const blogPost = getBlogPostById(id || "");
-  const relatedPosts = getRelatedPosts(id || "", 2);
+  // Get the blog post by ID (using slug as the identifier)
+  const blogPost = getBlogPostById(slug || "");
+  const relatedPosts = getRelatedPosts(slug || "", 2);
 
   // If blog post not found, show 404
   if (!blogPost) {
