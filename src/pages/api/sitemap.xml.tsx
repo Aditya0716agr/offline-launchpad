@@ -5,7 +5,7 @@ export default async function handler(req: any, res: any) {
     // Fetch all approved startups
     const { data: startups, error } = await supabase
       .from('startups')
-      .select('id, name, updated_at')
+      .select('id, name, slug, updated_at')
       .eq('status', 'approved')
       .order('updated_at', { ascending: false });
 
@@ -55,9 +55,10 @@ export default async function handler(req: any, res: any) {
     // Add startup pages
     if (startups) {
       startups.forEach((startup) => {
+        const startupUrl = startup.slug ? `${baseUrl}/startups/${startup.slug}` : `${baseUrl}/startup/${startup.id}`;
         sitemap += `
   <url>
-    <loc>${baseUrl}/startup/${startup.id}</loc>
+    <loc>${startupUrl}</loc>
     <lastmod>${new Date(startup.updated_at).toISOString()}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>

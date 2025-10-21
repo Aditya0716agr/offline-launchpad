@@ -36,6 +36,7 @@ function App() {
           <Route path="/explore" element={<Explore />} />
           <Route path="/explore/:category" element={<Explore />} />
           <Route path="/explore/:category/:city" element={<Explore />} />
+          <Route path="/startups/:slug" element={<StartupDetail />} />
           <Route path="/startup/:id" element={<StartupDetail />} />
           <Route path="/startup/:slug" element={<StartupDetail />} />
           <Route path="/startup/:slug/:city" element={<StartupDetail />} />

@@ -23,10 +23,10 @@ interface StartupCardProps {
       is_founding_member?: boolean;
     };
   };
-  viewMode?: "grid" | "list";
+  viewMode?: "block" | "list";
 }
 
-export function StartupCard({ startup, viewMode = "grid" }: StartupCardProps) {
+export function StartupCard({ startup, viewMode = "block" }: StartupCardProps) {
   if (viewMode === "list") {
     return (
       <Card className="startup-card group bg-white border border-gray-200 hover:border-green-200 hover:shadow-lg transition-all duration-300">

@@ -29,7 +29,7 @@ export const StartupSEO = ({ startup }: StartupSEOProps) => {
     `Discover ${startup.name}, a ${startup.category} startup in ${startup.city}. ${startup.description}`
   );
   
-  const url = `https://knowfounders.com/startup/${startup.id}`;
+  const url = `https://knowfounders.com/startups/${startup.slug || startup.id}`;
   const image = startup.logo_url || 'https://knowfounders.com/default-startup-image.jpg';
   
   const structuredData = [

@@ -25,6 +25,7 @@ interface Category {
 interface Startup {
   id: string;
   name: string;
+  slug: string;
   description: string;
   logo_url: string | null;
   location: string | null;
@@ -50,7 +51,7 @@ const Explore = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLocation, setSelectedLocation] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("newest");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState<"block" | "list">("list");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [user, setUser] = useState<any>(null);
 
@@ -377,20 +378,20 @@ const Explore = () => {
 
               <div className="flex border border-gray-200 rounded-lg overflow-hidden">
                 <Button
-                  variant={viewMode === "grid" ? "default" : "ghost"}
-                  size="sm"
-                  onClick={() => setViewMode("grid")}
-                  className={`rounded-none px-2 ${viewMode === "grid" ? "bg-green-600 text-white" : "text-gray-600 hover:bg-gray-50"}`}
-                >
-                  <Grid className="w-3 h-3" />
-                </Button>
-                <Button
                   variant={viewMode === "list" ? "default" : "ghost"}
                   size="sm"
                   onClick={() => setViewMode("list")}
-                  className={`rounded-none border-l border-gray-200 px-2 ${viewMode === "list" ? "bg-green-600 text-white" : "text-gray-600 hover:bg-gray-50"}`}
+                  className={`rounded-none px-2 ${viewMode === "list" ? "bg-green-600 text-white" : "text-gray-600 hover:bg-gray-50"}`}
                 >
                   <List className="w-3 h-3" />
+                </Button>
+                <Button
+                  variant={viewMode === "block" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("block")}
+                  className={`rounded-none border-l border-gray-200 px-2 ${viewMode === "block" ? "bg-green-600 text-white" : "text-gray-600 hover:bg-gray-50"}`}
+                >
+                  <Grid className="w-3 h-3" />
                 </Button>
               </div>
             </div>
@@ -443,14 +444,14 @@ const Explore = () => {
           </div>
         ) : (
           <div className={
-            viewMode === "grid" 
+            viewMode === "block" 
               ? "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"
               : "space-y-3"
           }>
             {startups.map((startup) => (
               <div 
                 key={startup.id}
-                onClick={() => navigate(`/startup/${startup.id}`)}
+                onClick={() => navigate(`/startups/${startup.slug || startup.id}`)}
                 className="cursor-pointer"
               >
                 <StartupCard 

@@ -12,7 +12,7 @@ export const generateSlug = (text: string): string => {
 export const generateStartupURL = (startupName: string, city?: string): string => {
   const slug = generateSlug(startupName);
   const citySlug = city ? generateSlug(city) : '';
-  return citySlug ? `/startup/${slug}/${citySlug}` : `/startup/${slug}`;
+  return citySlug ? `/startups/${slug}/${citySlug}` : `/startups/${slug}`;
 };
 
 export const generateCategoryURL = (category: string, city?: string): string => {

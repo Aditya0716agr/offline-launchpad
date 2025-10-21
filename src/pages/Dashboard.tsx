@@ -626,7 +626,7 @@ const Dashboard = () => {
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  onClick={() => navigate(`/startup/${startup.id}`)}
+                                  onClick={() => navigate(`/startups/${startup.slug || startup.id}`)}
                                 >
                                   View
                                 </Button>

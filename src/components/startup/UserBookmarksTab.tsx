@@ -106,10 +106,10 @@ export const UserBookmarksTab = ({ userProfile }: UserBookmarksTabProps) => {
         {bookmarkedStartups.map((startup) => (
           <div 
             key={startup.id}
-            onClick={() => navigate(`/startup/${startup.id}`)}
+            onClick={() => navigate(`/startups/${startup.slug || startup.id}`)}
             className="cursor-pointer"
           >
-            <StartupCard startup={startup} viewMode="grid" />
+            <StartupCard startup={startup} viewMode="block" />
           </div>
         ))}
       </div>

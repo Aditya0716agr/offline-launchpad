@@ -1,120 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Static Pages -->
+  <!-- Main Pages -->
   <url>
-    <loc>https://knowfounders.com</loc>
-    <lastmod>2025-01-28</lastmod>
+    <loc>https://knowfounders.com/</loc>
+    <lastmod>2024-01-15T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://knowfounders.com/home</loc>
-    <lastmod>2025-01-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
     <loc>https://knowfounders.com/explore</loc>
-    <lastmod>2025-01-28</lastmod>
+    <lastmod>2024-01-15T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://knowfounders.com/about</loc>
-    <lastmod>2025-01-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://knowfounders.com/contact</loc>
-    <lastmod>2025-01-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://knowfounders.com/blog</loc>
-    <lastmod>2025-01-28</lastmod>
+    <loc>https://knowfounders.com/dashboard</loc>
+    <lastmod>2024-01-15T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://knowfounders.com/login</loc>
-    <lastmod>2025-01-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
+    <loc>https://knowfounders.com/blog</loc>
+    <lastmod>2024-01-15T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://knowfounders.com/signup</loc>
-    <lastmod>2025-01-28</lastmod>
+    <loc>https://knowfounders.com/about</loc>
+    <lastmod>2024-01-15T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://knowfounders.com/contact</loc>
+    <lastmod>2024-01-15T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://knowfounders.com/privacy-policy</loc>
-    <lastmod>2025-01-28</lastmod>
+    <lastmod>2024-01-15T00:00:00+00:00</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://knowfounders.com/terms-of-service</loc>
-    <lastmod>2025-01-28</lastmod>
+    <lastmod>2024-01-15T00:00:00+00:00</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
-  </url>
-  
-  <!-- Category Pages -->
-  <url>
-    <loc>https://knowfounders.com/explore/food-beverage</loc>
-    <lastmod>2025-01-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://knowfounders.com/explore/wellness-health</loc>
-    <lastmod>2025-01-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://knowfounders.com/explore/retail-fashion</loc>
-    <lastmod>2025-01-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://knowfounders.com/explore/services</loc>
-    <lastmod>2025-01-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://knowfounders.com/explore/education</loc>
-    <lastmod>2025-01-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://knowfounders.com/explore/entertainment</loc>
-    <lastmod>2025-01-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://knowfounders.com/explore/travel</loc>
-    <lastmod>2025-01-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://knowfounders.com/explore/consulting</loc>
-    <lastmod>2025-01-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://knowfounders.com/explore/sustainability</loc>
-    <lastmod>2025-01-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
 </urlset>

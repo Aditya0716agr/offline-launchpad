@@ -96,7 +96,7 @@ export const getCategoryPages = (categories: any[]): SitemapEntry[] => {
 // Startup pages for sitemap
 export const getStartupPages = (startups: any[]): SitemapEntry[] => {
   return startups.map(startup => ({
-    url: `https://knowfounders.com/startup/${startup.slug || startup.id}`,
+    url: `https://knowfounders.com/startups/${startup.slug || startup.id}`,
     lastmod: startup.updated_at || startup.created_at,
     changefreq: 'weekly',
     priority: 0.7

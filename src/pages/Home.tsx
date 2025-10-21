@@ -28,6 +28,7 @@ interface Category {
 interface Startup {
   id: string;
   name: string;
+  slug: string;
   description: string;
   logo_url: string | null;
   location: string | null;
@@ -60,7 +61,7 @@ export default function HomePage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLocation, setSelectedLocation] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("newest");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState<"block" | "list">("list");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   useEffect(() => {
@@ -796,21 +797,21 @@ export default function HomePage() {
 
                 <div className="flex border border-slate-200 rounded-xl overflow-hidden bg-white/80 backdrop-blur-sm shadow-sm">
                   <Button
-                    variant={viewMode === "grid" ? "default" : "ghost"}
-                    size="sm"
-                    onClick={() => setViewMode("grid")}
-                    className={`rounded-none px-3 py-2 ${viewMode === "grid" ? "bg-gradient-to-r from-primary to-emerald-600 text-white border-0" : "text-slate-600 hover:bg-slate-50"}`}
-                  >
-                    <Grid className="w-4 h-4" />
-                      </Button>
-                  <Button
                     variant={viewMode === "list" ? "default" : "ghost"}
                     size="sm"
                     onClick={() => setViewMode("list")}
-                    className={`rounded-none border-l border-slate-200 px-3 py-2 ${viewMode === "list" ? "bg-gradient-to-r from-primary to-emerald-600 text-white border-0" : "text-slate-600 hover:bg-slate-50"}`}
+                    className={`rounded-none px-3 py-2 ${viewMode === "list" ? "bg-gradient-to-r from-primary to-emerald-600 text-white border-0" : "text-slate-600 hover:bg-slate-50"}`}
                   >
                     <List className="w-4 h-4" />
-              </Button>
+                  </Button>
+                  <Button
+                    variant={viewMode === "block" ? "default" : "ghost"}
+                    size="sm"
+                    onClick={() => setViewMode("block")}
+                    className={`rounded-none border-l border-slate-200 px-3 py-2 ${viewMode === "block" ? "bg-gradient-to-r from-primary to-emerald-600 text-white border-0" : "text-slate-600 hover:bg-slate-50"}`}
+                  >
+                    <Grid className="w-4 h-4" />
+                  </Button>
                 </div>
           </div>
         </div>
@@ -861,14 +862,14 @@ export default function HomePage() {
         </div>
           ) : (
             <div className={
-              viewMode === "grid" 
+              viewMode === "block" 
                 ? "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
                 : "space-y-4"
             }>
               {startups.map((startup) => (
                 <div 
                   key={startup.id}
-                  onClick={() => navigate(`/startup/${startup.id}`)}
+                  onClick={() => navigate(`/startups/${startup.slug || startup.id}`)}
                   className="cursor-pointer group"
                 >
                   <StartupCard 
