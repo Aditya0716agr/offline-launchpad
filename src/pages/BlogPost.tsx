@@ -6,14 +6,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Calendar, Clock, User, Share2, Heart, Bookmark } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { getBlogPostById, getRelatedPosts } from "@/data/blogPosts";
+import { BlogSEO } from "@/components/seo/BlogSEO";
+import { getBlogPostBySlug, getRelatedPostsBySlug } from "@/data/blogPosts";
 
 export default function BlogPost() {
   const { slug } = useParams();
   
-  // Get the blog post by ID (using slug as the identifier)
-  const blogPost = getBlogPostById(slug || "");
-  const relatedPosts = getRelatedPosts(slug || "", 2);
+  // Get the blog post by slug
+  const blogPost = getBlogPostBySlug(slug || "");
+  const relatedPosts = getRelatedPostsBySlug(slug || "", 2);
 
   // If blog post not found, show 404
   if (!blogPost) {
@@ -36,6 +37,7 @@ export default function BlogPost() {
 
   return (
     <div className="min-h-screen bg-background">
+      <BlogSEO post={blogPost} />
       <Navbar />
       
       {/* Article Header */}
@@ -136,7 +138,7 @@ export default function BlogPost() {
                       {post.excerpt}
                     </p>
                     
-                    <Link to={`/blog/${post.id}`}>
+                    <Link to={`/blog/${post.slug}`}>
                       <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
                         Read Article
                         <ArrowLeft className="ml-2 h-4 w-4 rotate-180" />

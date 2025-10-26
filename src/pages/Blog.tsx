@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Search, Calendar, User, ArrowRight, Filter } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { categories, blogPosts } from "@/data/blogPosts";
 
 export default function Blog() {
@@ -26,6 +27,13 @@ export default function Blog() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="Founder Resources & Insights | Know Founders Blog"
+        description="Learn from successful non-tech founders, get expert advice, and discover strategies that actually work. Browse our comprehensive collection of startup resources and founder stories."
+        keywords="startup blog, founder stories, non-tech startups, entrepreneurship advice, startup resources, founder insights, business building, startup validation, cofounder finding, fundraising"
+        url="https://knowfounders.com/blog"
+        type="CollectionPage"
+      />
       <Navbar />
       
       {/* Hero Section */}
@@ -114,7 +122,7 @@ export default function Blog() {
                           </div>
                         </div>
                         
-                        <Link to={`/blog/${post.id}`}>
+                        <Link to={`/blog/${post.slug}`}>
                           <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
                             Read More
                             <ArrowRight className="ml-2 h-4 w-4" />
@@ -172,7 +180,7 @@ export default function Blog() {
                       <span className="text-xs text-muted-foreground">{post.author.name}</span>
                     </div>
                     
-                    <Link to={`/blog/${post.id}`}>
+                    <Link to={`/blog/${post.slug}`}>
                       <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity text-xs">
                         Read
                         <ArrowRight className="ml-1 h-3 w-3" />

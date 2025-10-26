@@ -175,42 +175,112 @@
   <meta name="twitter:description" content="Discover innovative non-tech startups and connect with entrepreneurs. Browse startup directory, find cofounders, get funding, and join the largest community of non-tech founders in India.">
   <link rel="icon" type="image/x-icon" href="https://storage.googleapis.com/gpt-engineer-file-uploads/OVYktJbw3tZiZkzBsvSWWp5ISb23/uploads/1759048946323-image-removebg-preview (5).png">
 
-  <!-- Google Analytics 4 (GA4) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-99L81PFHRL"></script>
+  <!-- Crawler Detection and Optimization -->
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-99L81PFHRL', {
-      page_title: 'KnowFounders',
-      page_location: 'https://knowfounder.online/'
-    });
+    // Detect crawlers and optimize accordingly
+    (function() {
+      const userAgent = navigator.userAgent;
+      const isCrawler = /Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|Applebot|facebookexternalhit|Twitterbot|LinkedInBot|Pinterestbot|WhatsApp|TelegramBot/i.test(userAgent);
+      
+      if (isCrawler) {
+        // Add crawler-specific meta tags
+        const crawlerMeta = document.createElement('meta');
+        crawlerMeta.name = 'crawler-optimized';
+        crawlerMeta.content = 'true';
+        document.head.appendChild(crawlerMeta);
+        
+        // Add crawler class to body
+        document.documentElement.classList.add('crawler-mode');
+        
+        // Disable animations for crawlers
+        const style = document.createElement('style');
+        style.textContent = '.crawler-mode * { animation: none !important; transition: none !important; }';
+        document.head.appendChild(style);
+      }
+    })();
   </script>
 
-  <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9614136099969759"
-     crossorigin="anonymous"></script>
-
-  <!-- Meta Pixel Code -->
+  <!-- Google Analytics 4 (GA4) - Only for non-crawlers -->
   <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', 'YOUR_PIXEL_ID');
-    fbq('track', 'PageView');
+    (function() {
+      const userAgent = navigator.userAgent;
+      const isCrawler = /Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|Applebot|facebookexternalhit|Twitterbot|LinkedInBot|Pinterestbot|WhatsApp|TelegramBot/i.test(userAgent);
+      
+      if (!isCrawler) {
+        // Load GA4
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-99L81PFHRL';
+        document.head.appendChild(script);
+        
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-99L81PFHRL', {
+          page_title: 'KnowFounders',
+          page_location: 'https://knowfounder.online/'
+        });
+      }
+    })();
+  </script>
+
+  <!-- Google AdSense - Only for non-crawlers -->
+  <script>
+    (function() {
+      const userAgent = navigator.userAgent;
+      const isCrawler = /Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|Applebot|facebookexternalhit|Twitterbot|LinkedInBot|Pinterestbot|WhatsApp|TelegramBot/i.test(userAgent);
+      
+      if (!isCrawler) {
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9614136099969759';
+        script.crossOrigin = 'anonymous';
+        document.head.appendChild(script);
+      }
+    })();
+  </script>
+
+  <!-- Meta Pixel Code - Only for non-crawlers -->
+  <script>
+    (function() {
+      const userAgent = navigator.userAgent;
+      const isCrawler = /Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|Applebot|facebookexternalhit|Twitterbot|LinkedInBot|Pinterestbot|WhatsApp|TelegramBot/i.test(userAgent);
+      
+      if (!isCrawler) {
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', 'YOUR_PIXEL_ID');
+        fbq('track', 'PageView');
+      }
+    })();
   </script>
 </head>
 
   <body>
-    <!-- Meta Pixel noscript fallback -->
-    <noscript><img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1"
-    /></noscript>
+    <!-- Meta Pixel noscript fallback - Only for non-crawlers -->
+    <noscript>
+      <script>
+        (function() {
+          const userAgent = navigator.userAgent;
+          const isCrawler = /Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|Applebot|facebookexternalhit|Twitterbot|LinkedInBot|Pinterestbot|WhatsApp|TelegramBot/i.test(userAgent);
+          
+          if (!isCrawler) {
+            const img = document.createElement('img');
+            img.height = 1;
+            img.width = 1;
+            img.style.display = 'none';
+            img.src = 'https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1';
+            document.body.appendChild(img);
+          }
+        })();
+      </script>
+    </noscript>
     
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>

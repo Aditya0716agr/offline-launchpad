@@ -4,6 +4,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { PerformanceMonitor } from "@/components/performance/PerformanceMonitor";
+import { CrawlerOptimizedSEO } from "@/components/seo/CrawlerOptimizedSEO";
+import { initCrawlerOptimizations } from "@/lib/crawler-js-optimization";
+import { useEffect } from "react";
 
 import HomePage from "./pages/Home";
 import HomeTab from "./pages/HomeTab";
@@ -26,38 +29,45 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 function App() {
+  useEffect(() => {
+    // Initialize crawler optimizations
+    initCrawlerOptimizations();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
-      <Toaster />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/home" element={<HomeTab />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/explore/:category" element={<Explore />} />
-          <Route path="/explore/:category/:city" element={<Explore />} />
-          <Route path="/startups/:slug" element={<StartupDetail />} />
-          <Route path="/startup/:id" element={<StartupDetail />} />
-          <Route path="/startup/:slug" element={<StartupDetail />} />
-          <Route path="/startup/:slug/:city" element={<StartupDetail />} />
-          <Route path="/founders/:slug" element={<StartupDetail />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:slug" element={<BlogPost />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/email-confirmation" element={<EmailConfirmation />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms-of-service" element={<TermsOfService />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-      <Analytics />
-      <SpeedInsights />
-      <PerformanceMonitor />
+      <CrawlerOptimizedSEO>
+        <Toaster />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/home" element={<HomeTab />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/explore/:category" element={<Explore />} />
+            <Route path="/explore/:category/:city" element={<Explore />} />
+            <Route path="/startups/:slug" element={<StartupDetail />} />
+            <Route path="/startup/:id" element={<StartupDetail />} />
+            <Route path="/startup/:slug" element={<StartupDetail />} />
+            <Route path="/startup/:slug/:city" element={<StartupDetail />} />
+            <Route path="/founders/:slug" element={<StartupDetail />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/email-confirmation" element={<EmailConfirmation />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+        <Analytics />
+        <SpeedInsights />
+        <PerformanceMonitor />
+      </CrawlerOptimizedSEO>
     </QueryClientProvider>
   );
 }

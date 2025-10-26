@@ -3,17 +3,22 @@ import { generateArticleSchema, generateBreadcrumbSchema } from '@/lib/seo';
 
 interface BlogPost {
   id: string;
-  title: string;
   slug: string;
-  content: string;
+  title: string;
   excerpt: string;
-  featured_image: string | null;
-  author: string;
-  published_at: string;
-  updated_at: string;
-  tags: string[];
+  content: string;
+  author: {
+    name: string;
+    avatar: string | null;
+    bio: string;
+  };
   category: string;
-  read_time: number;
+  categoryName: string;
+  publishedAt: string;
+  readTime: string;
+  featured: boolean;
+  tags: string[];
+  image: string | null;
 }
 
 interface BlogSEOProps {
@@ -35,14 +40,14 @@ export const BlogSEO = ({ post }: BlogSEOProps) => {
     'startup stories'
   ].join(', ');
 
-  const image = post.featured_image || 'https://storage.googleapis.com/gpt-engineer-file-uploads/OVYktJbw3tZiZkzBsvSWWp5ISb23/social-images/social-1759048575325-Screenshot%202025-09-28%20140608.png';
+  const image = post.image || 'https://storage.googleapis.com/gpt-engineer-file-uploads/OVYktJbw3tZiZkzBsvSWWp5ISb23/social-images/social-1759048575325-Screenshot%202025-09-28%20140608.png';
   
   const url = `https://knowfounders.com/blog/${post.slug}`;
 
   const breadcrumbs = [
     { name: 'Home', url: 'https://knowfounders.com' },
     { name: 'Blog', url: 'https://knowfounders.com/blog' },
-    { name: post.category, url: `https://knowfounders.com/blog/category/${post.category.toLowerCase()}` },
+    { name: post.categoryName, url: `https://knowfounders.com/blog/category/${post.category.toLowerCase()}` },
     { name: post.title, url }
   ];
 
@@ -52,9 +57,9 @@ export const BlogSEO = ({ post }: BlogSEOProps) => {
       description: description,
       image: image,
       url: url,
-      published_at: post.published_at,
-      updated_at: post.updated_at,
-      author: post.author,
+      published_at: post.publishedAt,
+      updated_at: post.publishedAt, // Using publishedAt as updated_at since we don't have separate updated_at
+      author: post.author.name,
       content: post.content
     }),
     generateBreadcrumbSchema(breadcrumbs)
@@ -67,15 +72,15 @@ export const BlogSEO = ({ post }: BlogSEOProps) => {
     },
     {
       question: `Who wrote this article?`,
-      answer: `This article was written by ${post.author}, a contributor to the Know Founders blog.`
+      answer: `This article was written by ${post.author.name}, ${post.author.bio}.`
     },
     {
       question: `How long does it take to read this article?`,
-      answer: `This article takes approximately ${post.read_time} minutes to read.`
+      answer: `This article takes approximately ${post.readTime} to read.`
     },
     {
       question: `What category is this article in?`,
-      answer: `This article is categorized under ${post.category}.`
+      answer: `This article is categorized under ${post.categoryName}.`
     }
   ];
 
@@ -90,10 +95,10 @@ export const BlogSEO = ({ post }: BlogSEOProps) => {
       structuredData={structuredData}
       breadcrumbs={breadcrumbs}
       faq={faq}
-      author={post.author}
-      publishedTime={post.published_at}
-      modifiedTime={post.updated_at}
-      section={post.category}
+      author={post.author.name}
+      publishedTime={post.publishedAt}
+      modifiedTime={post.publishedAt}
+      section={post.categoryName}
       tags={post.tags}
     />
   );
