@@ -433,69 +433,88 @@ export default function HomePage() {
         keywords="non-tech startups, startup directory, find startups, startup discovery, non-tech founders, entrepreneur directory, startup community, business directory, startup listing, find cofounder, startup funding, business networking, startup ecosystem, entrepreneur platform, startup search, business discovery, startup database, founder network, startup marketplace, business opportunities, startup investment"
         url="https://knowfounders.com"
         structuredData={seoData.structuredData}
+        faq={[
+          {
+            question: "What is Know Founders?",
+            answer: "Know Founders is a platform that helps discover innovative non-tech startups and connect entrepreneurs. We provide a comprehensive directory of non-tech businesses, helping founders find cofounders, get funding, and build their network."
+          },
+          {
+            question: "How can I find startups on Know Founders?",
+            answer: "You can browse startups by category, location, or use our search function. Our directory includes detailed information about each startup including their stage, team size, and contact details."
+          },
+          {
+            question: "Is Know Founders free to use?",
+            answer: "Yes, Know Founders is completely free to use. You can browse startups, contact founders, and join the community without any cost."
+          },
+          {
+            question: "What types of startups are featured on Know Founders?",
+            answer: "We focus on non-tech startups including food & beverage, wellness & health, retail & fashion, services, beauty & personal care, fitness & sports, home & living, education & training, entertainment, travel & hospitality, professional services, and sustainability businesses."
+          }
+        ]}
       />
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative pt-24 pb-16 overflow-hidden">
-        {/* Elegant background elements */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(5,150,105,0.04),transparent_50%)]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(5,150,105,0.02),transparent_50%)]"></div>
-        <div className="absolute top-20 left-1/4 w-72 h-72 bg-primary/3 rounded-full blur-3xl opacity-60"></div>
-        <div className="absolute bottom-20 right-1/4 w-64 h-64 bg-emerald-400/2 rounded-full blur-3xl opacity-40"></div>
-        
-        <div className="relative z-10 max-w-6xl mx-auto px-8 text-center">
+      <main>
+        <section className="relative pt-24 pb-16 overflow-hidden" role="banner">
+          {/* Elegant background elements */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(5,150,105,0.04),transparent_50%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(5,150,105,0.02),transparent_50%)]"></div>
+          <div className="absolute top-20 left-1/4 w-72 h-72 bg-primary/3 rounded-full blur-3xl opacity-60"></div>
+          <div className="absolute bottom-20 right-1/4 w-64 h-64 bg-emerald-400/2 rounded-full blur-3xl opacity-40"></div>
           
-          <h1 className="text-4xl md:text-5xl font-light text-slate-900 mb-6 leading-tight tracking-tight animated-headline" style={{letterSpacing: '-0.02em', lineHeight: '1.3'}}>
-            <div className="headline-text">
-              <div>Discover India's Hidden</div>
-              <div className="bg-gradient-to-r from-primary via-primary to-emerald-600 bg-clip-text text-transparent font-normal">Startup Gems</div>
+          <div className="relative z-10 max-w-6xl mx-auto px-8 text-center">
+            
+            <h1 className="text-4xl md:text-5xl font-light text-slate-900 mb-6 leading-tight tracking-tight animated-headline" style={{letterSpacing: '-0.02em', lineHeight: '1.3'}}>
+              <div className="headline-text">
+                <div>Discover India's Hidden</div>
+                <div className="bg-gradient-to-r from-primary via-primary to-emerald-600 bg-clip-text text-transparent font-normal">Startup Gems</div>
+              </div>
+              <div className="headline-text">
+                <div>Get Your Startup Featured</div>
+                <div className="bg-gradient-to-r from-primary via-primary to-emerald-600 bg-clip-text text-transparent font-normal">Join 1,000+ Founders Getting Discovered</div>
+              </div>
+              <div className="headline-text">
+                <div>Share Your Story</div>
+                <div className="bg-gradient-to-r from-primary via-primary to-emerald-600 bg-clip-text text-transparent font-normal">We Highlight Real Businesses</div>
+              </div>
+            </h1>
+            
+            <p className="text-lg md:text-xl text-slate-600 mb-12 max-w-4xl mx-auto leading-relaxed font-light" style={{lineHeight: '1.6'}}>
+            The discovery platform where real-world products get the spotlight they deserve. Launch your food brand, wellness product, retail business, or service—get upvotes, feedback, and discovered by customers.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+              <AuthModal defaultTab="signup">
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-to-r from-primary to-emerald-600 hover:from-primary/90 hover:to-emerald-600/90 text-white text-lg px-12 py-4 h-12 min-w-[240px] rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl border-0"
+                  onClick={() => trackUrgencyBannerClick('signup')}
+                >
+                  Launch Your Product
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </AuthModal>
+              <Link to="/home">
+                <Button variant="outline" size="lg" className="text-lg px-12 py-4 h-12 min-w-[240px] border-slate-200 hover:bg-white hover:border-slate-300 rounded-full font-medium transition-all duration-300 text-slate-700 shadow-sm hover:shadow-md bg-white/50 backdrop-blur-sm">
+                  Learn More
+                </Button>
+              </Link>
             </div>
-            <div className="headline-text">
-              <div>Get Your Startup Featured</div>
-              <div className="bg-gradient-to-r from-primary via-primary to-emerald-600 bg-clip-text text-transparent font-normal">Join 1,000+ Founders Getting Discovered</div>
-            </div>
-            <div className="headline-text">
-              <div>Share Your Story</div>
-              <div className="bg-gradient-to-r from-primary via-primary to-emerald-600 bg-clip-text text-transparent font-normal">We Highlight Real Businesses</div>
-            </div>
-          </h1>
-          
-          <p className="text-lg md:text-xl text-slate-600 mb-12 max-w-4xl mx-auto leading-relaxed font-light" style={{lineHeight: '1.6'}}>
-          The discovery platform where real-world products get the spotlight they deserve. Launch your food brand, wellness product, retail business, or service—get upvotes, feedback, and discovered by customers.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-            <AuthModal defaultTab="signup">
-              <Button 
-                size="lg" 
-                className="bg-gradient-to-r from-primary to-emerald-600 hover:from-primary/90 hover:to-emerald-600/90 text-white text-lg px-12 py-4 h-12 min-w-[240px] rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl border-0"
-                onClick={() => trackUrgencyBannerClick('signup')}
-              >
-                Launch Your Product
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </AuthModal>
-            <Link to="/home">
-              <Button variant="outline" size="lg" className="text-lg px-12 py-4 h-12 min-w-[240px] border-slate-200 hover:bg-white hover:border-slate-300 rounded-full font-medium transition-all duration-300 text-slate-700 shadow-sm hover:shadow-md bg-white/50 backdrop-blur-sm">
-                Learn More
-              </Button>
-            </Link>
-          </div>
 
-          <div className="flex items-center justify-center gap-6 text-sm text-slate-500">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-primary rounded-full"></div>
-              <span>Trusted by <span className="font-medium text-slate-700">1000+ founders</span></span>
+            <div className="flex items-center justify-center gap-6 text-sm text-slate-500">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-primary rounded-full"></div>
+                <span>Trusted by <span className="font-medium text-slate-700">1000+ founders</span></span>
+              </div>
+              <div className="w-px h-4 bg-slate-200"></div>
+              <span>Reach <span className="font-medium text-slate-700">10,000+ Entrepreneurs</span></span>
             </div>
-            <div className="w-px h-4 bg-slate-200"></div>
-            <span>Reach <span className="font-medium text-slate-700">10,000+ Entrepreneurs</span></span>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Featured In Section */}
-      <section className="py-8 bg-gradient-to-r from-slate-50 via-white to-slate-50 border-y border-slate-200">
+        {/* Featured In Section */}
+        <section className="py-8 bg-gradient-to-r from-slate-50 via-white to-slate-50 border-y border-slate-200" aria-label="Featured platforms">
         <div className="max-w-6xl mx-auto px-8">
           <div className="text-center mb-4">
             <h3 className="text-sm font-semibold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-2 uppercase tracking-wide">
@@ -582,8 +601,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Founding Member Promotion */}
-      <section className="py-12 bg-gradient-to-r from-primary/5 via-emerald-50/50 to-primary/5 border-y border-primary/10">
+        {/* Founding Member Promotion */}
+        <section className="py-12 bg-gradient-to-r from-primary/5 via-emerald-50/50 to-primary/5 border-y border-primary/10" aria-label="Founding member promotion">
         <div className="max-w-4xl mx-auto px-8 text-center">
                 <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 mb-3">
                   First 100 startups get a <span className="bg-gradient-to-r from-primary to-emerald-600 bg-clip-text text-transparent">founding member</span> badge
@@ -620,8 +639,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Featured Startups Section */}
-      <section className="py-16 bg-white/50 backdrop-blur-sm">
+        {/* Featured Startups Section */}
+        <section className="py-16 bg-white/50 backdrop-blur-sm" aria-label="Featured startups">
         <div className="max-w-6xl mx-auto px-8">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-light text-slate-900 mb-3 leading-tight tracking-tight" style={{letterSpacing: '-0.02em', lineHeight: '1.2'}}>
@@ -632,9 +651,9 @@ export default function HomePage() {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12" role="list">
             {featuredStartups.slice(0, 3).map((startup) => (
-              <Card key={startup.id} className="group bg-white border border-slate-200/60 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden" style={{boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'}}>
+              <Card key={startup.id} className="group bg-white border border-slate-200/60 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden" style={{boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'}} role="listitem">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-3 mb-4">
                     <Avatar className="w-12 h-12 ring-2 ring-slate-100">
@@ -683,8 +702,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Explore Section - All Startups */}
-      <section className="py-16 bg-gradient-to-br from-slate-50/50 to-white">
+        {/* Explore Section - All Startups */}
+        <section className="py-16 bg-gradient-to-br from-slate-50/50 to-white" aria-label="All startups directory">
         <div className="max-w-6xl mx-auto px-8">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-light text-slate-900 mb-3 leading-tight tracking-tight" style={{letterSpacing: '-0.02em', lineHeight: '1.2'}}>
@@ -696,7 +715,7 @@ export default function HomePage() {
           </div>
           
           {/* Filters Section */}
-          <div className="mb-8">
+          <div className="mb-8" role="search" aria-label="Filter startups">
             {/* Categories Filter */}
             <div className="mb-6">
               <div className="flex items-center justify-between mb-3">
@@ -865,12 +884,13 @@ export default function HomePage() {
               viewMode === "block" 
                 ? "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
                 : "space-y-4"
-            }>
+            } role="list" aria-label="Startup listings">
               {startups.map((startup) => (
                 <div 
                   key={startup.id}
                   onClick={() => navigate(`/startups/${startup.slug || startup.id}`)}
                   className="cursor-pointer group"
+                  role="listitem"
                 >
                   <StartupCard 
                     startup={startup} 
@@ -883,6 +903,8 @@ export default function HomePage() {
         </div>
       </section>
 
+
+        </main>
 
       <Footer />
     </div>

@@ -9,7 +9,9 @@ export interface SitemapEntry {
 
 export const generateSitemap = (entries: SitemapEntry[]): string => {
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
 ${entries.map(entry => `  <url>
     <loc>${entry.url}</loc>
     ${entry.lastmod ? `<lastmod>${entry.lastmod}</lastmod>` : ''}
@@ -23,9 +25,18 @@ ${entries.map(entry => `  <url>
 
 export const generateRobotsTxt = (sitemapUrl: string, disallowPaths: string[] = []): string => {
   const robots = `User-agent: *
+Allow: /
 ${disallowPaths.map(path => `Disallow: ${path}`).join('\n')}
 
-Sitemap: ${sitemapUrl}`;
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Sitemap
+Sitemap: ${sitemapUrl}
+
+# Additional sitemaps
+Sitemap: ${sitemapUrl.replace('.xml', '-images.xml')}
+Sitemap: ${sitemapUrl.replace('.xml', '-news.xml')}`;
 
   return robots;
 };
@@ -111,4 +122,101 @@ export const getBlogPages = (posts: any[]): SitemapEntry[] => {
     changefreq: 'monthly',
     priority: 0.6
   }));
+};
+
+// Enhanced sitemap generation functions
+export const generateImageSitemap = (images: Array<{url: string, caption?: string, title?: string}>): string => {
+  const imageSitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.google.com/schemas/sitemap-image/1.1">
+${images.map(image => `  <url>
+    <image:image>
+      <image:loc>${image.url}</image:loc>
+      ${image.caption ? `<image:caption>${image.caption}</image:caption>` : ''}
+      ${image.title ? `<image:title>${image.title}</image:title>` : ''}
+    </image:image>
+  </url>`).join('\n')}
+</urlset>`;
+
+  return imageSitemap;
+};
+
+export const generateNewsSitemap = (articles: Array<{url: string, title: string, published: string, keywords?: string}>): string => {
+  const newsSitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.google.com/schemas/sitemap-news/0.9">
+${articles.map(article => `  <url>
+    <news:news>
+      <news:publication>
+        <news:name>Know Founders</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>${article.published}</news:publication_date>
+      <news:title>${article.title}</news:title>
+      ${article.keywords ? `<news:keywords>${article.keywords}</news:keywords>` : ''}
+    </news:news>
+  </url>`).join('\n')}
+</urlset>`;
+
+  return newsSitemap;
+};
+
+export const generateSitemapIndex = (sitemaps: Array<{url: string, lastmod?: string}>): string => {
+  const sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${sitemaps.map(sitemap => `  <sitemap>
+    <loc>${sitemap.url}</loc>
+    ${sitemap.lastmod ? `<lastmod>${sitemap.lastmod}</lastmod>` : ''}
+  </sitemap>`).join('\n')}
+</sitemapindex>`;
+
+  return sitemapIndex;
+};
+
+// Category-specific sitemap entries
+export const getCategorySitemapEntries = (categories: any[]): SitemapEntry[] => {
+  return categories.map(category => ({
+    url: `https://knowfounders.com/explore/${category.slug}`,
+    changefreq: 'weekly',
+    priority: 0.8,
+    lastmod: category.updated_at || new Date().toISOString()
+  }));
+};
+
+// Location-specific sitemap entries
+export const getLocationSitemapEntries = (locations: string[]): SitemapEntry[] => {
+  return locations.map(location => ({
+    url: `https://knowfounders.com/explore?location=${encodeURIComponent(location)}`,
+    changefreq: 'weekly',
+    priority: 0.7,
+    lastmod: new Date().toISOString()
+  }));
+};
+
+// Founder-specific sitemap entries
+export const getFounderSitemapEntries = (founders: any[]): SitemapEntry[] => {
+  return founders.map(founder => ({
+    url: `https://knowfounders.com/founders/${founder.slug || founder.id}`,
+    changefreq: 'monthly',
+    priority: 0.6,
+    lastmod: founder.updated_at || founder.created_at
+  }));
+};
+
+// Comprehensive sitemap generation
+export const generateComprehensiveSitemap = (data: {
+  startups: any[];
+  categories: any[];
+  blogPosts: any[];
+  founders: any[];
+  locations: string[];
+}): string => {
+  const entries: SitemapEntry[] = [
+    ...getStaticPages(),
+    ...getStartupPages(data.startups),
+    ...getCategorySitemapEntries(data.categories),
+    ...getBlogPages(data.blogPosts),
+    ...getFounderSitemapEntries(data.founders),
+    ...getLocationSitemapEntries(data.locations)
+  ];
+
+  return generateSitemap(entries);
 };
